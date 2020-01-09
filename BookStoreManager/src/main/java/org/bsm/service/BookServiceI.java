@@ -1,5 +1,5 @@
 package org.bsm.service;
 
-public interface BookI {
+public interface BookServiceI {
 	public void test();
 }
