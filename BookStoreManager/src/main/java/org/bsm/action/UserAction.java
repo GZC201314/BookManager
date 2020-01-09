@@ -2,45 +2,89 @@ package org.bsm.action;
 
 
 
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
-import org.apache.struts2.convention.annotation.ParentPackage;
-import org.bsm.service.BookI;
+import org.bsm.model.Tuser;
+import org.bsm.pageModel.AuthResult;
+import org.bsm.pageModel.Json;
+import org.bsm.pageModel.PageUser;
+import org.bsm.service.UserServiceI;
+import org.bsm.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
-@ParentPackage("basePackage")
+import com.opensymphony.xwork2.ModelDriven;
+
 @Namespace("/")
 @Action(value="userAction")
-public class UserAction {
-	/**
-	 * Logger for this class
-	 */
+public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 	private static final Logger logger = LogManager.getLogger(UserAction.class.getName());
-
 	
-	private BookI bookI;
+	private PageUser pageUser = new PageUser();
 	
-	public BookI getBookI() {
-		return bookI;
+	@Autowired
+	private UserServiceI userServiceI;
+    @Autowired  
+    StringRedisTemplate redisTemplate;
+	@Override
+	public PageUser getModel() {
+		return pageUser;
 	}
-	public void setBookI(BookI bookI) {
-		this.bookI = bookI;
+	public void reg() {
+		logger.info("into the reg function");
+		Json j = new Json();
+		try {
+			userServiceI.save(pageUser);
+			j.setSuccess(true);
+			j.setMsg("注册成功.");
+		} catch (Exception e) {
+			j.setMsg(e.getMessage());
+		}
+		super.writeJson(j);
+		logger.info("out into the reg function");
+	}
+	/**
+	 * 登录
+	 */
+	public void login() {
+		logger.info("into the login function");
+		Json j = new Json();
+		try {
+			Tuser tuser = userServiceI.login(pageUser);
+			if(tuser != null) {
+				
+	            //生成token  
+	            String token = JWTUtil.generateToken(tuser.getName());  
+	              
+	            //生成refreshToken  
+	            String refreshToken = UUID.randomUUID().toString();
+				
+	            //数据放入redis  
+	            redisTemplate.opsForHash().put(refreshToken, "token", token);  
+	            redisTemplate.opsForHash().put(refreshToken, "username", tuser.getName()); 
+				
+	            //设置token的过期时间  
+	            redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);  
+	            j.setObj(new AuthResult(token, refreshToken));
+	            j.setMsg("登录成功.");
+				j.setSuccess(true);
+
+			}else {
+				j.setMsg("登录失败.");
+			}
+				
+		} catch (Exception e) {
+			j.setMsg(e.getMessage());
+			j.setSuccess(false);
+
+		}
+		super.writeJson(j);
+		logger.info("out into the login function");
 	}
 
-	public static Logger getLogger() {
-		return logger;
-	}
-
-	public void test() {
-		logger.error("UserAction class test method is running!!!!!!");
-//		ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(ServletActionContext.getServletContext());
-//		BookI bookI = (BookI) ac.getBean("bookI");
-		bookI.test();
-		
-	}
 }

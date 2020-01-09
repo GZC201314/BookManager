@@ -2,6 +2,5 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-  <table-filter match-catalog="bookmanager" match-name="book"/>
-  <table-filter match-catalog="bookmanager" match-name="tuser"/>
+  <table-filter match-catalog="bookmanager" match-name="tmenu"/>
 </hibernate-reverse-engineering>

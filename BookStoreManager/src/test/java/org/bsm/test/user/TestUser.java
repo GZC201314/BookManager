@@ -2,8 +2,7 @@ package org.bsm.test.user;
 
 import java.util.UUID;
 
-import org.bsm.dao.UserDaoI;
-import org.bsm.model.Tuser;
+import org.bsm.pageModel.PageUser;
 import org.bsm.service.UserServiceI;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
@@ -15,9 +14,10 @@ public class TestUser {
 	public void testUser() {
 		ApplicationContext ac = new ClassPathXmlApplicationContext(new String[] {"classpath:spring.xml","classpath:spring-hibernate.xml"});
 		UserServiceI userServiceI =(UserServiceI) ac.getBean("userServiceI");
-		Tuser tuser = new Tuser();
+		PageUser tuser = new PageUser();
 		tuser.setId(UUID.randomUUID().toString());
-		tuser.setName("GZC");
+		//为了防止主键冲突
+		tuser.setName("GZC"+UUID.randomUUID().toString().substring(0, 10));
 		tuser.setPwd("abc123");
 		userServiceI.save(tuser);
 	}
