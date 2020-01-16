@@ -1,25 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <script type="text/javascript"
-	src="pages/lib/jquery-easyui-1.3.2/jquery-1.8.0.min.js"></script>
+	src="pages/lib/jquery-easyui-1.7.0/jquery.min.js"></script>
 <script type="text/javascript" src="pages/lib/jquery.cookie.js"></script>
 <script type="text/javascript"
-	src="pages/lib/jquery-easyui-1.3.2/jquery.easyui.min.js"></script>
+	src="pages/lib/jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
 <script type="text/javascript"
-	src="pages/lib/jquery-easyui-1.3.2/locale/easyui-lang-zh_CN.js"></script>
+	src="pages/lib/jquery-easyui-1.7.0/locale/easyui-lang-zh_CN.js"></script>
 
 <script type="text/javascript" src="pages/lib/ValidateUtil.js"></script>
 
 <link rel="stylesheet"
-	href="pages/lib/jquery-easyui-1.3.2/themes/default/easyui.css"
+	href="pages/lib/jquery-easyui-1.7.0/themes/default/easyui.css"
 	type="text/css"></link>
 <link rel="stylesheet"
-	href="pages/lib/jquery-easyui-1.3.2/themes/icon.css" type="text/css"></link>
+	href="pages/lib/jquery-easyui-1.7.0/themes/icon.css" type="text/css"></link>
 <title>BSM</title>
 </head>
 <body class="easyui-layout">
@@ -155,7 +154,7 @@
 			}
 		});
 
-		if ($.cookie("token") != "" && $.cookie("token").length > 0) {
+		if (typeof($.cookie("token")) != "undefined" && $.cookie("token").length > 0) {
 			$('#user_login_loginDialog').dialog('close');
 		}
 

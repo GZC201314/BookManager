@@ -2,6 +2,7 @@ package org.bsm.action;
 
 
 
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -12,6 +13,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.bsm.model.Tuser;
 import org.bsm.pageModel.AuthResult;
 import org.bsm.pageModel.Json;
+import org.bsm.pageModel.PageDataGrid;
 import org.bsm.pageModel.PageUser;
 import org.bsm.service.UserServiceI;
 import org.bsm.util.JWTUtil;
@@ -35,6 +37,9 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 	public PageUser getModel() {
 		return pageUser;
 	}
+	/**
+	 * 注册
+	 */
 	public void reg() {
 		logger.info("into the reg function");
 		Json j = new Json();
@@ -47,6 +52,19 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 		}
 		super.writeJson(j);
 		logger.info("out into the reg function");
+	}
+	/**
+	 * 获取用户列表
+	 */
+	public void datagrid() {
+		logger.info("into the datagrid function");
+		PageDataGrid pageDataGrid = new PageDataGrid();
+		try {
+			pageDataGrid = userServiceI.datagrid(pageUser);
+		} catch (Exception e) {
+		}
+		super.writeJson(pageDataGrid);
+		logger.info("out into the datagrid function");
 	}
 	/**
 	 * 登录
@@ -69,7 +87,7 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 	            redisTemplate.opsForHash().put(refreshToken, "username", tuser.getName()); 
 				
 	            //设置token的过期时间  
-	            redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);  
+	            redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);  
 	            j.setObj(new AuthResult(token, refreshToken));
 	            j.setMsg("登录成功.");
 				j.setSuccess(true);

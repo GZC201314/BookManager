@@ -2,7 +2,6 @@ package org.bsm.test.redis;
 
 import java.util.concurrent.TimeUnit;
 
-import org.bsm.util.CacheContext;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

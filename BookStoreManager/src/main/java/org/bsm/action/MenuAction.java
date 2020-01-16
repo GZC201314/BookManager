@@ -1,10 +1,8 @@
 package org.bsm.action;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Namespace;
-import org.apache.log4j.LogManager;
-
 import org.bsm.pageModel.Menu;
 import org.bsm.service.MenuServiceI;
 import org.springframework.beans.factory.annotation.Autowired;

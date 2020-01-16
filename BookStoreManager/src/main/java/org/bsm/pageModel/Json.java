@@ -2,6 +2,11 @@ package org.bsm.pageModel;
 
 public class Json implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6447438075928976064L;
+
 	private boolean success = false;
 
 	private String msg = "";

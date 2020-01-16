@@ -13,6 +13,10 @@ import javax.persistence.Table;
 @Table(name = "book", catalog = "bookmanager")
 public class Book implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5401448365736456014L;
 	private String isbn;
 	private String id;
 	private String name;

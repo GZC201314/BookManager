@@ -19,6 +19,10 @@ import javax.persistence.Table;
 @Table(name = "tmenu", catalog = "bookmanager")
 public class Tmenu implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -936274068073371683L;
 	private String id;
 	private Tmenu tmenu;
 	private String text;
