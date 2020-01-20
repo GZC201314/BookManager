@@ -104,7 +104,7 @@
 			<tr>
 				<th>登录名</th>
 				<td><input name="name" class="easyui-validatebox"
-					data-options="required:true,missingMessage:'登陆名称必填'" /></td>
+					data-options="required:true,missingMessage:'登陆名称必填'" validType="validateSameName" /></td>
 			</tr>
 			<tr>
 				<th>密码</th>

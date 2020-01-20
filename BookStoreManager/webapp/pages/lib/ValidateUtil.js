@@ -9,7 +9,30 @@ $.extend($.fn.validatebox.defaults.rules, {
 		message : '密码不一致！'
 	}
 });
-//扩展树加载数据的方法
+
+$.extend($.fn.validatebox.defaults.rules, {
+	validateSameName : {
+		validator : function(value, param) {
+			var result;
+			$.ajax({
+				url : 'userAction!validateName.action',
+				data : {
+					name : value
+				},
+				type : 'post',
+				dataType : "json",
+				async : false,
+				success : function(data) {
+					result = data.success;
+				}
+			});
+			return result;
+		},
+		message : ' 当前用户名已存在。'
+	}
+});
+
+// 扩展树加载数据的方法
 $.fn.tree.defaults.loadFilter = function(data, parent) {
 	var opt = $(this).data().tree.options;
 	var idFiled, textFiled, parentField;
@@ -22,8 +45,7 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
 			tmpMap[data[i][idFiled]] = data[i];
 		}
 		for (i = 0, l = data.length; i < l; i++) {
-			if (tmpMap[data[i][parentField]]
-					&& data[i][idFiled] != data[i][parentField]) {
+			if (tmpMap[data[i][parentField]] && data[i][idFiled] != data[i][parentField]) {
 				if (!tmpMap[data[i][parentField]]['children'])
 					tmpMap[data[i][parentField]]['children'] = [];
 				data[i]['text'] = data[i][textFiled];
@@ -37,7 +59,7 @@ $.fn.tree.defaults.loadFilter = function(data, parent) {
 	}
 	return data;
 };
-//序列化form表单为对象
+// 序列化form表单为对象
 serializeObject = function(form) {
 	var o = {};
 	$.each(form.serializeArray(), function(index) {

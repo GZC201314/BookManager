@@ -123,4 +123,10 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
 		return (Long) q.uniqueResult();
 	}
 
+	@Override
+	public int executeHql(String hql) {
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+		return query.executeUpdate();
+	}
+
 }

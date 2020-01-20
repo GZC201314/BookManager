@@ -10,7 +10,27 @@ public class PageUser implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 3243653850988254719L;
 	
+	/**
+	 * 修改用户使用字段
+	 */
+	private String oldname;
 	
+	public String getOldname() {
+		return oldname;
+	}
+
+	public void setOldname(String oldname) {
+		this.oldname = oldname;
+	}
+	private String ids;
+	
+	public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
 	private int page;
 	private int rows;
 	

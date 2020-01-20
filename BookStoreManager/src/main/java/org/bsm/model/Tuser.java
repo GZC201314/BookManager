@@ -87,4 +87,10 @@ public class Tuser implements java.io.Serializable {
 		this.lastmodifytime = lastmodifytime;
 	}
 
+	@Override
+	public String toString() {
+		return "Tuser [name=" + name + ", id=" + id + ", pwd=" + pwd + ", createdatetime=" + createdatetime
+				+ ", lastmodifytime=" + lastmodifytime + "]";
+	}
+
 }

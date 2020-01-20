@@ -62,7 +62,7 @@ public class AuthFilter implements Filter {
 		String token = "";
 		if (StringUtils.isEmpty(url)) {
 			return;
-		} else if (url.contains("login") || url.contains("reg")|| url.contains("repair")||url.contains("menuAction")) {//如果是注册和登录以及数据库修复则跳过过滤器
+		} else if (url.contains("login") || url.contains("reg")|| url.contains("repair")||url.contains("menuAction")||url.contains("validateName")) {//如果是注册和登录以及数据库修复则跳过过滤器
 			chain.doFilter(request, response);
 		} else {
 			// 其他的action需要校验是否有权限访问

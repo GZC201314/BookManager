@@ -1,7 +1,9 @@
 package org.bsm.service.impl;
 
-import java.io.Serializable;
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +23,26 @@ import org.springframework.util.StringUtils;
 
 @Service(value = "userServiceI")
 public class UserServiceImpl implements UserServiceI {
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
 	@Autowired
 	private BaseDaoI<Tuser> userDao;
 
 	@Override
-	public Serializable save(PageUser t) {
+	public PageUser save(PageUser t) {
 		Tuser tuser = new Tuser();
+		PageUser pageUser = new PageUser();
 		BeanUtils.copyProperties(t, tuser, "pwd");
 		tuser.setPwd(Encrypt.e(t.getPwd()));
 		tuser.setId(UUID.randomUUID().toString());
-		return userDao.save(tuser);
+		tuser.setCreatedatetime(new Date());
+		tuser.setLastmodifytime(new Date());
+		userDao.save(tuser);
+		BeanUtils.copyProperties(tuser, pageUser);
+		return pageUser;
 	}
 
 	@Override
@@ -89,6 +100,75 @@ public class UserServiceImpl implements UserServiceI {
 		pageDataGrid.setRows(pageUserList);
 		pageDataGrid.setTotal(count);
 		return pageDataGrid;
+	}
+
+	@Override
+	public void removeUser(PageUser pageUser) {
+		//如果删除的用户不为空
+		if(!StringUtils.isEmpty(pageUser.getIds())) {
+			String ids = pageUser.getIds();
+			String hql = "delete from Tuser t where t.id in ("+ids+")";
+			 int count = userDao.executeHql(hql);
+			 logger.error("删除的返回值是:   "+count);
+		}
+	}
+
+	@Override
+	public Tuser validateName(String name) {
+		if (!StringUtils.isEmpty(name)) {
+			String hql = "from Tuser where name=:name";
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("name", name);
+			return userDao.get(hql, params);
+		}else {
+			return null;
+		}
+	}
+
+	@Override
+	public Integer update(PageUser pageUser) {
+		Integer resultCode = 1;
+		if(!StringUtils.isEmpty(pageUser)) {
+			String name = pageUser.getName();
+			String oldname = pageUser.getOldname();
+			//如果没有修改登录名
+			if(oldname.equals(name)) {
+				String hql = "from Tuser where name=:name";
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("name", name);
+				Tuser tuser = (Tuser) userDao.get(hql, params);
+				userDao.delete(tuser);
+				if(!StringUtils.isEmpty(tuser)) {
+					if(!StringUtils.isEmpty(pageUser.getPwd())) {
+						tuser.setPwd(Encrypt.e(pageUser.getPwd()));
+					}
+					userDao.saveOrUpdate(tuser);
+				}
+			}else {//如果修改了用户的名称
+				String hql = "from Tuser where name=:name";
+				Map<String, Object> params = new HashMap<String, Object>();
+				params.put("name", name);
+				//判断新的用户名是否重复
+				Tuser tuser = (Tuser) userDao.get(hql, params);
+				//如果不重复,找到要修改的记录修改
+				if(StringUtils.isEmpty(tuser)) {
+					params.put("name", oldname);
+					Tuser oldUser = (Tuser) userDao.get(hql, params);
+					userDao.delete(oldUser);
+					if(!StringUtils.isEmpty(oldUser)) {
+						oldUser.setName(name);
+						if(!StringUtils.isEmpty(pageUser.getPwd())) {
+							oldUser.setPwd(Encrypt.e(pageUser.getPwd()));
+						}
+						userDao.saveOrUpdate(oldUser);
+						resultCode =0;
+					}
+				}else {
+					resultCode = 2;
+				}
+			}
+		}
+		return resultCode;
 	}
 
 
