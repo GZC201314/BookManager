@@ -25,6 +25,7 @@ public class TestUser {
 		tuser.setPwd(Encrypt.e("abc123"));
 		tuser.setCreatedatetime(DateUtil.getPastDate(7));
 		tuser.setLastmodifytime(new Date());
+		tuser.setRoleid("1");
 		userServiceI.save(tuser);
 	}
 

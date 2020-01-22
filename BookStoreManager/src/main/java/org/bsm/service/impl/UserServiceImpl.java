@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bsm.dao.BaseDaoI;
+import org.bsm.model.Trole;
 import org.bsm.model.Tuser;
 import org.bsm.pageModel.PageDataGrid;
 import org.bsm.pageModel.PageUser;
@@ -40,8 +41,12 @@ public class UserServiceImpl implements UserServiceI {
 		tuser.setId(UUID.randomUUID().toString());
 		tuser.setCreatedatetime(new Date());
 		tuser.setLastmodifytime(new Date());
+		if(!StringUtils.isEmpty(t.getRoleid())) {
+			tuser.setTrole(new Trole(Integer.parseInt(t.getRoleid())));
+		}
 		userDao.save(tuser);
 		BeanUtils.copyProperties(tuser, pageUser);
+		pageUser.setRoleid(tuser.getTrole().getRoleid()+"");
 		return pageUser;
 	}
 
@@ -93,6 +98,9 @@ public class UserServiceImpl implements UserServiceI {
 			for (Tuser tuser : lt) {
 				PageUser user = new PageUser();
 				BeanUtils.copyProperties(tuser, user);
+				if(!StringUtils.isEmpty(tuser.getTrole())) {
+					user.setRoleid(tuser.getTrole().getRoleid()+"");
+				}
 				pageUserList.add(user);
 			}
 		}
@@ -142,6 +150,12 @@ public class UserServiceImpl implements UserServiceI {
 					if(!StringUtils.isEmpty(pageUser.getPwd())) {
 						tuser.setPwd(Encrypt.e(pageUser.getPwd()));
 					}
+					if(!StringUtils.isEmpty(pageUser.getRoleid())) {
+						tuser.setTrole(new Trole(Integer.parseInt(pageUser.getRoleid())));
+					}
+					if(!StringUtils.isEmpty(pageUser.getLastmodifytime())) {
+						tuser.setLastmodifytime(pageUser.getLastmodifytime());
+					}
 					userDao.saveOrUpdate(tuser);
 				}
 			}else {//如果修改了用户的名称
@@ -159,6 +173,9 @@ public class UserServiceImpl implements UserServiceI {
 						oldUser.setName(name);
 						if(!StringUtils.isEmpty(pageUser.getPwd())) {
 							oldUser.setPwd(Encrypt.e(pageUser.getPwd()));
+						}
+						if(!StringUtils.isEmpty(pageUser.getRoleid())) {
+							oldUser.setTrole(new Trole(Integer.parseInt(pageUser.getRoleid())));
 						}
 						userDao.saveOrUpdate(oldUser);
 						resultCode =0;

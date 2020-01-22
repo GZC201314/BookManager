@@ -38,6 +38,11 @@
 				<td><input name="pwd" type="password"
 					class="easyui-validatebox" data-options="required:true"></td>
 			</tr>
+			<tr>
+				<th>角色</th>
+				<td><input id="roleid1" name="roleid" /></td>
+			</tr>			
+			
 		</table>
 	</form>
 </div>
@@ -54,7 +59,7 @@
 							var obj = jQuery.parseJSON(r);
 							if (obj.obj=='0'||obj.obj=='1') {
 								$('#admin_yhgl_datagrid').datagrid('load');
-								$('#admin_yhgl_datagrid').datagrid('unselectAll');
+								$('#admin_yhgl_datagrid').datagrid('clearChecked');
 								$('#admin_yhgl_editDialog').dialog('close');
 								msg='修改用户成功.';
 							}else if(obj.obj=='2'){
@@ -79,6 +84,10 @@
 			<tr>
 				<th>密码</th>
 				<td><input name="pwd" type="password" /></td>
+			</tr>
+			<tr>
+				<th>角色</th>
+				<td><input id="roleid" name="roleid" /></td>
 			</tr>
 			<tr hidden="true">
 				<td><input name="oldname" /></td>
@@ -128,6 +137,16 @@
 
 	$(function() {
 
+		$('#roleid').combobox({
+			url : '${pageContext.request.contextPath}/roleAction!getComboboxItem.action',
+			valueField : 'id',
+			textField : 'text'
+		});
+		$('#roleid1').combobox({
+			url : '${pageContext.request.contextPath}/roleAction!getComboboxItem.action',
+			valueField : 'id',
+			textField : 'text'
+		});
 		//新增用户弹窗初始化
 		function append() {
 			$('#admin_yhgl_addForm input').val('');
@@ -188,6 +207,7 @@
 				$('#admin_yhgl_editForm input[name=name]').validatebox({
 					required : true
 				});
+				$('#roleid').combobox('setValue',rows[0].roleid);
 
 			} else if (ids.length >= 2) {
 				$.messager.show({
@@ -221,7 +241,7 @@
 							success : function(data) {
 								if (data.success == true) {
 									$('#admin_yhgl_datagrid').datagrid('load');
-									$('#admin_yhgl_datagrid').datagrid('unselectAll');
+									$('#admin_yhgl_datagrid').datagrid('clearChecked');
 								}
 								$.messager.show({
 									title : '提示',
@@ -272,6 +292,31 @@
 				width : 150,
 				formatter : function(value, row, index) {
 					return '******';
+				}
+			}, {
+				field : 'roleid',
+				title : '角色',
+				width : 150,
+				formatter : function(value, row, index) {
+					var text = "";
+					switch (value) {
+					case '0':
+						text = "超级管理员";
+						break;
+					case '1':
+						text = "管理员";
+						break;
+					case '2':
+						text = "operater";
+						break;
+					case '3':
+						text = "seller";
+						break;
+					default:
+						text = "other";
+						break;
+					}
+					return text;
 				}
 			}, {
 				field : 'createdatetime',

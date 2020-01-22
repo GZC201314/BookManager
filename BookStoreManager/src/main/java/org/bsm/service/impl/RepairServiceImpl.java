@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bsm.dao.BaseDaoI;
 import org.bsm.model.Tmenu;
+import org.bsm.model.Trole;
 import org.bsm.model.Tuser;
 import org.bsm.service.RepairServiceI;
 import org.bsm.util.Encrypt;
@@ -56,7 +57,6 @@ public class RepairServiceImpl implements RepairServiceI {
 		xtgl.setId("xtgl");
 		xtgl.setTmenu(root);
 		xtgl.setText("系统管理");
-		xtgl.setUrl("/admin/xtgl.jsp");
 		menuDaoI.saveOrUpdate(xtgl);
 
 		Tmenu yhgl = new Tmenu();
@@ -108,6 +108,7 @@ public class RepairServiceImpl implements RepairServiceI {
 		admin.setId("0");
 		admin.setName("admin");
 		admin.setPwd(Encrypt.e("admin"));
+		admin.setTrole(new Trole(0, "超级管理员", "超级管理员", "", null, null));
 		userDaoI.saveOrUpdate(admin);
 	}
 

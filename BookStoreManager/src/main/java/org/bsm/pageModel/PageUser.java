@@ -123,6 +123,7 @@ public class PageUser implements java.io.Serializable {
 	private String pwd;
 	private Date createdatetime;
 	private Date lastmodifytime;
+	private String roleid;
 	public PageUser() {
 	}
 
@@ -174,6 +175,14 @@ public class PageUser implements java.io.Serializable {
 
 	public void setLastmodifytime(Date lastmodifytime) {
 		this.lastmodifytime = lastmodifytime;
+	}
+
+	public String getRoleid() {
+		return roleid;
+	}
+
+	public void setRoleid(String roleid) {
+		this.roleid = roleid;
 	}
 
 }

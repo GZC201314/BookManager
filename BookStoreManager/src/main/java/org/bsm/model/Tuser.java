@@ -1,10 +1,13 @@
 package org.bsm.model;
-// Generated 2020-1-14 13:50:33 by Hibernate Tools 4.3.5.Final
+// Generated 2020-1-20 20:57:24 by Hibernate Tools 4.0.1.Final
 
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,6 +20,7 @@ import javax.persistence.TemporalType;
 public class Tuser implements java.io.Serializable {
 
 	private String name;
+	private Trole trole;
 	private String id;
 	private String pwd;
 	private Date createdatetime;
@@ -30,8 +34,9 @@ public class Tuser implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Tuser(String name, String id, String pwd, Date createdatetime, Date lastmodifytime) {
+	public Tuser(String name, Trole trole, String id, String pwd, Date createdatetime, Date lastmodifytime) {
 		this.name = name;
+		this.trole = trole;
 		this.id = id;
 		this.pwd = pwd;
 		this.createdatetime = createdatetime;
@@ -47,6 +52,16 @@ public class Tuser implements java.io.Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "roleid")
+	public Trole getTrole() {
+		return this.trole;
+	}
+
+	public void setTrole(Trole trole) {
+		this.trole = trole;
 	}
 
 	@Column(name = "id", nullable = false, length = 36)
@@ -85,12 +100,6 @@ public class Tuser implements java.io.Serializable {
 
 	public void setLastmodifytime(Date lastmodifytime) {
 		this.lastmodifytime = lastmodifytime;
-	}
-
-	@Override
-	public String toString() {
-		return "Tuser [name=" + name + ", id=" + id + ", pwd=" + pwd + ", createdatetime=" + createdatetime
-				+ ", lastmodifytime=" + lastmodifytime + "]";
 	}
 
 }

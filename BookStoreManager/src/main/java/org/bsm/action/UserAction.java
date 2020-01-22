@@ -1,5 +1,6 @@
 package org.bsm.action;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -81,6 +82,7 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 		Json j = new Json();
 		Integer resultCode =1;
 		try {
+			pageUser.setLastmodifytime(new Date());
 			resultCode = userServiceI.update(pageUser);
 			j.setSuccess(true);
 			j.setObj(resultCode);
@@ -88,7 +90,6 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 			j.setMsg(e.getMessage());
 			j.setObj(resultCode);
 			j.setSuccess(false);
-			
 		}
 		super.writeJson(j);
 		logger.info("out into the edit User  function....");
