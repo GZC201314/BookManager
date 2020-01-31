@@ -109,7 +109,8 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
 	@Override
 	public Long count(String hql) {
 		Query q = sessionFactory.getCurrentSession().createQuery(hql);
-		return (Long) q.uniqueResult();
+		Integer value = (int) q.uniqueResult();
+		return value.longValue();
 	}
 
 	@Override

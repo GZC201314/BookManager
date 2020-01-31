@@ -2,10 +2,10 @@
 	pageEncoding="UTF-8"%>
 <div id="admin_jsgl_toobar">
 	<a onclick="append();" class="easyui-linkbutton"
-		data-options="iconCls:'icon-add',plain:true">添加</a> 
-		<a onclick="editRole();" class="easyui-linkbutton"
-		data-options="iconCls:'icon-edit',plain:true">修改</a> <a onclick="removerole();"
-		class="easyui-linkbutton"
+		data-options="iconCls:'icon-add',plain:true">添加</a> <a
+		onclick="editRole();" class="easyui-linkbutton"
+		data-options="iconCls:'icon-edit',plain:true">修改</a> <a
+		onclick="removerole();" class="easyui-linkbutton"
 		data-options="iconCls:'icon-remove',plain:true">删除</a> 角色名称: <input
 		id="admin_jsgl_rolename"></input> <a href="#"
 		class="easyui-linkbutton"
@@ -111,14 +111,16 @@
 <script type="text/javascript">
 	function searchFun() {
 		var rolename = $('#admin_jsgl_rolename').val();
-		$('#admin_jsgl_datagrid').datagrid('load', {'rolename':rolename});
+		$('#admin_jsgl_datagrid').datagrid('load', {
+			'rolename' : rolename
+		});
 	}
 	function clearFun() {
 		$('#admin_jsgl_rolename').val('');
-		$('#admin_jsgl_datagrid').datagrid('load',{});
+		$('#admin_jsgl_datagrid').datagrid('load', {});
 
 	}
-	
+
 	//新增角色弹窗初始化
 	function append() {
 		$('#admin_jsgl_addForm input').val('');
@@ -151,9 +153,9 @@
 				msg : "请选择一条用户记录修改!"
 			});
 		}
-	
+
 	}
-	
+
 	//批量删除用户
 	function removerole() {
 		var ids = [];
@@ -193,8 +195,8 @@
 			});
 		}
 
-	}	
-	
+	}
+
 	$(function() {
 
 		$('#admin_jsgl_datagrid').datagrid({

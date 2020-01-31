@@ -1,5 +1,5 @@
 package org.bsm.model;
-// Generated 2020-1-20 20:57:24 by Hibernate Tools 4.0.1.Final
+// Generated 2020-1-30 22:28:22 by Hibernate Tools 4.0.1.Final
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +17,8 @@ import javax.persistence.Table;
 public class Tauthorize implements java.io.Serializable {
 
 	private String id;
+	private Tmenu tmenu;
 	private Trole trole;
-	private String authorizepage;
 
 	public Tauthorize() {
 	}
@@ -27,10 +27,10 @@ public class Tauthorize implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Tauthorize(String id, Trole trole, String authorizepage) {
+	public Tauthorize(String id, Tmenu tmenu, Trole trole) {
 		this.id = id;
+		this.tmenu = tmenu;
 		this.trole = trole;
-		this.authorizepage = authorizepage;
 	}
 
 	@Id
@@ -45,6 +45,16 @@ public class Tauthorize implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "authorizepage")
+	public Tmenu getTmenu() {
+		return this.tmenu;
+	}
+
+	public void setTmenu(Tmenu tmenu) {
+		this.tmenu = tmenu;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "roleid")
 	public Trole getTrole() {
 		return this.trole;
@@ -52,15 +62,6 @@ public class Tauthorize implements java.io.Serializable {
 
 	public void setTrole(Trole trole) {
 		this.trole = trole;
-	}
-
-	@Column(name = "authorizepage", length = 100)
-	public String getAuthorizepage() {
-		return this.authorizepage;
-	}
-
-	public void setAuthorizepage(String authorizepage) {
-		this.authorizepage = authorizepage;
 	}
 
 }

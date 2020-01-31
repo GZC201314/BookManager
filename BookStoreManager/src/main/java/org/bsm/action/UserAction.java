@@ -164,10 +164,11 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 				// 数据放入redis
 				redisTemplate.opsForHash().put(refreshToken, "token", token);
 				redisTemplate.opsForHash().put(refreshToken, "username", tuser.getName());
+				redisTemplate.opsForHash().put(refreshToken, "role", tuser.getTrole().getRolename());
 
 				// 设置token的过期时间
 				redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
-				j.setObj(new AuthResult(token, refreshToken));
+				j.setObj(new AuthResult(token, refreshToken,tuser.getTrole().getRoleid()));
 				j.setMsg("登录成功.");
 				j.setSuccess(true);
 

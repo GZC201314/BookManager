@@ -4,11 +4,14 @@ public class AuthResult {
 	private String Token;
 	
 	private String refreshToken;
+	
+	private Integer role;
 
-	public AuthResult(String token, String refreshToken) {
+	public AuthResult(String token, String refreshToken,Integer role) {
 		super();
-		Token = token;
+		this.Token = token;
 		this.refreshToken = refreshToken;
+		this.role = role;
 	}
 
 	public String getToken() {
@@ -25,5 +28,13 @@ public class AuthResult {
 
 	public void setRefreshToken(String refreshToken) {
 		this.refreshToken = refreshToken;
+	}
+
+	public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer role) {
+		this.role = role;
 	}
 }

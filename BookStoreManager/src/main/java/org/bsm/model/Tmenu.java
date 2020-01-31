@@ -1,5 +1,5 @@
 package org.bsm.model;
-// Generated 2020-1-20 20:57:24 by Hibernate Tools 4.0.1.Final
+// Generated 2020-1-30 22:28:22 by Hibernate Tools 4.0.1.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +24,7 @@ public class Tmenu implements java.io.Serializable {
 	private String text;
 	private String iconCls;
 	private String url;
+	private Set<Tauthorize> tauthorizes = new HashSet<Tauthorize>(0);
 	private Set<Tmenu> tmenus = new HashSet<Tmenu>(0);
 
 	public Tmenu() {
@@ -33,12 +34,14 @@ public class Tmenu implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Tmenu(String id, Tmenu tmenu, String text, String iconCls, String url, Set<Tmenu> tmenus) {
+	public Tmenu(String id, Tmenu tmenu, String text, String iconCls, String url, Set<Tauthorize> tauthorizes,
+			Set<Tmenu> tmenus) {
 		this.id = id;
 		this.tmenu = tmenu;
 		this.text = text;
 		this.iconCls = iconCls;
 		this.url = url;
+		this.tauthorizes = tauthorizes;
 		this.tmenus = tmenus;
 	}
 
@@ -88,6 +91,15 @@ public class Tmenu implements java.io.Serializable {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmenu")
+	public Set<Tauthorize> getTauthorizes() {
+		return this.tauthorizes;
+	}
+
+	public void setTauthorizes(Set<Tauthorize> tauthorizes) {
+		this.tauthorizes = tauthorizes;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tmenu")

@@ -1,5 +1,5 @@
 package org.bsm.model;
-// Generated 2020-1-20 20:57:24 by Hibernate Tools 4.0.1.Final
+// Generated 2020-1-30 22:28:22 by Hibernate Tools 4.0.1.Final
 
 import java.util.HashSet;
 import java.util.Set;

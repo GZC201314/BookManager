@@ -31,7 +31,7 @@
 				<div title="系统菜单" data-options="iconCls:'icon-save'">
 					<ul id="layout_west_tree" class="easyui-tree"
 						data-options="
-					url : '${pageContext.request.contextPath}/menuAction!getAllTreeNote.action',
+					url : '${pageContext.request.contextPath}/menuAction!getTreeNote.action',
 					parentField : 'pid',
 					lines : true,
 					onClick : function(node) {
@@ -140,6 +140,7 @@
 					/* 登录成功把Token和refreshToken放到cookies中 */
 					$.cookie('token', obj.obj.token);
 					$.cookie('refreshToken', obj.obj.refreshToken);
+					$.cookie('role', obj.obj.role);
 					$('#user_login_loginDialog').dialog('close');
 				}
 				$.messager.show({
