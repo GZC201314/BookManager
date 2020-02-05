@@ -9,6 +9,7 @@ public class Menu {
 	private String text;
 	private String state;
 	private String iconCls;
+	private boolean checked = false;
 	private Map<String, Object> attributes;
 	
 	
@@ -41,6 +42,12 @@ public class Menu {
 	}
 	public void setState(String state) {
 		this.state = state;
+	}
+	public boolean getChecked() {
+		return checked;
+	}
+	public void setChecked(boolean checked) {
+		this.checked = checked;
 	}
 	public Map<String, Object> getAttributes() {
 		return attributes;

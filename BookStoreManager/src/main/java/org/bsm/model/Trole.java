@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "trole", catalog = "bookmanager")
 public class Trole implements java.io.Serializable {
 
-	private int roleid;
+	private Integer roleid;
 	private String rolename;
 	private String remark;
 	private String excol;
@@ -27,7 +27,7 @@ public class Trole implements java.io.Serializable {
 	public Trole() {
 	}
 
-	public Trole(int roleid) {
+	public Trole(Integer roleid) {
 		this.roleid = roleid;
 	}
 
@@ -44,11 +44,11 @@ public class Trole implements java.io.Serializable {
 	@Id
 
 	@Column(name = "roleid", unique = true, nullable = false)
-	public int getRoleid() {
+	public Integer getRoleid() {
 		return this.roleid;
 	}
 
-	public void setRoleid(int roleid) {
+	public void setRoleid(Integer roleid) {
 		this.roleid = roleid;
 	}
 

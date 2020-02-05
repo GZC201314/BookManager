@@ -20,6 +20,9 @@
 				handler : function() {
 					$('#admin_jsgl_addForm').form('submit', {
 						url : '${pageContext.request.contextPath}/roleAction!add.action',
+						onSubmit : function(param){
+						addGrandMenuid1(param);
+    					},						
 						success : function(r) {
 							var obj = jQuery.parseJSON(r);
 							if (obj.success) {
@@ -37,7 +40,7 @@
 					});
 				}
 			}]"
-	style="width: 500px; height: 200px;" align="center">
+	style="width: 500px; height: 500px;" align="center">
 	<form id="admin_jsgl_addForm" method="post">
 		<table>
 			<tr>
@@ -49,7 +52,10 @@
 				<th>备注</th>
 				<td><input name="remark" /></td>
 			</tr>
-
+			<tr>
+				<th>授权菜单</th>
+				<td><ul id="admin_yhgl_add_grandMenutree"></ul></td>
+			</tr>
 		</table>
 	</form>
 </div>
@@ -61,6 +67,9 @@
 				handler : function() {
 					$('#admin_jsgl_editForm').form('submit', {
 						url : '${pageContext.request.contextPath}/roleAction!edit.action',
+						onSubmit : function(param){
+						addGrandMenuid(param);
+    					},
 						success : function(r) {
 							var msg='';
 							var obj = jQuery.parseJSON(r);
@@ -80,7 +89,7 @@
 					});
 				}
 			}]"
-	style="width: 500px; height: 200px;" align="center">
+	style="width: 500px; height: 500px;" align="center">
 	<form id="admin_jsgl_editForm" method="post">
 		<table>
 			<tr>
@@ -91,6 +100,10 @@
 			<tr>
 				<th>备注</th>
 				<td><input name="remark" /></td>
+			</tr>
+			<tr>
+				<th>授权菜单</th>
+				<td><ul id="admin_yhgl_edit_grandMenutree" name="grandMenus"></ul></td>
 			</tr>
 			<tr hidden="true">
 				<td><input name="roleid" /></td>
@@ -109,6 +122,24 @@
 	</div>
 </div>
 <script type="text/javascript">
+	function addGrandMenuid(param) {
+		var nodes = $('#admin_yhgl_edit_grandMenutree').tree('getChecked');
+		var id = [];
+		for ( var node in nodes) {
+			id.push("'" + nodes[node].id + "'");
+		}
+		param.menusId = id.join(',');
+	}
+
+	function addGrandMenuid1(param) {
+		var nodes = $('#admin_yhgl_add_grandMenutree').tree('getChecked');
+		var id = [];
+		for ( var node in nodes) {
+			id.push("'" + nodes[node].id + "'");
+		}
+		param.menusId = id.join(',');
+	}
+
 	function searchFun() {
 		var rolename = $('#admin_jsgl_rolename').val();
 		$('#admin_jsgl_datagrid').datagrid('load', {
@@ -125,6 +156,15 @@
 	function append() {
 		$('#admin_jsgl_addForm input').val('');
 		$('#admin_jsgl_addDialog').dialog('open');
+		
+		$('#admin_yhgl_add_grandMenutree').tree({
+			url : '${pageContext.request.contextPath}/menuAction!getAllTreeNote.action',
+			checkbox : true,
+			parentField : 'pid',
+			lines : true,
+			cascadeCheck : true
+		});		
+		
 	}
 	function editRole() {
 		var ids = [];
@@ -140,6 +180,19 @@
 			$('#admin_jsgl_editForm input[name=roleid]').val(rows[0].roleid);
 			$('#admin_jsgl_editForm input[name=rolename]').validatebox({
 				required : true
+			});
+			$('#admin_yhgl_edit_grandMenutree').tree({
+				url : '${pageContext.request.contextPath}/roleAction!getGrandMenus.action',
+				checkbox : true,
+				parentField : 'pid',
+				lines : true,
+				cascadeCheck : true,
+				onBeforeLoad : function(node, param) {
+					param.roleid = rows[0].roleid;
+				},
+				onCheck : function(node, checked) {
+					console.log(node);
+				}
 			});
 
 		} else if (ids.length >= 2) {

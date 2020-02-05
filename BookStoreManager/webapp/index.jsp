@@ -11,7 +11,7 @@
 	src="pages/lib/jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
 <script type="text/javascript"
 	src="pages/lib/jquery-easyui-1.7.0/locale/easyui-lang-zh_CN.js"></script>
-
+<script type="text/javascript" src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 <script type="text/javascript" src="pages/lib/ValidateUtil.js"></script>
 
 <link rel="stylesheet"

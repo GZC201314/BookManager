@@ -3,8 +3,8 @@ package org.bsm.service;
 import java.util.List;
 
 import org.bsm.pageModel.Combobox;
+import org.bsm.pageModel.Menu;
 import org.bsm.pageModel.PageDataGrid;
-import org.bsm.pageModel.PageUser;
 import org.bsm.pageModel.Role;
 
 public interface RoleServiceI {
@@ -17,5 +17,7 @@ public interface RoleServiceI {
 	public Integer update(Role role);
 	
 	public void removeRole(Role role);
+	
+	public List<Menu> getGrandMenus(Role role);
 	
 }

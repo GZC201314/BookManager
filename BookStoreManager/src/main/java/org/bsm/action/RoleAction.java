@@ -1,10 +1,16 @@
 package org.bsm.action;
 
 import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
+import org.bsm.model.Tauthorize;
 import org.bsm.pageModel.Json;
 import org.bsm.pageModel.Menu;
 import org.bsm.pageModel.PageDataGrid;
@@ -88,6 +94,20 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 		}
 		super.writeJson(j);
 		logger.info("out into the edit Role  function....");
+	}	
+	/**
+	 * 获取授权角色的页面
+	 */
+	public void getGrandMenus() {
+		logger.info("into the getGrandMenus function");
+		List<Menu> menus = null;
+		try {
+			menus = roleService.getGrandMenus(role);
+		} catch (Exception e) {
+
+		}
+		super.writeJson(menus);
+		logger.info("out the getGrandMenus  function....");
 	}	
 	
 	/**

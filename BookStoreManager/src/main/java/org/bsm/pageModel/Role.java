@@ -1,7 +1,6 @@
 package org.bsm.pageModel;
 
 public class Role {
-
 	private String ids;
 	
 	
@@ -52,15 +51,15 @@ public class Role {
 	 * 页面数据
 	 */
 	
-	private int roleid;
+	private Integer roleid;
 	private String rolename;
 	private String oldrolename;
 	private String remark;
 	private String excol;
-	public int getRoleid() {
+	public Integer getRoleid() {
 		return roleid;
 	}
-	public void setRoleid(int roleid) {
+	public void setRoleid(Integer roleid) {
 		this.roleid = roleid;
 	}
 	public String getRolename() {
@@ -86,6 +85,19 @@ public class Role {
 	}
 	public void setExcol(String excol) {
 		this.excol = excol;
+	}
+	
+	/**
+	 * 角色授权的菜单Id
+	 */
+	private String menusId;
+
+
+	public String getMenusId() {
+		return menusId;
+	}
+	public void setMenusId(String menusId) {
+		this.menusId = menusId;
 	}
 	
 }

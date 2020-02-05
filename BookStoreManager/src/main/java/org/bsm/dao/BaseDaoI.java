@@ -31,5 +31,7 @@ public interface BaseDaoI<T> {
 	public Long count(String hql, Map<String, Object> params);
 	
 	public int executeHql(String hql);
+	
+	public int executeHql(String hql, Map<String, Object> params);
 
 }

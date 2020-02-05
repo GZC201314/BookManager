@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+	<!-- 新增用户弹窗 -->
 <div id="admin_yhgl_addDialog" class="easyui-dialog"
 	data-options="closed:true,modal:true,title:'添加用户',buttons:[{
 				text : '增加',
@@ -41,8 +41,8 @@
 			<tr>
 				<th>角色</th>
 				<td><input id="roleid1" name="roleid" /></td>
-			</tr>			
-			
+			</tr>
+
 		</table>
 	</form>
 </div>
@@ -122,6 +122,7 @@
 	</div>
 </div>
 <script type="text/javascript">
+
 	function searchFun() {
 		$('#admin_yhgl_datagrid').datagrid('load', serializeObject($('#admin_yhgl_searchForm')));
 	}
@@ -163,12 +164,8 @@
 		$('#endcreatetime').datebox().datebox('calendar').calendar({
 			validator : function(date) {
 				var now = new Date();
-				var startTime = $('#startcreatetime').val();
-				if (typeof (startTime) != undefined) {
-					var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-					return d1 >= date && startTime <= date;
-				}
-				return false;
+				var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+				return d1 >= date;
 			}
 		});
 		//初始化查询最后修改用户时间
@@ -182,13 +179,8 @@
 		$('#endmodifytime').datebox().datebox('calendar').calendar({
 			validator : function(date) {
 				var now = new Date();
-				var startTime = $('#startmodifytime').val();
-				console.log(startTime);
-				if (typeof (startTime) != undefined) {
-					var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-					return d1 >= date && startTime <= date;
-				}
-				return false;
+				var d1 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+				return d1 >= date;
 			}
 		});
 
@@ -207,7 +199,7 @@
 				$('#admin_yhgl_editForm input[name=name]').validatebox({
 					required : true
 				});
-				$('#roleid').combobox('setValue',rows[0].roleid);
+				$('#roleid').combobox('setValue', rows[0].roleid);
 
 			} else if (ids.length >= 2) {
 				$.messager.show({

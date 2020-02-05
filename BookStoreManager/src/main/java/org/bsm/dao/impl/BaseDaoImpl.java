@@ -130,4 +130,15 @@ public class BaseDaoImpl<T> implements BaseDaoI<T> {
 		return query.executeUpdate();
 	}
 
+	@Override
+	public int executeHql(String hql, Map<String, Object> params) {
+		Query query = sessionFactory.getCurrentSession().createSQLQuery(hql);
+		if (!CollectionUtil.isEmpty(params)) {
+			for (String key : params.keySet()) {
+				query.setParameter(key, params.get(key));
+			}
+		}
+		return query.executeUpdate();
+	}
+
 }

@@ -1,20 +1,22 @@
 package org.bsm.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bsm.dao.BaseDaoI;
+import org.bsm.model.Tauthorize;
+import org.bsm.model.Tmenu;
 import org.bsm.model.Trole;
-import org.bsm.model.Tuser;
 import org.bsm.pageModel.Combobox;
+import org.bsm.pageModel.Menu;
 import org.bsm.pageModel.PageDataGrid;
 import org.bsm.pageModel.Role;
 import org.bsm.service.RoleServiceI;
-import org.bsm.util.Encrypt;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,12 @@ public class RoleServiceImpl implements RoleServiceI {
 
 	@Autowired
 	private BaseDaoI<Trole> roleDao;
+
+	@Autowired
+	private BaseDaoI<Tauthorize> authorizeDao;
+
+	@Autowired
+	private BaseDaoI<Tmenu> menuDao;
 
 	@Override
 	public List<Combobox> getRoleItem() {
@@ -57,7 +65,24 @@ public class RoleServiceImpl implements RoleServiceI {
 			BeanUtils.copyProperties(role, trole);
 			Long roleid = roleDao.count("select max(roleid) from Trole");
 			trole.setRoleid(Integer.parseInt(++roleid + ""));
+			// TODO 新增角色的授权页面的添加
+			Set<Tauthorize> tauthorizes = trole.getTauthorizes();
+			
+			
+			
 			roleDao.save(trole);
+			String[] idarr = role.getMenusId().split(",");
+			for (String id : idarr) {
+				id = id.replace("'", "");
+				Tauthorize tauthorize = new Tauthorize();
+				tauthorize.setId(UUID.randomUUID().toString());
+				Tmenu tmenu = new Tmenu();
+				tmenu.setId(id);
+				tauthorize.setTrole(trole);
+				tauthorize.setTmenu(tmenu);
+				authorizeDao.save(tauthorize);
+				tauthorizes.add(tauthorize);
+			}
 			BeanUtils.copyProperties(trole, rolereturn);
 			return rolereturn;
 		}
@@ -116,7 +141,6 @@ public class RoleServiceImpl implements RoleServiceI {
 				return resultCode;
 			}
 			// 如果查询到角色信息
-
 			// 如果没有修改用户名
 			if (oldrolename.equals(rolename)) {
 				resultCode = 0;
@@ -133,25 +157,101 @@ public class RoleServiceImpl implements RoleServiceI {
 					resultCode = 2;
 				}
 			}
-			if(resultCode != 2) {
+			if (resultCode != 2) {
 				BeanUtils.copyProperties(role, trole);
+				//删除原来授权的页面
+				String hql1 = "delete from Tauthorize t where t.roleid=:roleid";
+				Map<String, Object> autParams = new HashMap<>();
+				autParams.put("roleid", trole.getRoleid());
+				authorizeDao.executeHql(hql1, autParams);
+				
+				//添加新的授权页面
+				Set<Tauthorize> tauthorizes = trole.getTauthorizes();
+				tauthorizes.clear();
+				String[] idarr = role.getMenusId().split(",");
+				for (String id : idarr) {
+					id = id.replace("'", "");
+					Tauthorize tauthorize = new Tauthorize();
+					tauthorize.setId(UUID.randomUUID().toString());
+					Tmenu tmenu = new Tmenu();
+					tmenu.setId(id);
+					tauthorize.setTrole(trole);
+					tauthorize.setTmenu(tmenu);
+					authorizeDao.save(tauthorize);
+					tauthorizes.add(tauthorize);
+				}
 				roleDao.update(trole);
 			}
-			
-			
+
 		}
 		return resultCode;
 	}
 
 	@Override
 	public void removeRole(Role role) {
-		// 
-		//如果删除的用户不为空
-		if(!StringUtils.isEmpty(role.getIds())) {
+		//
+		// 如果删除的角色不为空
+		if (!StringUtils.isEmpty(role.getIds())) {
 			String ids = role.getIds();
-			String hql = "delete from Trole t where t.roleid in ("+ids+")";
-			  roleDao.executeHql(hql);
+			//删除原来授权的页面
+			String hql1 = "delete from Tauthorize t where t.roleid in("+ids+")";
+			authorizeDao.executeHql(hql1);
+			String hql = "delete from Trole t where t.roleid in (" + ids + ")";
+			roleDao.executeHql(hql);
+			
+			
 		}
+	}
+
+	@Override
+	public List<Menu> getGrandMenus(Role role) {
+		if (!StringUtils.isEmpty(role.getRoleid())) {
+			// 1.获取全部的菜单信息
+			List<Menu> listMenu = new ArrayList<>();
+			List<Tmenu> tmenuList = menuDao.find("from Tmenu");
+
+			// 2.获取所有的授权的页面
+			String hql = "from Tauthorize where roleid=:roleid";
+			Map<String, Object> params = new HashMap<>();
+			params.put("roleid", role.getRoleid());
+			List<Tauthorize> tauthorizes = authorizeDao.find(hql, params);
+
+			if (!CollectionUtils.isEmpty(tmenuList)) {
+				// 获取
+				for (Tmenu tmenu : tmenuList) {
+					Menu menu = new Menu();
+					BeanUtils.copyProperties(tmenu, menu);
+					Tmenu parent = tmenu.getTmenu();
+					if (parent != null) {
+						menu.setPid(tmenu.getTmenu().getId());
+					}
+					Set<Tmenu> childrens = tmenu.getTmenus();
+
+					// 初始化attributes 属性
+					Map<String, Object> attributes = new HashMap<>();
+					attributes.put("url", tmenu.getUrl());
+					menu.setAttributes(attributes);
+
+					// 3.设置是否选中该页面
+					for (Tauthorize tauthorize : tauthorizes) {
+						if (tmenu.getId().equals(tauthorize.getTmenu().getId())
+								&& tauthorize.getTmenu().getTmenus().isEmpty()) {
+							menu.setChecked(true);
+						}
+					}
+
+					// 如果子菜单不为空
+					if (CollectionUtils.isEmpty(childrens)) {
+						menu.setState("open");
+					} else {
+						menu.setState("closed");
+					}
+					listMenu.add(menu);
+				}
+			}
+			return listMenu;
+		}
+		return null;
 	}
 
 }
