@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-	<!-- 新增用户弹窗 -->
+<!-- 新增用户弹窗 -->
 <div id="admin_yhgl_addDialog" class="easyui-dialog"
 	data-options="closed:true,modal:true,title:'添加用户',buttons:[{
 				text : '增加',
@@ -108,7 +108,7 @@
 				<input id="endcreatetime" name="endcreatetime"></input> 最后修改时间: <input
 					id="startmodifytime" name="startmodifytime"></input> -- <input
 					id="endmodifytime" name="endmodifytime"></input> 登录名称: <input
-					id="username" name="username"></input> <a href="#"
+					class="easyui-textbox" id="username" name="username"></input> <a href="#"
 					class="easyui-linkbutton"
 					data-options="iconCls:'icon-search',plain:true"
 					onclick="searchFun();">查询</a> <a href="#" class="easyui-linkbutton"
@@ -122,7 +122,6 @@
 	</div>
 </div>
 <script type="text/javascript">
-
 	function searchFun() {
 		$('#admin_yhgl_datagrid').datagrid('load', serializeObject($('#admin_yhgl_searchForm')));
 	}
@@ -131,8 +130,8 @@
 		$('#endcreatetime').datebox('setValue', '');
 		$('#startmodifytime').datebox('setValue', '');
 		$('#endmodifytime').datebox('setValue', '');
-		$('#username').val('');
-		$('#admin_yhgl_datagrid').datagrid('load');
+		$('#username').textbox('setText','');
+		$('#admin_yhgl_datagrid').datagrid('load',{});
 
 	}
 

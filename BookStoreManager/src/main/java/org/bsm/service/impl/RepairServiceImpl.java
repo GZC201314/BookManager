@@ -52,12 +52,35 @@ public class RepairServiceImpl implements RepairServiceI {
 		root.setText("首页");
 		root.setUrl("");
 		menuDaoI.saveOrUpdate(root);
+		
+		Tmenu yhzx = new Tmenu();
+		yhzx.setId("yhzx");
+		yhzx.setTmenu(root);
+		yhzx.setText("用户中心");
+		menuDaoI.saveOrUpdate(yhzx);
 
+		Tmenu grzx = new Tmenu();
+		grzx.setId("grzx");
+		grzx.setTmenu(yhzx);
+		grzx.setText("个人中心");
+		grzx.setUrl("/admin/grzx.jsp");
+		menuDaoI.saveOrUpdate(grzx);
+		
+		Tmenu xxxg = new Tmenu();
+		xxxg.setId("xxxg");
+		xxxg.setTmenu(yhzx);
+		xxxg.setText("信息修改");
+		xxxg.setUrl("/admin/xxxg.jsp");
+		menuDaoI.saveOrUpdate(xxxg);
+		
+		
 		Tmenu xtgl = new Tmenu();
 		xtgl.setId("xtgl");
 		xtgl.setTmenu(root);
 		xtgl.setText("系统管理");
 		menuDaoI.saveOrUpdate(xtgl);
+		
+		
 
 		Tmenu yhgl = new Tmenu();
 		yhgl.setId("yhgl");

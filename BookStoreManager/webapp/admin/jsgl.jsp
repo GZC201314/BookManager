@@ -7,11 +7,11 @@
 		data-options="iconCls:'icon-edit',plain:true">修改</a> <a
 		onclick="removerole();" class="easyui-linkbutton"
 		data-options="iconCls:'icon-remove',plain:true">删除</a> 角色名称: <input
-		id="admin_jsgl_rolename"></input> <a href="#"
+		id="admin_jsgl_rolename" class="easyui-textbox"></input> <a href="#"
 		class="easyui-linkbutton"
-		data-options="iconCls:'icon-search',plain:true" onclick="searchFun();">查询</a>
+		data-options="iconCls:'icon-search',plain:true" onclick="searchRoleFun();">查询</a>
 	<a href="#" class="easyui-linkbutton"
-		data-options="iconCls:'icon-cancel',plain:true" onclick="clearFun();">清空</a>
+		data-options="iconCls:'icon-cancel',plain:true" onclick="clearRoleFun();">清空</a>
 </div>
 <div id="admin_jsgl_addDialog" class="easyui-dialog"
 	data-options="closed:true,modal:true,title:'添加用户',buttons:[{
@@ -132,6 +132,7 @@
 		}
 		param.menusId = id.join(',');
 		param.menusPid = pid.join(',');
+		debugger;
 	}
 
 	function addGrandMenuid1(param) {
@@ -143,14 +144,15 @@
 		param.menusId = id.join(',');
 	}
 
-	function searchFun() {
+	function searchRoleFun() {
 		var rolename = $('#admin_jsgl_rolename').val();
 		$('#admin_jsgl_datagrid').datagrid('load', {
 			'rolename' : rolename
 		});
 	}
-	function clearFun() {
-		$('#admin_jsgl_rolename').val('');
+	function clearRoleFun() {
+		debugger;
+		$('#admin_jsgl_rolename').textbox('setText','');
 		$('#admin_jsgl_datagrid').datagrid('load', {});
 
 	}

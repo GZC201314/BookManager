@@ -142,6 +142,7 @@
 					$.cookie('token', obj.obj.token);
 					$.cookie('refreshToken', obj.obj.refreshToken);
 					$.cookie('role', obj.obj.role);
+					$.cookie('userName', obj.obj.userName);
 					$('#user_login_loginDialog').dialog('close');
 					$('#layout_north_userName').text(obj.obj.userName)
 				}
@@ -159,6 +160,7 @@
 
 		if (typeof ($.cookie("token")) != "undefined" && $.cookie("token").length > 0) {
 			$('#user_login_loginDialog').dialog('close');
+			$('#layout_north_userName').text($.cookie("userName"));
 		}
 
 		$('#user_reg_regForm').form({

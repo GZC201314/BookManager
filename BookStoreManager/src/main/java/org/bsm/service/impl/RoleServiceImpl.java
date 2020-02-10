@@ -198,6 +198,9 @@ public class RoleServiceImpl implements RoleServiceI {
 				pidarr = set.toArray(new String[set.size()]);
 				for (String id : pidarr) {
 					id = id.replace("'", "");
+					if("undefined".equals(id)||"0".equals(id)) {
+						continue;
+					}
 					Tauthorize tauthorize = new Tauthorize();
 					tauthorize.setId(UUID.randomUUID().toString());
 					Tmenu tmenu = new Tmenu();
@@ -206,7 +209,7 @@ public class RoleServiceImpl implements RoleServiceI {
 					tauthorize.setTmenu(tmenu);
 					authorizeDao.save(tauthorize);
 					tauthorizes.add(tauthorize);
-				}				
+				}
 				roleDao.update(trole);
 			}
 

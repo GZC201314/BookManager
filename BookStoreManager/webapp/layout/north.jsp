@@ -3,7 +3,7 @@
 	style="margin-top: 10px; background-color: #f9f9f9;">
 	<div class="head_font">网上图书商城</div>
 	<div style="float: right; float: right;">
-		<img alt="" class="avatar" src="img/default_user.jpg" height="20"
+		<img alt="" href="#" style="cursor: pointer;" class="avatar" onclick="userCenter();" src="img/default_user.jpg" height="20"
 			width="20"> <a id="layout_north_userName" href="#" class="easyui-menubutton"
 			data-options="menu:'#mm2'">请登录</a>
 	</div>
@@ -48,4 +48,9 @@
 			});
 		}
 	}
+	
+	function userCenter() {
+		alert("123");
+	}
+	
 </script>
