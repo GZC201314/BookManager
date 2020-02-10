@@ -80,7 +80,7 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 	public void edit() {
 		logger.info("into the edit User function");
 		Json j = new Json();
-		Integer resultCode =1;
+		Integer resultCode = 1;
 		try {
 			pageUser.setLastmodifytime(new Date());
 			resultCode = userServiceI.update(pageUser);
@@ -168,7 +168,7 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 
 				// 设置token的过期时间
 				redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
-				j.setObj(new AuthResult(token, refreshToken,tuser.getTrole().getRoleid()));
+				j.setObj(new AuthResult(token, refreshToken, tuser.getTrole().getRoleid(),tuser.getName()));
 				j.setMsg("登录成功.");
 				j.setSuccess(true);
 
@@ -183,6 +183,27 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 		}
 		super.writeJson(j);
 		logger.info("out into the login function");
+	}
+
+	/**
+	 * 登出
+	 */
+	public void logout() {
+		logger.info("into the logout function");
+		Json j = new Json();
+		try {
+			// 删除redis里边的登录信息
+			redisTemplate.opsForHash().delete(pageUser.getRefreshToken(),"username","token","role");;
+			j.setMsg("登出成功.");
+			j.setSuccess(true);
+
+		} catch (Exception e) {
+			j.setMsg(e.getMessage());
+			j.setSuccess(false);
+			logger.error(e.getMessage());
+		}
+		super.writeJson(j);
+		logger.info("out into the logout function");
 	}
 
 }

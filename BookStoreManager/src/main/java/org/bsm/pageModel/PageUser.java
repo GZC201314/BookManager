@@ -9,7 +9,27 @@ public class PageUser implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3243653850988254719L;
+	/**
+	 * 登出传参
+	 */
+	private String token;
+	private String refreshToken;
 	
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
 	/**
 	 * 修改用户使用字段
 	 */

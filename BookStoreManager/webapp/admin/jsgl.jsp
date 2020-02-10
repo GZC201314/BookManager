@@ -125,10 +125,13 @@
 	function addGrandMenuid(param) {
 		var nodes = $('#admin_yhgl_edit_grandMenutree').tree('getChecked');
 		var id = [];
+		var pid = [];
 		for ( var node in nodes) {
 			id.push("'" + nodes[node].id + "'");
+			pid.push("'" + nodes[node].pid + "'");
 		}
 		param.menusId = id.join(',');
+		param.menusPid = pid.join(',');
 	}
 
 	function addGrandMenuid1(param) {

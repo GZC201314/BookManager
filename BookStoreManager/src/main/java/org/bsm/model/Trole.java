@@ -1,5 +1,5 @@
 package org.bsm.model;
-// Generated 2020-1-30 22:28:22 by Hibernate Tools 4.0.1.Final
+// Generated 2020-2-10 11:19:53 by Hibernate Tools 4.0.1.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,26 +17,29 @@ import javax.persistence.Table;
 @Table(name = "trole", catalog = "bookmanager")
 public class Trole implements java.io.Serializable {
 
-	private Integer roleid;
+	private int roleid;
 	private String rolename;
 	private String remark;
 	private String excol;
+	private int disabled;
 	private Set<Tauthorize> tauthorizes = new HashSet<Tauthorize>(0);
 	private Set<Tuser> tusers = new HashSet<Tuser>(0);
 
 	public Trole() {
 	}
 
-	public Trole(Integer roleid) {
+	public Trole(int roleid, int disabled) {
 		this.roleid = roleid;
+		this.disabled = disabled;
 	}
 
-	public Trole(int roleid, String rolename, String remark, String excol, Set<Tauthorize> tauthorizes,
+	public Trole(int roleid, String rolename, String remark, String excol, int disabled, Set<Tauthorize> tauthorizes,
 			Set<Tuser> tusers) {
 		this.roleid = roleid;
 		this.rolename = rolename;
 		this.remark = remark;
 		this.excol = excol;
+		this.disabled = disabled;
 		this.tauthorizes = tauthorizes;
 		this.tusers = tusers;
 	}
@@ -44,11 +47,11 @@ public class Trole implements java.io.Serializable {
 	@Id
 
 	@Column(name = "roleid", unique = true, nullable = false)
-	public Integer getRoleid() {
+	public int getRoleid() {
 		return this.roleid;
 	}
 
-	public void setRoleid(Integer roleid) {
+	public void setRoleid(int roleid) {
 		this.roleid = roleid;
 	}
 
@@ -77,6 +80,15 @@ public class Trole implements java.io.Serializable {
 
 	public void setExcol(String excol) {
 		this.excol = excol;
+	}
+
+	@Column(name = "disabled", nullable = false)
+	public int getDisabled() {
+		return this.disabled;
+	}
+
+	public void setDisabled(int disabled) {
+		this.disabled = disabled;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "trole")

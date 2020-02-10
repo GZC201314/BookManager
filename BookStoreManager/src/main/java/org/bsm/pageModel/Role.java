@@ -3,7 +3,6 @@ package org.bsm.pageModel;
 public class Role {
 	private String ids;
 	
-	
 	public String getIds() {
 		return ids;
 	}
@@ -91,13 +90,19 @@ public class Role {
 	 * 角色授权的菜单Id
 	 */
 	private String menusId;
-
+	private String menusPid;
 
 	public String getMenusId() {
 		return menusId;
 	}
 	public void setMenusId(String menusId) {
 		this.menusId = menusId;
+	}
+	public String getMenusPid() {
+		return menusPid;
+	}
+	public void setMenusPid(String menusPid) {
+		this.menusPid = menusPid;
 	}
 	
 }

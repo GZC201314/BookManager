@@ -42,7 +42,9 @@ public class UserServiceImpl implements UserServiceI {
 		tuser.setCreatedatetime(new Date());
 		tuser.setLastmodifytime(new Date());
 		if(!StringUtils.isEmpty(t.getRoleid())) {
-			tuser.setTrole(new Trole(Integer.parseInt(t.getRoleid())));
+			tuser.setTrole(new Trole(Integer.parseInt(t.getRoleid()),0));
+		}else {//注册默认是买家角色
+			tuser.setTrole(new Trole(3,0));
 		}
 		userDao.save(tuser);
 		BeanUtils.copyProperties(tuser, pageUser);
@@ -151,7 +153,7 @@ public class UserServiceImpl implements UserServiceI {
 						tuser.setPwd(Encrypt.e(pageUser.getPwd()));
 					}
 					if(!StringUtils.isEmpty(pageUser.getRoleid())) {
-						tuser.setTrole(new Trole(Integer.parseInt(pageUser.getRoleid())));
+						tuser.setTrole(new Trole(Integer.parseInt(pageUser.getRoleid()),0));
 					}
 					if(!StringUtils.isEmpty(pageUser.getLastmodifytime())) {
 						tuser.setLastmodifytime(pageUser.getLastmodifytime());
@@ -175,7 +177,7 @@ public class UserServiceImpl implements UserServiceI {
 							oldUser.setPwd(Encrypt.e(pageUser.getPwd()));
 						}
 						if(!StringUtils.isEmpty(pageUser.getRoleid())) {
-							oldUser.setTrole(new Trole(Integer.parseInt(pageUser.getRoleid())));
+							oldUser.setTrole(new Trole(Integer.parseInt(pageUser.getRoleid()),0));
 						}
 						userDao.saveOrUpdate(oldUser);
 						resultCode =0;

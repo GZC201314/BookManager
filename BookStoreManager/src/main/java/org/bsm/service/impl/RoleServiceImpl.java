@@ -1,6 +1,7 @@
 package org.bsm.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,9 +38,11 @@ public class RoleServiceImpl implements RoleServiceI {
 
 	@Override
 	public List<Combobox> getRoleItem() {
-		String hql = "from Trole";
+		String hql = "from Trole where disabled = :disabled";
+		Map<String, Object> params = new HashMap<>();
+		params.put("disabled", 0);
 		List<Combobox> comboboxs = new ArrayList<Combobox>();
-		List<Trole> lists = roleDao.find(hql);
+		List<Trole> lists = roleDao.find(hql,params);
 		for (Trole trole : lists) {
 			Combobox combobox = new Combobox();
 			combobox.setId(trole.getRoleid() + "");
@@ -53,26 +56,36 @@ public class RoleServiceImpl implements RoleServiceI {
 	public Role save(Role role) {
 		// 判断新增的角色是否重复
 		if (!StringUtils.isEmpty(role)) {
-			String hql = "from Trole where rolename=:rolename";
+			String hql = "from Trole where rolename=:rolename and disabled=:disable";
 			Map<String, Object> params = new HashMap<>();
 			params.put("rolename", role.getRolename());
+			params.put("disable", 0);
 			Trole rTrole = roleDao.get(hql, params);
 			if (!StringUtils.isEmpty(rTrole)) {
 				return null;
 			}
 			Trole trole = new Trole();
 			Role rolereturn = new Role();
-			BeanUtils.copyProperties(role, trole);
+			BeanUtils.copyProperties(role, trole,"roleid");
 			Long roleid = roleDao.count("select max(roleid) from Trole");
 			trole.setRoleid(Integer.parseInt(++roleid + ""));
 			// TODO 新增角色的授权页面的添加
 			Set<Tauthorize> tauthorizes = trole.getTauthorizes();
-			
-			
-			
 			roleDao.save(trole);
 			String[] idarr = role.getMenusId().split(",");
 			for (String id : idarr) {
+				id = id.replace("'", "");
+				Tauthorize tauthorize = new Tauthorize();
+				tauthorize.setId(UUID.randomUUID().toString());
+				Tmenu tmenu = new Tmenu();
+				tmenu.setId(id);
+				tauthorize.setTrole(trole);
+				tauthorize.setTmenu(tmenu);
+				authorizeDao.save(tauthorize);
+				tauthorizes.add(tauthorize);
+			}
+			String[] pidarr = role.getMenusPid().split(",");
+			for (String id : pidarr) {
 				id = id.replace("'", "");
 				Tauthorize tauthorize = new Tauthorize();
 				tauthorize.setId(UUID.randomUUID().toString());
@@ -92,7 +105,7 @@ public class RoleServiceImpl implements RoleServiceI {
 	@Override
 	public PageDataGrid datagrid(Role role) {
 		// 添加过滤条件
-		String condition = " where 1=1";
+		String condition = " where disabled = 0 ";
 		Map<String, Object> params = new HashMap<>();
 
 		if (!StringUtils.isEmpty(role.getRolename())) {
@@ -180,6 +193,20 @@ public class RoleServiceImpl implements RoleServiceI {
 					authorizeDao.save(tauthorize);
 					tauthorizes.add(tauthorize);
 				}
+				String[] pidarr = role.getMenusPid().split(",");
+				Set<String> set=new HashSet<String>(Arrays.asList(pidarr));
+				pidarr = set.toArray(new String[set.size()]);
+				for (String id : pidarr) {
+					id = id.replace("'", "");
+					Tauthorize tauthorize = new Tauthorize();
+					tauthorize.setId(UUID.randomUUID().toString());
+					Tmenu tmenu = new Tmenu();
+					tmenu.setId(id);
+					tauthorize.setTrole(trole);
+					tauthorize.setTmenu(tmenu);
+					authorizeDao.save(tauthorize);
+					tauthorizes.add(tauthorize);
+				}				
 				roleDao.update(trole);
 			}
 
@@ -196,9 +223,12 @@ public class RoleServiceImpl implements RoleServiceI {
 			//删除原来授权的页面
 			String hql1 = "delete from Tauthorize t where t.roleid in("+ids+")";
 			authorizeDao.executeHql(hql1);
-			String hql = "delete from Trole t where t.roleid in (" + ids + ")";
-			roleDao.executeHql(hql);
-			
+			String hql = "from Trole t where t.roleid in (" + ids + ")";
+			List<Trole> troles = roleDao.find(hql);
+			for (Trole trole : troles) {
+				trole.setDisabled(1);
+				roleDao.update(trole);
+			}
 			
 		}
 	}

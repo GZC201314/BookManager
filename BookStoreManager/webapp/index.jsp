@@ -11,8 +11,28 @@
 	src="pages/lib/jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
 <script type="text/javascript"
 	src="pages/lib/jquery-easyui-1.7.0/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+<script type="text/javascript"
+	src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 <script type="text/javascript" src="pages/lib/ValidateUtil.js"></script>
+
+<style type="text/css">
+.avatar {
+	display: inline-block;
+	overflow: hidden;
+	line-height: 1;
+	vertical-align: middle;
+	border-radius: 3px;
+}
+
+.head_font {
+	width: 90%;
+	float: left;
+	font-family: cursive;
+	font-size: xx-large;
+	font-weight: bolder;
+	text-align: center;
+}
+</style>
 
 <link rel="stylesheet"
 	href="pages/lib/jquery-easyui-1.7.0/themes/default/easyui.css"
@@ -22,33 +42,12 @@
 <title>BSM</title>
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'north'" style="height: 60px;"></div>
+	<div data-options="region:'north'" style="height: 60px;background-color: #f9f9f9;">
+		<jsp:include page="layout/north.jsp"></jsp:include>
+	</div>
 	<div data-options="region:'south'" style="height: 60px;"></div>
 	<div data-options="region:'west'" style="width: 200px;">
-		<div class="easyui-panel"
-			data-options="title:'功能导航',border:false,fit:true">
-			<div class="easyui-accordion" data-options="fit:true,border:false">
-				<div title="系统菜单" data-options="iconCls:'icon-save'">
-					<ul id="layout_west_tree" class="easyui-tree"
-						data-options="
-					url : '${pageContext.request.contextPath}/menuAction!getTreeNote.action',
-					parentField : 'pid',
-					lines : true,
-					onClick : function(node) {
-						if (node.attributes.url) {
-							var url = '${pageContext.request.contextPath}' + node.attributes.url;
-							addTab({
-								title : node.text,
-								closable : true,
-								href : url
-							});
-						}
-					}
-					"></ul>
-				</div>
-				<div title="Title2" data-options="iconCls:'icon-reload'"></div>
-			</div>
-		</div>
+		<jsp:include page="layout/west.jsp"></jsp:include>
 	</div>
 	<div data-options="region:'east',title:'East'" style="width: 200px;">
 	</div>
@@ -104,7 +103,8 @@
 			<tr>
 				<th>登录名</th>
 				<td><input name="name" class="easyui-validatebox"
-					data-options="required:true,missingMessage:'登陆名称必填'" validType="validateSameName" /></td>
+					data-options="required:true,missingMessage:'登陆名称必填'"
+					validType="validateSameName" /></td>
 			</tr>
 			<tr>
 				<th>密码</th>
@@ -137,11 +137,13 @@
 			success : function(r) {
 				var obj = jQuery.parseJSON(r);
 				if (obj.success) {
+					debugger;
 					/* 登录成功把Token和refreshToken放到cookies中 */
 					$.cookie('token', obj.obj.token);
 					$.cookie('refreshToken', obj.obj.refreshToken);
 					$.cookie('role', obj.obj.role);
 					$('#user_login_loginDialog').dialog('close');
+					$('#layout_north_userName').text(obj.obj.userName)
 				}
 				$.messager.show({
 					title : '提示',
@@ -155,7 +157,7 @@
 			}
 		});
 
-		if (typeof($.cookie("token")) != "undefined" && $.cookie("token").length > 0) {
+		if (typeof ($.cookie("token")) != "undefined" && $.cookie("token").length > 0) {
 			$('#user_login_loginDialog').dialog('close');
 		}
 

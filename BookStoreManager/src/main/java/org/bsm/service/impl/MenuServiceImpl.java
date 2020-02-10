@@ -92,9 +92,6 @@ public class MenuServiceImpl implements MenuServiceI {
 		for (Tauthorize tauthorize : aTauthorizes) {
 			Menu menu1 = new Menu();
 			Tmenu tmenu = tauthorize.getTmenu();
-//			if("首页".equals(tmenu.getText())) {
-//				continue;
-//			}
 			BeanUtils.copyProperties(tmenu, menu1);	
 			Tmenu t = tmenu.getTmenu();
 			if (!StringUtils.isEmpty(t)) {
@@ -112,8 +109,18 @@ public class MenuServiceImpl implements MenuServiceI {
 			} else {
 				menu1.setState("closed");
 			}
-			menuList.add(menu1);
-		
+			if(!menuList.contains(menu1)) {
+				menuList.add(menu1);
+			}
+		}
+		Menu index = new Menu();
+		index.setChecked(false);
+		index.setId("0");
+		index.setText("首页");
+		index.setState("closed");
+		//如果菜单中不包含 首页,把首页加入到菜单中
+		if(!menuList.contains(index) && !"0".equals(id)) {
+			menuList.add(index);
 		}
 
 		return menuList;

@@ -1,5 +1,5 @@
 package org.bsm.model;
-// Generated 2020-1-30 22:28:22 by Hibernate Tools 4.0.1.Final
+// Generated 2020-2-10 11:19:53 by Hibernate Tools 4.0.1.Final
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -25,6 +25,7 @@ public class Tuser implements java.io.Serializable {
 	private String pwd;
 	private Date createdatetime;
 	private Date lastmodifytime;
+	private String userlog;
 
 	public Tuser() {
 	}
@@ -34,13 +35,15 @@ public class Tuser implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public Tuser(String name, Trole trole, String id, String pwd, Date createdatetime, Date lastmodifytime) {
+	public Tuser(String name, Trole trole, String id, String pwd, Date createdatetime, Date lastmodifytime,
+			String userlog) {
 		this.name = name;
 		this.trole = trole;
 		this.id = id;
 		this.pwd = pwd;
 		this.createdatetime = createdatetime;
 		this.lastmodifytime = lastmodifytime;
+		this.userlog = userlog;
 	}
 
 	@Id
@@ -100,6 +103,15 @@ public class Tuser implements java.io.Serializable {
 
 	public void setLastmodifytime(Date lastmodifytime) {
 		this.lastmodifytime = lastmodifytime;
+	}
+
+	@Column(name = "userlog", length = 256)
+	public String getUserlog() {
+		return this.userlog;
+	}
+
+	public void setUserlog(String userlog) {
+		this.userlog = userlog;
 	}
 
 }
