@@ -8,13 +8,16 @@ public class AuthResult {
 	private Integer role;
 	
 	private String userName;
+	
+	private String userlog;
 
-	public AuthResult(String token, String refreshToken,Integer role,String userName) {
+	public AuthResult(String token, String refreshToken,Integer role,String userName,String userlog) {
 		super();
 		this.Token = token;
 		this.refreshToken = refreshToken;
 		this.role = role;
 		this.userName = userName;
+		this.userlog = userlog;
 	}
 
 	public String getToken() {
@@ -47,5 +50,19 @@ public class AuthResult {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getUserlog() {
+		return userlog;
+	}
+
+	public void setUserlog(String userlog) {
+		this.userlog = userlog;
+	}
+
+	@Override
+	public String toString() {
+		return "AuthResult [Token=" + Token + ", refreshToken=" + refreshToken + ", role=" + role + ", userName="
+				+ userName + ", userlog=" + userlog + "]";
 	}
 }

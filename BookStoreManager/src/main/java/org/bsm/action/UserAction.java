@@ -1,7 +1,7 @@
 package org.bsm.action;
 
+import java.io.File;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +28,35 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 	private static final Logger logger = LogManager.getLogger(UserAction.class.getName());
 
 	private PageUser pageUser = new PageUser();
+	
 
+    private File upload;//定义一个File ,变量名要与jsp中的input标签的name一致
+    private String uploadContentType;//上传文件的mimeType类型
+    private String uploadFileName;//上传文件的名称
+
+	public File getUpload() {
+		return upload;
+	}
+
+	public void setUpload(File upload) {
+		this.upload = upload;
+	}
+
+	public String getUploadContentType() {
+		return uploadContentType;
+	}
+
+	public void setUploadContentType(String uploadContentType) {
+		this.uploadContentType = uploadContentType;
+	}
+
+	public String getUploadFileName() {
+		return uploadFileName;
+	}
+
+	public void setUploadFileName(String uploadFileName) {
+		this.uploadFileName = uploadFileName;
+	}
 	@Autowired
 	private UserServiceI userServiceI;
 	@Autowired
@@ -168,7 +196,7 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 
 				// 设置token的过期时间
 				redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
-				j.setObj(new AuthResult(token, refreshToken, tuser.getTrole().getRoleid(),tuser.getName()));
+				j.setObj(new AuthResult(token, refreshToken, tuser.getTrole().getRoleid(),tuser.getName(),tuser.getUserlog()));
 				j.setMsg("登录成功.");
 				j.setSuccess(true);
 
@@ -204,6 +232,59 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 		}
 		super.writeJson(j);
 		logger.info("out into the logout function");
+	}
+	/**
+	 * 上传头像图像
+	 */
+
+	public void uploadHeadIcon() {
+		logger.info("into the uploadHeadIcon function");
+		Json j = new Json();
+		try {
+			pageUser.setUploadImg(upload);
+			boolean result = userServiceI.uploadHeadIcon(pageUser);
+			if(result) {
+				j.setMsg("上传头像成功.");
+				j.setSuccess(true);
+			}else {
+				j.setMsg("上传头像失败.");
+				j.setSuccess(false);
+			}
+			
+		} catch (Exception e) {
+			j.setMsg(e.getMessage());
+			j.setSuccess(false);
+			logger.error(e.getMessage());
+		}
+		super.writeJson(j);
+		logger.info("out into the uploadHeadIcon function");
+	}
+	/**
+	 * 查询用户信息
+	 */
+	public void userInfo() {
+		logger.info("into the userInfo function");
+		Json j = new Json();
+		try {
+			// 查询用户的详细信息
+			PageUser repageUser = userServiceI.userInfo(pageUser);
+			if(StringUtils.isEmpty(repageUser)) {
+				
+				j.setMsg("获取用户信息失败.");
+				j.setSuccess(false);
+			}else {
+				j.setMsg("获取用户信息成功.");
+				j.setSuccess(true);
+				j.setObj(repageUser);
+			}
+			
+		} catch (Exception e) {
+			j.setMsg(e.getMessage());
+			j.setSuccess(false);
+			logger.error(e.getMessage());
+		}
+		super.writeJson(j);
+		logger.info("out into the userInfo function");
 	}
 
 }

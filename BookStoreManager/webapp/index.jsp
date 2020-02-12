@@ -14,6 +14,7 @@
 <script type="text/javascript"
 	src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 <script type="text/javascript" src="pages/lib/ValidateUtil.js"></script>
+<script type="text/javascript" src="pages/lib/verUpload/verUpload.js"></script>
 
 <style type="text/css">
 .avatar {
@@ -32,6 +33,19 @@
 	font-weight: bolder;
 	text-align: center;
 }
+
+.ibx-uc-uimg {
+	padding-top: 80px;
+	position: relative;
+	text-align: center;
+}
+
+.ibx-uc-unick {
+	line-height: 80px;
+	font-size: 20px;
+	margin-bottom: 4px;
+}
+
 </style>
 
 <link rel="stylesheet"
@@ -42,7 +56,8 @@
 <title>BSM</title>
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'north'" style="height: 60px;background-color: #f9f9f9;">
+	<div data-options="region:'north'"
+		style="height: 60px; background-color: #f9f9f9;">
 		<jsp:include page="layout/north.jsp"></jsp:include>
 	</div>
 	<div data-options="region:'south'" style="height: 60px;"></div>
@@ -144,7 +159,8 @@
 					$.cookie('role', obj.obj.role);
 					$.cookie('userName', obj.obj.userName);
 					$('#user_login_loginDialog').dialog('close');
-					$('#layout_north_userName').text(obj.obj.userName)
+					$('#layout_north_userName').text(obj.obj.userName);
+					$('#admin_north_headIcon').attr("src", decodeURI(obj.obj.userlog));
 				}
 				$.messager.show({
 					title : '提示',

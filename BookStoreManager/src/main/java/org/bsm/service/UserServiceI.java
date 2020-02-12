@@ -7,6 +7,8 @@ import org.bsm.pageModel.PageUser;
 public interface UserServiceI {
 
 	public PageUser save(PageUser t);
+	
+	public PageUser userInfo(PageUser t);
 
 	public Tuser login(PageUser t);
 
@@ -17,4 +19,6 @@ public interface UserServiceI {
 	public Tuser validateName(String name);
 	
 	public Integer update(PageUser pageUser);
+	
+	public boolean uploadHeadIcon(PageUser pageUser);
 }

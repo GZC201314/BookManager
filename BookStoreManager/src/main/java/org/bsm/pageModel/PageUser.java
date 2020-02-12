@@ -1,6 +1,7 @@
 package org.bsm.pageModel;
 // Generated 2020-1-1 16:12:16 by Hibernate Tools 4.3.5.Final
 
+import java.io.File;
 import java.util.Date;
 
 public class PageUser implements java.io.Serializable {
@@ -9,12 +10,42 @@ public class PageUser implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3243653850988254719L;
+
+	// 上传的头像图像
+	private File uploadImg;
+	private String uploadFileName;
+	private String userlog;
+
+	public String getUserlog() {
+		return userlog;
+	}
+
+	public void setUserlog(String userlog) {
+		this.userlog = userlog;
+	}
+
+	public File getUploadImg() {
+		return uploadImg;
+	}
+
+	public void setUploadImg(File uploadImg) {
+		this.uploadImg = uploadImg;
+	}
+
+	public String getUploadFileName() {
+		return uploadFileName;
+	}
+
+	public void setUploadFileName(String uploadFileName) {
+		this.uploadFileName = uploadFileName;
+	}
+
 	/**
 	 * 登出传参
 	 */
 	private String token;
 	private String refreshToken;
-	
+
 	public String getToken() {
 		return token;
 	}
@@ -30,11 +61,12 @@ public class PageUser implements java.io.Serializable {
 	public void setRefreshToken(String refreshToken) {
 		this.refreshToken = refreshToken;
 	}
+
 	/**
 	 * 修改用户使用字段
 	 */
 	private String oldname;
-	
+
 	public String getOldname() {
 		return oldname;
 	}
@@ -42,8 +74,9 @@ public class PageUser implements java.io.Serializable {
 	public void setOldname(String oldname) {
 		this.oldname = oldname;
 	}
+
 	private String ids;
-	
+
 	public String getIds() {
 		return ids;
 	}
@@ -51,10 +84,9 @@ public class PageUser implements java.io.Serializable {
 	public void setIds(String ids) {
 		this.ids = ids;
 	}
+
 	private int page;
 	private int rows;
-	
-	
 
 	public int getPage() {
 		return page;
@@ -71,18 +103,18 @@ public class PageUser implements java.io.Serializable {
 	public void setRows(int rows) {
 		this.rows = rows;
 	}
-	//查询条件字段
+
+	// 查询条件字段
 	private Date startcreatetime;
 	private Date endcreatetime;
 	private Date startmodifytime;
 	private Date endmodifytime;
 	private String username;
-	
-	//查询排序字段
+
+	// 查询排序字段
 	private String sort;
 	private String order;
-	
-	
+
 	public String getSort() {
 		return sort;
 	}
@@ -138,12 +170,14 @@ public class PageUser implements java.io.Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
 	private String id;
 	private String name;
 	private String pwd;
 	private Date createdatetime;
 	private Date lastmodifytime;
 	private String roleid;
+
 	public PageUser() {
 	}
 
