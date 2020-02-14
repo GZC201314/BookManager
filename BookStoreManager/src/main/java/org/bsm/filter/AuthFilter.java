@@ -15,7 +15,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.jasper.tagplugins.jstl.core.Url;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.bsm.util.JWTUtil;
@@ -69,6 +68,7 @@ public class AuthFilter implements Filter {
 		String userName = "";
 		if (StringUtils.isEmpty(url)) {
 			return;
+			// TODO
 		} else if (url.contains("login") || url.contains("reg") || url.contains("repair") || url.contains("menuAction")
 				|| url.contains("validateName")) {// 如果是注册和登录以及数据库修复则跳过过滤器
 			chain.doFilter(request, response);

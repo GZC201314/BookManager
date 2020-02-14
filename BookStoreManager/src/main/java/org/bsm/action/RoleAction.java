@@ -47,7 +47,6 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 		return role;
 	}
 
-	// 异步获取菜单树的方法
 	public void getComboboxItem() {
 		super.writeJson(roleService.getRoleItem());
 	}

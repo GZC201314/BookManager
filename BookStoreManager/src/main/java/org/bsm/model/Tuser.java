@@ -1,5 +1,5 @@
 package org.bsm.model;
-// Generated 2020-2-10 11:19:53 by Hibernate Tools 4.0.1.Final
+// Generated 2020-2-13 22:52:44 by Hibernate Tools 4.0.1.Final
 
 import java.util.Date;
 import javax.persistence.Column;

@@ -53,6 +53,19 @@ public class RepairServiceImpl implements RepairServiceI {
 		root.setUrl("");
 		menuDaoI.saveOrUpdate(root);
 		
+		Tmenu tszq = new Tmenu();
+		tszq.setId("tszq");
+		tszq.setTmenu(root);
+		tszq.setText("图书专区");
+		menuDaoI.saveOrUpdate(tszq);
+		
+		Tmenu tsgl = new Tmenu();
+		tsgl.setId("tsgl");
+		tsgl.setTmenu(tszq);
+		tsgl.setText("图书管理");
+		tsgl.setUrl("/tszq/tsgl.jsp");
+		menuDaoI.saveOrUpdate(tsgl);
+		
 		Tmenu yhzx = new Tmenu();
 		yhzx.setId("yhzx");
 		yhzx.setTmenu(root);

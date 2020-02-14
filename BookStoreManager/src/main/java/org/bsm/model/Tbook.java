@@ -1,9 +1,14 @@
 package org.bsm.model;
-// Generated 2020-2-10 11:19:53 by Hibernate Tools 4.0.1.Final
+// Generated 2020-2-13 22:52:44 by Hibernate Tools 4.0.1.Final
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -13,48 +18,108 @@ import javax.persistence.Table;
 @Table(name = "tbook", catalog = "bookmanager")
 public class Tbook implements java.io.Serializable {
 
-	private String isbn;
-	private String id;
+	private TbookId id;
+	private Ttag ttag;
+	private String splitIsbn;
 	private String name;
-	private Double price;
-	private Integer remainnumber;
+	private String englishName;
+	private String title;
+	private String seriesName;
+	private String copiesCount;
+	private String cip;
+	private String author;
+	private String introduction;
+	private String content;
+	private String publisher;
+	private String publishingTime;
+	private String publishingAddress;
+	private String edition;
+	private String print;
+	private String score;
+	private String translate;
+	private String editor;
+	private String illustrator;
+	private String pageCount;
+	private String folio;
+	private String size;
+	private String weight;
+	private String price;
+	private String image;
 
 	public Tbook() {
 	}
 
-	public Tbook(String isbn) {
-		this.isbn = isbn;
-	}
-
-	public Tbook(String isbn, String id, String name, Double price, Integer remainnumber) {
-		this.isbn = isbn;
+	public Tbook(TbookId id) {
 		this.id = id;
+	}
+
+	public Tbook(TbookId id, Ttag ttag, String splitIsbn, String name, String englishName, String title,
+			String seriesName, String copiesCount, String cip, String author, String introduction, String content,
+			String publisher, String publishingTime, String publishingAddress, String edition, String print,
+			String score, String translate, String editor, String illustrator, String pageCount, String folio,
+			String size, String weight, String price, String image) {
+		this.id = id;
+		this.ttag = ttag;
+		this.splitIsbn = splitIsbn;
 		this.name = name;
+		this.englishName = englishName;
+		this.title = title;
+		this.seriesName = seriesName;
+		this.copiesCount = copiesCount;
+		this.cip = cip;
+		this.author = author;
+		this.introduction = introduction;
+		this.content = content;
+		this.publisher = publisher;
+		this.publishingTime = publishingTime;
+		this.publishingAddress = publishingAddress;
+		this.edition = edition;
+		this.print = print;
+		this.score = score;
+		this.translate = translate;
+		this.editor = editor;
+		this.illustrator = illustrator;
+		this.pageCount = pageCount;
+		this.folio = folio;
+		this.size = size;
+		this.weight = weight;
 		this.price = price;
-		this.remainnumber = remainnumber;
+		this.image = image;
 	}
 
-	@Id
+	@EmbeddedId
 
-	@Column(name = "isbn", unique = true, nullable = false)
-	public String getIsbn() {
-		return this.isbn;
-	}
-
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
-	}
-
-	@Column(name = "id", length = 36)
-	public String getId() {
+	@AttributeOverrides({
+			@AttributeOverride(name = "code", column = @Column(name = "code", nullable = false, length = 32)),
+			@AttributeOverride(name = "isbn", column = @Column(name = "isbn", nullable = false, length = 32)) })
+	public TbookId getId() {
 		return this.id;
 	}
 
-	public void setId(String id) {
+	public void setId(TbookId id) {
 		this.id = id;
 	}
 
-	@Column(name = "name")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "clc")
+	public Ttag getTtag() {
+		return this.ttag;
+	}
+
+	public void setTtag(Ttag ttag) {
+		this.ttag = ttag;
+	}
+
+	@Column(name = "splitIsbn", length = 36)
+	public String getSplitIsbn() {
+		return this.splitIsbn;
+	}
+
+	public void setSplitIsbn(String splitIsbn) {
+		this.splitIsbn = splitIsbn;
+	}
+
+	@Column(name = "name", length = 128)
 	public String getName() {
 		return this.name;
 	}
@@ -63,22 +128,211 @@ public class Tbook implements java.io.Serializable {
 		this.name = name;
 	}
 
-	@Column(name = "price", precision = 22, scale = 0)
-	public Double getPrice() {
+	@Column(name = "englishName", length = 128)
+	public String getEnglishName() {
+		return this.englishName;
+	}
+
+	public void setEnglishName(String englishName) {
+		this.englishName = englishName;
+	}
+
+	@Column(name = "title", length = 128)
+	public String getTitle() {
+		return this.title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	@Column(name = "seriesName", length = 128)
+	public String getSeriesName() {
+		return this.seriesName;
+	}
+
+	public void setSeriesName(String seriesName) {
+		this.seriesName = seriesName;
+	}
+
+	@Column(name = "copiesCount", length = 128)
+	public String getCopiesCount() {
+		return this.copiesCount;
+	}
+
+	public void setCopiesCount(String copiesCount) {
+		this.copiesCount = copiesCount;
+	}
+
+	@Column(name = "cip", length = 128)
+	public String getCip() {
+		return this.cip;
+	}
+
+	public void setCip(String cip) {
+		this.cip = cip;
+	}
+
+	@Column(name = "author", length = 32)
+	public String getAuthor() {
+		return this.author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	@Column(name = "introduction", length = 65535)
+	public String getIntroduction() {
+		return this.introduction;
+	}
+
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+
+	@Column(name = "content", length = 65535)
+	public String getContent() {
+		return this.content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	@Column(name = "publisher", length = 128)
+	public String getPublisher() {
+		return this.publisher;
+	}
+
+	public void setPublisher(String publisher) {
+		this.publisher = publisher;
+	}
+
+	@Column(name = "publishingTime", length = 32)
+	public String getPublishingTime() {
+		return this.publishingTime;
+	}
+
+	public void setPublishingTime(String publishingTime) {
+		this.publishingTime = publishingTime;
+	}
+
+	@Column(name = "publishingAddress", length = 128)
+	public String getPublishingAddress() {
+		return this.publishingAddress;
+	}
+
+	public void setPublishingAddress(String publishingAddress) {
+		this.publishingAddress = publishingAddress;
+	}
+
+	@Column(name = "edition", length = 32)
+	public String getEdition() {
+		return this.edition;
+	}
+
+	public void setEdition(String edition) {
+		this.edition = edition;
+	}
+
+	@Column(name = "print", length = 32)
+	public String getPrint() {
+		return this.print;
+	}
+
+	public void setPrint(String print) {
+		this.print = print;
+	}
+
+	@Column(name = "score", length = 32)
+	public String getScore() {
+		return this.score;
+	}
+
+	public void setScore(String score) {
+		this.score = score;
+	}
+
+	@Column(name = "translate", length = 32)
+	public String getTranslate() {
+		return this.translate;
+	}
+
+	public void setTranslate(String translate) {
+		this.translate = translate;
+	}
+
+	@Column(name = "editor", length = 32)
+	public String getEditor() {
+		return this.editor;
+	}
+
+	public void setEditor(String editor) {
+		this.editor = editor;
+	}
+
+	@Column(name = "illustrator", length = 32)
+	public String getIllustrator() {
+		return this.illustrator;
+	}
+
+	public void setIllustrator(String illustrator) {
+		this.illustrator = illustrator;
+	}
+
+	@Column(name = "pageCount", length = 32)
+	public String getPageCount() {
+		return this.pageCount;
+	}
+
+	public void setPageCount(String pageCount) {
+		this.pageCount = pageCount;
+	}
+
+	@Column(name = "folio", length = 32)
+	public String getFolio() {
+		return this.folio;
+	}
+
+	public void setFolio(String folio) {
+		this.folio = folio;
+	}
+
+	@Column(name = "size", length = 32)
+	public String getSize() {
+		return this.size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
+	@Column(name = "weight", length = 32)
+	public String getWeight() {
+		return this.weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+
+	@Column(name = "price", length = 32)
+	public String getPrice() {
 		return this.price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 
-	@Column(name = "remainnumber")
-	public Integer getRemainnumber() {
-		return this.remainnumber;
+	@Column(name = "image", length = 65535)
+	public String getImage() {
+		return this.image;
 	}
 
-	public void setRemainnumber(Integer remainnumber) {
-		this.remainnumber = remainnumber;
+	public void setImage(String image) {
+		this.image = image;
 	}
 
 }

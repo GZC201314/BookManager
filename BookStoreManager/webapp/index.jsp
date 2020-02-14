@@ -46,6 +46,14 @@
 	margin-bottom: 4px;
 }
 
+div img {
+	cursor: pointer;
+	transition: all 0.6s;
+}
+
+div img:hover {
+	transform: scale(1.4);
+}
 </style>
 
 <link rel="stylesheet"
@@ -152,12 +160,12 @@
 			success : function(r) {
 				var obj = jQuery.parseJSON(r);
 				if (obj.success) {
-					debugger;
 					/* 登录成功把Token和refreshToken放到cookies中 */
 					$.cookie('token', obj.obj.token);
 					$.cookie('refreshToken', obj.obj.refreshToken);
 					$.cookie('role', obj.obj.role);
 					$.cookie('userName', obj.obj.userName);
+					$.cookie('userlog', decodeURI(obj.obj.userlog));
 					$('#user_login_loginDialog').dialog('close');
 					$('#layout_north_userName').text(obj.obj.userName);
 					$('#admin_north_headIcon').attr("src", decodeURI(obj.obj.userlog));
@@ -177,6 +185,7 @@
 		if (typeof ($.cookie("token")) != "undefined" && $.cookie("token").length > 0) {
 			$('#user_login_loginDialog').dialog('close');
 			$('#layout_north_userName').text($.cookie("userName"));
+			$('#admin_north_headIcon').attr("src", $.cookie("userlog"));
 		}
 
 		$('#user_reg_regForm').form({
