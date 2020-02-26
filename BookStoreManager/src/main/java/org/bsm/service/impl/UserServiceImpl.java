@@ -12,11 +12,6 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.bsm.dao.BaseDaoI;
@@ -31,8 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
-import freemarker.template.utility.StringUtil;
 
 @Service(value = "userServiceI")
 public class UserServiceImpl implements UserServiceI {
@@ -89,9 +82,9 @@ public class UserServiceImpl implements UserServiceI {
 			params.put("startmodifytime", pageUser.getStartmodifytime());
 			params.put("endmodifytime", pageUser.getEndmodifytime());
 		}
-		if (!StringUtils.isEmpty(pageUser.getUsername())) {
+		if (!StringUtils.isEmpty(pageUser.getUserName())) {
 			condition += " and name like :name";
-			params.put("name", "%%" + pageUser.getUsername().trim() + "%%");
+			params.put("name", "%%" + pageUser.getUserName().trim() + "%%");
 		}
 
 		// 添加排序方式
@@ -201,10 +194,9 @@ public class UserServiceImpl implements UserServiceI {
 
 	@Override
 	public PageUser userInfo(PageUser t) {
-		URLDecoder urlDecoder = new URLDecoder();
 		String userName = t.getUsername();
 		try {
-			userName = urlDecoder.decode(userName, "UTF-8");
+			userName = URLDecoder.decode(userName, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

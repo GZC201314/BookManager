@@ -110,6 +110,15 @@ public class PageUser implements java.io.Serializable {
 	private Date startmodifytime;
 	private Date endmodifytime;
 	private String username;
+	private String userName;
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	// 查询排序字段
 	private String sort;

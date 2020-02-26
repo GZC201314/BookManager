@@ -41,7 +41,7 @@
 		enctype="multipart/form-data">
 		<h3>图书信息</h3>
 		<div id="tszq_sjgl_toobar" style="margin-bottom: 15px;">
-			图书ISBN:   <input id="tszq_sjgl_searchbookisbn" class="easyui-textbox"></input>
+			图书ISBN: <input id="tszq_sjgl_searchbookisbn" class="easyui-textbox"></input>
 			<a href="#" class="easyui-linkbutton"
 				data-options="iconCls:'icon-search',plain:true"
 				onclick="insertBookFun();">插入</a>
@@ -101,13 +101,13 @@
 				class="easyui-numberbox" label="出版时间:" data-options="min:0"
 				style="width: 70%">
 		</div>
-		<div style="margin-bottom: 10px; ">
-			<input id="tszq_sjgl_code1" label="图书编码:" name="code" class="easyui-textbox"
-				style="width: 70%">
+		<div style="margin-bottom: 10px;">
+			<input id="tszq_sjgl_code1" label="图书编码:" name="code"
+				class="easyui-textbox" style="width: 70%">
 		</div>
 		<div style="margin-bottom: 10px;">
-			<input id="tszq_sjgl_isbn1" label="ISBN:" name="Isbn" class="easyui-textbox"
-				style="width: 70%">
+			<input id="tszq_sjgl_isbn1" label="ISBN:" name="Isbn"
+				class="easyui-textbox" style="width: 70%">
 		</div>
 		<div style="margin-bottom: 10px; display: none;">
 			<input id="tszq_sjgl_image2" name="image" class="easyui-textbox"
@@ -242,6 +242,7 @@
 				type : 'post',
 				dataType : "json",
 				success : function(data) {
+					debugger;
 					if (data.success == true) {
 						$('#tszq_sjgl_code1').textbox('setValue', data.obj.code);
 						$('#tszq_sjgl_isbn1').textbox('setValue', data.obj.isbn);
@@ -337,7 +338,7 @@
 
 	}
 
-	//批量删除用户
+	//批量删除图书
 	function removeBook() {
 		var ids = [];
 		var rows = $('#tszq_sjgl_datagrid').datagrid('getChecked');
@@ -364,7 +365,11 @@
 								title : '提示',
 								msg : data.msg
 							});
-						}
+						},
+					    error:function(xhr,textStatus){
+					    	//先把cookie失效
+					    	//重新刷新页面
+					    }						
 					});
 				}
 			});

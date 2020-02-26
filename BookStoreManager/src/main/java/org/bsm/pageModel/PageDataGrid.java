@@ -3,11 +3,12 @@ package org.bsm.pageModel;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("rawtypes")
 public class PageDataGrid {
 
-	private Long total =0L;
-	
-	private List rows= new ArrayList<>();
+	private Long total = 0L;
+
+	private List rows = new ArrayList<>();
 
 	public Long getTotal() {
 		return total;

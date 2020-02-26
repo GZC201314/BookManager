@@ -9,6 +9,15 @@ $.extend($.fn.validatebox.defaults.rules, {
 		message : '密码不一致！'
 	}
 });
+$.extend($.fn.validatebox.defaults.rules, {
+	eqvalidateCode : {
+		validator : function(value, param) {
+			console.log($.cookie("validateCode"));
+			return value == $.cookie("validateCode");
+		},
+		message : '验证码错误！'
+	}
+});
 
 $.extend($.fn.validatebox.defaults.rules, {
 	validateSameName : {

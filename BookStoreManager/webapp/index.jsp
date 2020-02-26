@@ -7,6 +7,7 @@
 <script type="text/javascript"
 	src="pages/lib/jquery-easyui-1.7.0/jquery.min.js"></script>
 <script type="text/javascript" src="pages/lib/jquery.cookie.js"></script>
+<script type="text/javascript" src="pages/lib/jquery.session.js"></script>
 <script type="text/javascript"
 	src="pages/lib/jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
 <script type="text/javascript"
@@ -97,19 +98,29 @@ div img:hover {
 				}
 			}]">
 	<form id="user_login_loginForm" method="post">
-		<table>
-			<tr>
-				<th>登录名</th>
-				<td><input name="name" class="easyui-validatebox"
-					data-options="required:true,missingMessage:'登陆名称必填'" /></td>
-			</tr>
-			<tr>
-				<th>密码</th>
-				<td><input type="password" name="pwd"
-					class="easyui-validatebox"
-					data-options="required:true,missingMessage:'登陆密码必填'" /></td>
-			</tr>
-		</table>
+
+		<div style="margin: 20px;">
+			<input name="name" class="easyui-textbox"
+				data-options="required:true,missingMessage:'登陆名必填'" label="用户名称:"
+				style="width: 300px;">
+		</div>
+		<div style="margin: 20px;">
+			<input name="pwd" class="easyui-passwordbox"
+				data-options="required:true,missingMessage:'登陆密码必填'" label="登陆密码:"
+				style="width: 300px;">
+		</div>
+		<div style="margin: 20px;">
+			<input name="validateCode" class="easyui-textbox" required="true"
+				label="验证码:"
+				data-options="required:true,validType:'eqvalidateCode[\'#user_login_loginForm input[name=validateCode]\']'"
+				style="width: 300px;">
+		</div>
+		<div style="margin: 20px;">
+			<img id="image"
+				src="${pageContext.request.contextPath}/userAction!check.action"
+				style="float: left; height: 24px; margin-right: 30px;" /> <a
+				href="javascript:void(0)" onclick="changeCheckCode();return false;">看不清，换一张</a>
+		</div>
 	</form>
 </div>
 <!-- 注册弹窗 -->
@@ -145,6 +156,11 @@ div img:hover {
 </div>
 
 <script type="text/javascript">
+	//切换验证码
+	function changeCheckCode() {
+		var nowTime = new Date;
+		$("#image").attr("src", '${pageContext.request.contextPath}/userAction!check.action' + "?time=" + nowTime.getTime());
+	}
 	//新增tab页签
 	function addTab(opts) {
 		var t = $('#index_centerTab');
@@ -168,7 +184,9 @@ div img:hover {
 					$.cookie('userlog', decodeURI(obj.obj.userlog));
 					$('#user_login_loginDialog').dialog('close');
 					$('#layout_north_userName').text(obj.obj.userName);
-					$('#admin_north_headIcon').attr("src", decodeURI(obj.obj.userlog));
+					if (!(typeof (obj.obj.userlog) == "undefined" || obj.obj.userlog == "")) {
+						$('#admin_north_headIcon').attr("src", decodeURI(obj.obj.userlog));
+					}
 				}
 				$.messager.show({
 					title : '提示',

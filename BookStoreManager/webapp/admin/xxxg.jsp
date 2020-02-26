@@ -43,6 +43,9 @@
 	$(function() {
 		debugger;
 		var src = $('#admin_north_headIcon')[0].src;
+		if(typeof(src) == "undefined"){
+			return;
+		}
 		$('#admin_xxxg_uploadImg').attr('src', src);
 	});
 </script>

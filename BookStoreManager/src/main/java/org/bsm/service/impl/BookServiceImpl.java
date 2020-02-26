@@ -190,6 +190,7 @@ public class BookServiceImpl implements BookServiceI {
 				if(StringUtils.isEmpty(bookQuery.getUploadbookImg())) {
 					BeanUtils.copyProperties(bookQuery, tbook,"image");
 				}else {
+					BeanUtils.copyProperties(bookQuery, tbook,"image");
 					tbook.setImage(FileUtil.fileToBase64(bookQuery.getUploadbookImg()));
 				}
 				tbook.setTtag(new Ttag(bookQuery.getClc(), bookQuery.getClcText()));

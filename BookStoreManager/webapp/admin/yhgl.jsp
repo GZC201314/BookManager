@@ -108,7 +108,7 @@
 				<input id="endcreatetime" name="endcreatetime"></input> 最后修改时间: <input
 					id="startmodifytime" name="startmodifytime"></input> -- <input
 					id="endmodifytime" name="endmodifytime"></input> 登录名称: <input
-					class="easyui-textbox" id="username" name="username"></input> <a href="#"
+					class="easyui-textbox" id="username" name="userName"></input> <a href="#"
 					class="easyui-linkbutton"
 					data-options="iconCls:'icon-search',plain:true"
 					onclick="searchFun();">查询</a> <a href="#" class="easyui-linkbutton"
