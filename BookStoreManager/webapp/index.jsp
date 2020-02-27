@@ -78,7 +78,7 @@ div img:hover {
 	<!-- 中间tab内容显示 -->
 	<div data-options="region:'center'">
 		<div id="index_centerTab" class="easyui-tabs"
-			data-options="fit:true,border:false">
+			data-options="fit:true,border:false" style="text-align: -webkit-center;">
 			<div title="首页"></div>
 		</div>
 	</div>

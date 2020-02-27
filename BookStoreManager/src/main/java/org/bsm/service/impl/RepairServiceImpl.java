@@ -52,7 +52,6 @@ public class RepairServiceImpl implements RepairServiceI {
 		root.setText("首页");
 		root.setUrl("");
 		menuDaoI.saveOrUpdate(root);
-		
 		Tmenu tszq = new Tmenu();
 		tszq.setId("tszq");
 		tszq.setTmenu(root);
@@ -65,6 +64,20 @@ public class RepairServiceImpl implements RepairServiceI {
 		tsgl.setText("图书管理");
 		tsgl.setUrl("/tszq/tsgl.jsp");
 		menuDaoI.saveOrUpdate(tsgl);
+		
+		Tmenu aizq = new Tmenu();
+		aizq.setId("aizq");
+		aizq.setTmenu(root);
+		aizq.setText("智能专区");
+		menuDaoI.saveOrUpdate(aizq);
+		
+		Tmenu tpsb = new Tmenu();
+		tpsb.setId("tpsb");
+		tpsb.setTmenu(aizq);
+		tpsb.setText("图片识别");
+		tpsb.setUrl("/aizq/tpsb.jsp");
+		menuDaoI.saveOrUpdate(tpsb);
+		
 		
 		Tmenu yhzx = new Tmenu();
 		yhzx.setId("yhzx");
