@@ -6,7 +6,6 @@ import java.net.URLEncoder;
 import org.baidu.util.Base64Util;
 import org.baidu.util.HttpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**

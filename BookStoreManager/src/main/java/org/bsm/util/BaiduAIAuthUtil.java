@@ -5,8 +5,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.springframework.data.redis.connection.HyperLogLogCommands;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -75,6 +80,15 @@ public class BaiduAIAuthUtil {
         return null;
     }
     public static void main(String[] args) {
-		getAuth("1OlEjVz6Zck7h4kdCpSu2GDX", "1gylrnGUjKdUbFSqUyGd54LwUCCUStno");
+//    	int[] arr = {1,3,5,7};
+//    	System.out.println(Arrays.toString(Arrays.stream(arr).boxed().toArray(Integer[]::new)));
+//    	Timer timer = new Timer();
+//    	timer.schedule(new TimerTask() {
+//			
+//			@Override
+//			public void run() {
+//				System.err.println("Hello World !");
+//			}
+//		}, 0, 1000);
 	}
 }
