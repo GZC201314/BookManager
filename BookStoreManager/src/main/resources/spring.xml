@@ -62,8 +62,8 @@
 			socket-keep-alive="true" socket-timeout="${mongo.socketTimeout}"
 			slave-ok="true" write-number="1" write-timeout="0" write-fsync="true" />
 	</mongo:mongo>
-	<mongo:db-factory username="bsm" password="abc123"
-		dbname="admin" mongo-ref="mongo" />
+	<mongo:db-factory username="root" password="root"
+		dbname="bsm" mongo-ref="mongo" />
 
 	<bean id="MongoTemplate"
 		class="org.springframework.data.mongodb.core.MongoTemplate">
