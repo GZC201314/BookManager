@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <div id="tszq_sjgl_toobar">
-	<a onclick="append();" class="easyui-linkbutton"
-		data-options="iconCls:'icon-add',plain:true">添加</a> <a
-		onclick="editBook();" class="easyui-linkbutton"
+	<a onclick="editBook();" class="easyui-linkbutton"
 		data-options="iconCls:'icon-edit',plain:true">修改</a> <a
 		onclick="removeBook();" class="easyui-linkbutton"
 		data-options="iconCls:'icon-remove',plain:true">删除</a>图书名称: <input
@@ -157,31 +155,18 @@
 				style="width: 70%; height: 60px;">
 		</div>
 		<div style="margin-bottom: 10px">
-			<input id="tszq_sjgl_clc" class="easyui-combobox" name="clc"
-				label="图书分类:" style="width: 70%"
-				data-options="valueField:'id',textField:'text',url:'bookAction!getComboboxItem.action'">
-		</div>
-		<div style="margin-bottom: 10px">
-			<input id="tszq_sjgl_title" name="title" class="easyui-textbox"
-				label="类别:" style="width: 70%">
-		</div>
-		<div style="margin-bottom: 10px">
 			<input id="tszq_sjgl_folio" name="folio" class="easyui-numberbox"
 				label="页数:" data-options="min:0" style="width: 70%">
 		</div>
 		<div style="margin-bottom: 10px">
 			<input id="tszq_sjgl_price" label="价格:" type="text" name="price"
-				class="easyui-numberbox" data-options="min:0,precision:2"
+				class="easyui-textbox" data-options="min:0,precision:2"
 				style="width: 70%">
 		</div>
 
 		<div style="margin-bottom: 10px">
 			<input id="tszq_sjgl_publisher" name="publisher"
 				class="easyui-textbox" label="出版社:" style="width: 70%">
-		</div>
-		<div style="margin-bottom: 10px">
-			<input id="tszq_sjgl_publishingAddress" name="publishingAddress"
-				class="easyui-textbox" label="出版地址:" style="width: 70%">
 		</div>
 		<div style="margin-bottom: 10px">
 			<input id="tszq_sjgl_publishingTime" name="publishingTime"
@@ -256,7 +241,7 @@
 						$('#tszq_sjgl_publishingTime1').numberbox('setValue', data.obj.publishingTime);
 						$('#tszq_sjgl_folio1').numberbox('setValue', data.obj.folio);
 						$('#tszq_sjgl_price1').numberbox('setValue', data.obj.price);
-						$("#tszq_sjgl_image1").attr("src","data:image/jpeg;base64,"+data.obj.image);
+						$("#tszq_sjgl_image1").attr("src", data.obj.image);
 					}
 					$.messager.show({
 						title : '提示',
@@ -264,14 +249,14 @@
 					});
 				}
 			});
-		}else{
+		} else {
 			$.messager.show({
 				title : '提示',
 				msg : "请输入图书的ISBN号."
 			});
 		}
 	}
-	
+
 	function searchBookFun() {
 		var bookname = $('#tszq_sjgl_bookname').val();
 		$('#tszq_sjgl_datagrid').datagrid('load', {
@@ -299,7 +284,7 @@
 		$('#tszq_sjgl_publishingTime1').numberbox('setValue', "");
 		$('#tszq_sjgl_folio1').numberbox('setValue', "");
 		$('#tszq_sjgl_price1').numberbox('setValue', "");
-		$("#tszq_sjgl_image1").attr("src","img/default_user.jpg");
+		$("#tszq_sjgl_image1").attr("src", "img/default_user.jpg");
 		$('#tszq_sjgl_addDialog').dialog('open');
 
 	}
@@ -313,14 +298,10 @@
 			$('#tszq_sjgl_editDialog').dialog('open');
 			$('#tszq_sjgl_code').textbox('setValue', rows[0].code);
 			$('#tszq_sjgl_isbn').textbox('setValue', rows[0].isbn);
-			$('#tszq_sjgl_title').textbox('setValue', rows[0].title);
 			$('#tszq_sjgl_name').textbox('setValue', rows[0].name);
-			$('#tszq_sjgl_clc').combobox('setValue', rows[0].clc);
-			$('#tszq_sjgl_clc').combobox('setText', rows[0].clcText);
 			$('#tszq_sjgl_author').textbox('setValue', rows[0].author);
 			$('#tszq_sjgl_introduction').textbox('setValue', rows[0].introduction);
 			$('#tszq_sjgl_publisher').textbox('setValue', rows[0].publisher);
-			$('#tszq_sjgl_publishingAddress').textbox('setValue', rows[0].publishingAddress);
 			$('#tszq_sjgl_publishingTime').numberbox('setValue', rows[0].publishingTime);
 			$('#tszq_sjgl_folio').numberbox('setValue', rows[0].folio);
 			$('#tszq_sjgl_price').numberbox('setValue', rows[0].price);
@@ -342,7 +323,6 @@
 	function removeBook() {
 		var ids = [];
 		var rows = $('#tszq_sjgl_datagrid').datagrid('getChecked');
-		debugger;
 		for (var i = 0; i < rows.length; i++) {
 			ids.push("'" + rows[i].isbn + "'");
 		}
@@ -366,10 +346,10 @@
 								msg : data.msg
 							});
 						},
-					    error:function(xhr,textStatus){
-					    	//先把cookie失效
-					    	//重新刷新页面
-					    }						
+						error : function(xhr, textStatus) {
+							//先把cookie失效
+							//重新刷新页面
+						}
 					});
 				}
 			});
@@ -384,7 +364,6 @@
 	}
 
 	$(function() {
-
 		$('#tszq_sjgl_datagrid').datagrid({
 			url : '${pageContext.request.contextPath}/bookAction!datagrid.action',
 			fit : true,
@@ -416,7 +395,7 @@
 				fixed : true,
 				width : 150,
 				formatter : function(value, row, index) {
-					var text = "<img  href=\"#\" style=\"cursor: pointer;\" class=\"avatar\" height=\"50\" width=\"50\" src=\"data:image/jpeg;base64,"+value+"\">";
+					var text = "<img  href=\"#\" style=\"cursor: pointer;\" class=\"avatar\" height=\"50\" width=\"50\" src="+value+">";
 					return text;
 				}
 			} ] ],
@@ -425,17 +404,13 @@
 				title : '作者',
 				width : 150
 			}, {
-				field : 'clc',
-				title : '图书分类',
-				width : 150
-			}, {
 				field : 'introduction',
 				title : '图书介绍',
-				width : 150
-			}, {
-				field : 'title',
-				title : '类别',
-				width : 150
+				width : 150,
+				formatter : function(value, row, index) {
+					var text = '<span title=\"'+value+'\">' + value + '</span>';
+					return text;
+				}
 			}, {
 				field : 'folio',
 				title : '页数',
@@ -447,10 +422,6 @@
 			}, {
 				field : 'publisher',
 				title : '出版社',
-				width : 150
-			}, {
-				field : 'publishingAddress',
-				title : '出版地址',
 				width : 150
 			}, {
 				field : 'publishingTime',

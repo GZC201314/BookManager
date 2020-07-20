@@ -107,16 +107,15 @@ public class AuthFilter implements Filter {
 				ServerHttpResponse rep = (ServerHttpResponse) response;
 				rep.setStatusCode(HttpStatus.FORBIDDEN);
 				rep.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
-				return;
 			}
 			boolean verifyResult = JWTUtil.verify(token);
 
 			if (!verifyResult) {
-				ServerHttpResponse rep = (ServerHttpResponse) response;
-				rep.setStatusCode(HttpStatus.FORBIDDEN);
-				rep.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
-				return;
-
+				response.setContentType("application/json;charset=UTF-8");
+				response.getOutputStream().print(403);
+//				ServerHttpResponse rep = (ServerHttpResponse) response;
+//				rep.setStatusCode(HttpStatus.FORBIDDEN);
+//				rep.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
 			}
 
 			chain.doFilter(request, response);

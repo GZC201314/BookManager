@@ -80,7 +80,7 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 			HttpServletResponse response = ServletActionContext.getResponse();
 			HttpServletRequest request =ServletActionContext.getRequest();
 			response.setContentType("application/octet-stream");
-			response.addHeader("Content-Disposition", "attachment;filename=" + "vcode.jpeg");
+			response.addHeader("Content-Disposition", "attachment;filename=vcode.jpeg");
 			String number = validateCode.getNumber(4);
 			Cookie cookie=new Cookie("validateCode", number);
 			response.addCookie(cookie);

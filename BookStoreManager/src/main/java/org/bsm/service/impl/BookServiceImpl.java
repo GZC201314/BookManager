@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bsm.dao.BaseDaoI;
+import org.bsm.model.Doubanbook;
 import org.bsm.model.Tbook;
 import org.bsm.model.TbookId;
 import org.bsm.model.Ttag;
@@ -35,7 +36,7 @@ public class BookServiceImpl implements BookServiceI {
 
 
 	@Autowired
-	private BaseDaoI<Tbook> bookDAO;
+	private BaseDaoI<Doubanbook> bookDAO;
 
 	@Autowired
 	private BaseDaoI<Ttag> tagDAO;
@@ -97,7 +98,8 @@ public class BookServiceImpl implements BookServiceI {
 			bookParams.put("code", book.getCode());
 			bookParams.put("isbn", book.getIsbn());
 			if (StringUtils.isEmpty(bookDAO.get(bookhql, bookParams))) {
-				bookDAO.save(tbook);
+				// TODO
+//				bookDAO.save(tbook);
 			}
 		}
 		return book;
@@ -131,19 +133,15 @@ public class BookServiceImpl implements BookServiceI {
 			order = " order by " + bookQuery.getSort() + " " + bookQuery.getOrder();
 		}
 
-		String hql = "from Tbook" + condition + order;
+		String hql = "from Doubanbook" + condition + order;
 
 		Long count = bookDAO.count("select count(*) " + hql, params);
-		List<Tbook> lt = bookDAO.find(hql, params, bookQuery.getPage(), bookQuery.getRows());
+		List<Doubanbook> lt = bookDAO.find(hql, params, bookQuery.getPage(), bookQuery.getRows());
 		List<Book> bookList = new ArrayList<Book>();
 		if (!CollectionUtils.isEmpty(lt)) {
-			for (Tbook tbook : lt) {
+			for (Doubanbook tbook : lt) {
 				Book book = new Book();
 				BeanUtils.copyProperties(tbook, book);
-				book.setCode(tbook.getId().getCode());
-				book.setIsbn(tbook.getId().getIsbn());
-				book.setClcText(tbook.getTtag().getName());
-				book.setClc(tbook.getTtag().getId());
 				bookList.add(book);
 			}
 		}
@@ -157,7 +155,7 @@ public class BookServiceImpl implements BookServiceI {
 	public void removeBook(BookQuery bookQuery) {
 		if (!StringUtils.isEmpty(bookQuery.getIds())) {
 			String ids = bookQuery.getIds();
-			String hql = "delete from Tbook t where t.isbn in (" + ids + ")";
+			String hql = "delete from Doubanbook t where t.isbn in (" + ids + ")";
 			bookDAO.executeHql(hql);
 		}
 			
@@ -181,19 +179,18 @@ public class BookServiceImpl implements BookServiceI {
 	public void update(BookQuery bookQuery) {
 		if (!StringUtils.isEmpty(bookQuery)) {
 			
-			String hql = "from Tbook where code=:code and isbn=:isbn";
+			String hql = "from Doubanbook where isbn=:isbn";
 			Map<String, Object> params = new HashMap<>();
-			params.put("code", bookQuery.getCode());
 			params.put("isbn", bookQuery.getIsbn());
-			Tbook tbook = bookDAO.get(hql, params);
+			Doubanbook tbook = bookDAO.get(hql, params);
 			if(!StringUtils.isEmpty(tbook)) {
 				if(StringUtils.isEmpty(bookQuery.getUploadbookImg())) {
 					BeanUtils.copyProperties(bookQuery, tbook,"image");
 				}else {
 					BeanUtils.copyProperties(bookQuery, tbook,"image");
-					tbook.setImage(FileUtil.fileToBase64(bookQuery.getUploadbookImg()));
+//					tbook.setImage(FileUtil.fileToBase64(bookQuery.getUploadbookImg()));
 				}
-				tbook.setTtag(new Ttag(bookQuery.getClc(), bookQuery.getClcText()));
+//				tbook.setTtag(new Ttag(bookQuery.getClc(), bookQuery.getClcText()));
 				bookDAO.saveOrUpdate(tbook);
 			}
 		}

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta name="referrer" content="no-referrer" charset="UTF-8">
 <script type="text/javascript"
 	src="pages/lib/jquery-easyui-1.7.0/jquery.min.js"></script>
 <script type="text/javascript" src="pages/lib/jquery.cookie.js"></script>
@@ -174,6 +174,7 @@ div img:hover {
 		$('#user_login_loginForm').form({
 			url : '${pageContext.request.contextPath}/userAction!login.action',
 			success : function(r) {
+				console.info(r);
 				var obj = jQuery.parseJSON(r);
 				if (obj.success) {
 					/* 登录成功把Token和refreshToken放到cookies中 */
