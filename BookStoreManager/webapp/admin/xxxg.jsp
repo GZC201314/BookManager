@@ -11,7 +11,6 @@
 			src="img/default_user.jpg" height="78" width="78">
 	</div>
 </div>
-<
 <script type="text/javascript">
 	new verUpload({
 		files : "#admin_xxxg_uploadImg",
@@ -20,7 +19,6 @@
 		load_list : false,
 		success : function(d) {
 			var obj = jQuery.parseJSON(d);
-			debugger;
 			if (obj.success) {
 				userCenter();
 			}
@@ -29,14 +27,10 @@
 				msg : obj.msg
 			});
 		},
-		fail : function(d) {
-			alert(d)
-		},
 		size : 1024 * 4,
 		ext : [ 'jpg', 'jpeg', 'png', 'gif' ]
 	});
 	$(function() {
-		debugger;
 		var src = $('#admin_north_headIcon')[0].src;
 		if(typeof(src) == "undefined"){
 			return;

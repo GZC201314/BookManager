@@ -1,6 +1,7 @@
 package org.bsm.filter;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
@@ -14,9 +15,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.bsm.pageModel.ErrorMsg;
+import org.bsm.pageModel.Json;
 import org.bsm.util.JWTUtil;
 import org.bsm.util.ParameterRequestWrapper;
 import org.springframework.context.ApplicationContext;
@@ -25,6 +29,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.alibaba.fastjson.JSON;
 
 /**
  * Servlet Filter implementation class AuthFilter
@@ -55,12 +61,13 @@ public class AuthFilter implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+	public void doFilter(ServletRequest request, ServletResponse response1, FilterChain chain)
 			throws IOException, ServletException {
 		// place your code here
 		logger.info("鉴权过滤器!!!!!!!!!");
 		request.setCharacterEncoding("utf-8");
 		HttpServletRequest req = (HttpServletRequest) request;
+		HttpServletResponse response = (HttpServletResponse) response1;
 		HashMap<String, Object> params = new HashMap(req.getParameterMap());
 		String url = req.getServletPath();
 		String refreshToken = "";
@@ -103,19 +110,35 @@ public class AuthFilter implements Filter {
 			RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) ctx.getBean("redisTemplate");
 
 			String redisToken = (String) redisTemplate.opsForHash().get(refreshToken, "token");
+			ErrorMsg errorMsg = new ErrorMsg();
 			if (!token.equals(redisToken)) {
-				ServerHttpResponse rep = (ServerHttpResponse) response;
-				rep.setStatusCode(HttpStatus.FORBIDDEN);
-				rep.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
+				response.setContentType("application/json;charset=UTF-8");
+	            response.setCharacterEncoding("UTF-8");
+	            response.sendError(402);
+	            Json eJson = new Json();
+	            errorMsg.setErrorCode(402);
+	            errorMsg.setErrorMsg("token is error!!!");
+	            eJson.setObj(errorMsg);
+	            String json = JSON.toJSONStringWithDateFormat(eJson, "yyyy-MM-dd HH:mm:ss");
+	            OutputStream out = response.getOutputStream();
+	            out.write(json.getBytes("UTF-8"));
+	            out.flush();
+	            return;
 			}
 			boolean verifyResult = JWTUtil.verify(token);
-
 			if (!verifyResult) {
 				response.setContentType("application/json;charset=UTF-8");
-				response.getOutputStream().print(403);
-//				ServerHttpResponse rep = (ServerHttpResponse) response;
-//				rep.setStatusCode(HttpStatus.FORBIDDEN);
-//				rep.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
+	            response.setCharacterEncoding("UTF-8");
+	            response.sendError(403);
+	            Json eJson = new Json();
+	            errorMsg.setErrorCode(403);
+	            errorMsg.setErrorMsg("token is out time!!!");
+	            eJson.setObj(errorMsg);
+	            String json = JSON.toJSONStringWithDateFormat(eJson, "yyyy-MM-dd HH:mm:ss");
+	            OutputStream out = response.getOutputStream();
+	            out.write(json.getBytes("UTF-8"));
+	            out.flush();
+	            return;
 			}
 
 			chain.doFilter(request, response);
