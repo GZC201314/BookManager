@@ -405,7 +405,7 @@ window.verUpload = (function () {
     	}
     }    
     
-    //在这里重写fail的返回值
+    //在这里重写fail
     var fail = function (d) {
         if(d==402){
         	// TODO

@@ -11,8 +11,7 @@ $.extend($.fn.validatebox.defaults.rules, {
 });
 $.extend($.fn.validatebox.defaults.rules, {
 	eqvalidateCode : {
-		validator : function(value, param) {
-			console.log($.cookie("validateCode"));
+		validator : function(value) {
 			return value == $.cookie("validateCode");
 		},
 		message : '验证码错误！'
@@ -40,7 +39,44 @@ $.extend($.fn.validatebox.defaults.rules, {
 		message : ' 当前用户名已存在。'
 	}
 });
-
+//扩展树加载失败的方法
+$.fn.tree.defaults.onLoadError = function(arguments) {
+	var d = arguments.status;
+    if(d==402){
+    	// TODO
+    	alert_totalQuery('Token is error,please re-acquire!','',10);
+		setTimeout(() => {
+//			清理cookie
+		$.cookie('token', '', {
+			expires : -1
+		});
+		$.cookie('refreshToken', '', {
+			expires : -1
+		});
+		$.cookie('role', '', {
+			expires : -1
+		});
+			window.location.reload();
+		}, 10000);
+    }
+    if(d==403){
+    	// TODO
+    	alert_totalQuery('This token has expired!','',10);
+		setTimeout(() => {
+//			清理cookie
+		$.cookie('token', '', {
+			expires : -1
+		});
+		$.cookie('refreshToken', '', {
+			expires : -1
+		});
+		$.cookie('role', '', {
+			expires : -1
+		});
+			window.location.reload();
+		}, 10000);
+    } 
+}
 // 扩展树加载数据的方法
 $.fn.tree.defaults.loadFilter = function(data, parent) {
 	var opt = $(this).data().tree.options;
@@ -80,6 +116,35 @@ serializeObject = function(form) {
 	});
 	return o;
 };
+
+// 提示框关闭倒计时函数
+alert_totalQuery = function(msg,icon,tm){
+	var interval;
+	debugger;
+	var time=1000;
+	var x;
+	if(null==tm||''==tm){
+		x=Number(3);
+	}else{
+		x=Number(tm);
+	}
+	//
+	if(null==icon||''==icon){
+		icon="infoSunnyIcon";
+	}
+	$.messager.alert(' ','<font size=\"2\" color=\"#666666\"><strong>'+msg+'</strong></font>',icon,function(){});
+	$(".messager-window .window-header .panel-title").append("系统提示（"+x+"秒后自动关闭）");
+	interval=setInterval(fun,time);
+	function fun(){
+		--x;
+		if(x==0){
+	      clearInterval(interval);
+		  $(".messager-body").window('close');	
+		}
+		$(".messager-window .window-header .panel-title").text("");
+		$(".messager-window .window-header .panel-title").append("系统提示（"+x+"秒后自动关闭）");
+	}
+}  
 
 /**
  * @author 孙宇

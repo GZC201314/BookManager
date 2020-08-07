@@ -78,7 +78,8 @@ div img:hover {
 	<!-- 中间tab内容显示 -->
 	<div data-options="region:'center'">
 		<div id="index_centerTab" class="easyui-tabs"
-			data-options="fit:true,border:false" style="text-align: -webkit-center;">
+			data-options="fit:true,border:false"
+			style="text-align: -webkit-center;">
 			<div title="首页"></div>
 		</div>
 	</div>
@@ -156,6 +157,66 @@ div img:hover {
 </div>
 
 <script type="text/javascript">
+	(function($) {
+		//备份jquery的ajax方法
+		var _ajax = $.ajax;
+		//重写jquery的ajax方法
+		$.ajax = function(opt) {
+			//备份opt中error和success方法
+			var fn = {
+				error : function(d) {
+					d = d.status;
+			        if(d==402){
+			        	// TODO
+			        	alert_totalQuery('Token is error,please re-acquire!','',10);
+						setTimeout(() => {
+//							清理cookie
+						$.cookie('token', '', {
+							expires : -1
+						});
+						$.cookie('refreshToken', '', {
+							expires : -1
+						});
+						$.cookie('role', '', {
+							expires : -1
+						});
+							window.location.reload();
+						}, 10000);
+			        }
+			        if(d==403){
+			        	// TODO
+			        	alert_totalQuery('This token has expired!','',10);
+						setTimeout(() => {
+//							清理cookie
+						$.cookie('token', '', {
+							expires : -1
+						});
+						$.cookie('refreshToken', '', {
+							expires : -1
+						});
+						$.cookie('role', '', {
+							expires : -1
+						});
+							window.location.reload();
+						}, 10000);
+			        }    
+				}
+			}
+			if (opt.error) {
+				fn.error = opt.error;
+			}
+			//扩展增强处理
+			var _opt = $.extend(opt, {
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					//错误方法增强处理
+					fn.error(XMLHttpRequest, textStatus, errorThrown);
+				}
+			});
+			_ajax(_opt);
+		};
+
+	})(jQuery);
+
 	//切换验证码
 	function changeCheckCode() {
 		var nowTime = new Date;
@@ -174,7 +235,6 @@ div img:hover {
 		$('#user_login_loginForm').form({
 			url : '${pageContext.request.contextPath}/userAction!login.action',
 			success : function(r) {
-				console.info(r);
 				var obj = jQuery.parseJSON(r);
 				if (obj.success) {
 					/* 登录成功把Token和refreshToken放到cookies中 */
@@ -188,6 +248,23 @@ div img:hover {
 					if (!(typeof (obj.obj.userlog) == "undefined" || obj.obj.userlog == "")) {
 						$('#admin_north_headIcon').attr("src", decodeURI(obj.obj.userlog));
 					}
+					//加载 目录
+					$('#layout_west_tree').tree({
+						url : '${pageContext.request.contextPath}/menuAction!getTreeNote.action',
+						parentField : 'pid',
+						lines : true,
+						onClick : function(node) {
+							if (node.attributes.url) {
+								var url = '${pageContext.request.contextPath}' + node.attributes.url;
+								addTab({
+									title : node.text,
+									closable : true,
+									href : url
+								});
+							}
+						}						
+					});
+					
 				}
 				$.messager.show({
 					title : '提示',
@@ -205,6 +282,23 @@ div img:hover {
 			$('#user_login_loginDialog').dialog('close');
 			$('#layout_north_userName').text($.cookie("userName"));
 			$('#admin_north_headIcon').attr("src", $.cookie("userlog"));
+			
+			//加载 目录
+			$('#layout_west_tree').tree({
+				url : '${pageContext.request.contextPath}/menuAction!getTreeNote.action',
+				parentField : 'pid',
+				lines : true,
+				onClick : function(node) {
+					if (node.attributes.url) {
+						var url = '${pageContext.request.contextPath}' + node.attributes.url;
+						addTab({
+							title : node.text,
+							closable : true,
+							href : url
+						});
+					}
+				}						
+			});
 		}
 
 		$('#user_reg_regForm').form({
