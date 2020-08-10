@@ -39,6 +39,8 @@ $.extend($.fn.validatebox.defaults.rules, {
 		message : ' 当前用户名已存在。'
 	}
 });
+
+
 //扩展树加载失败的方法
 $.fn.tree.defaults.onLoadError = function(arguments) {
 	var d = arguments.status;
