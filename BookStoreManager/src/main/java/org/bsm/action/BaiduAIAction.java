@@ -59,4 +59,5 @@ public class BaiduAIAction extends BaseAction implements ModelDriven<BaiduAI> {
 		super.writeJson(j);
 		logger.info("out into the uploadImg function");
 	}
+
 }

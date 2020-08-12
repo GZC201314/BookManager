@@ -12,8 +12,6 @@
 	src="pages/lib/jquery-easyui-1.7.0/jquery.easyui.min.js"></script>
 <script type="text/javascript"
 	src="pages/lib/jquery-easyui-1.7.0/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript"
-	src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
 <script type="text/javascript" src="pages/lib/ValidateUtil.js"></script>
 <script type="text/javascript" src="pages/lib/verUpload/verUpload.js"></script>
 
@@ -55,6 +53,47 @@ div img {
 div img:hover {
 	transform: scale(1.4);
 }
+
+body {
+	height: 100vh;
+	background-position: center;
+	overflow: hidden;
+}
+
+h1 {
+	color: #fff;
+	text-align: center;
+	font-weight: 100;
+	margin-top: 40px;
+}
+
+#media {
+	width: 280px;
+	height: 250px;
+	margin: 10px auto 0;
+	border-radius: 30px;
+	overflow: hidden;
+	opacity: 0.7px;
+}
+
+#video {
+	
+}
+
+#canvas {
+	display: none;
+}
+
+#btn {
+	width: 160px;
+	height: 50px;
+	background: #03a9f4;
+	margin: 70px auto 0;
+	text-align: center;
+	line-height: 50px;
+	color: #fff;
+	border-radius: 40px;
+}
 </style>
 
 <link rel="stylesheet"
@@ -88,6 +127,18 @@ div img:hover {
 <div id="user_login_loginDialog" class="easyui-dialog"
 	data-options="title:'登录',closable:false,modal:true,
 			buttons:[{
+				text:'人脸识别',
+				handler:function(){
+				$('#user_face_regDialog').dialog('open');				
+	  			navigator.mediaDevices.getUserMedia(con)
+	  			.then(function(stream){
+	  				video.srcObject = stream;
+	  				video.onloadmetadate = function(e){
+	  					video.play();
+	  				}
+	  			});
+				}
+			},{
 				text:'注册',
 				handler:function(){
 				$('#user_reg_regDialog').dialog('open');
@@ -124,6 +175,34 @@ div img:hover {
 		</div>
 	</form>
 </div>
+
+<!-- 人脸识别弹窗 -->
+<div id="user_face_regDialog" style="width: 350px;"
+	class="easyui-dialog"
+	data-options="title:'人脸识别',closed:true,modal:true,buttons:[{
+				text:'人脸识别',
+				iconCls:'icon-edit',
+				handler:function(){
+					query();
+				}
+			}]">
+
+	<form
+		action="${pageContext.request.contextPath}/userAction!facelogin.action"
+		method="get">
+		<dl class="admin_login">
+			<dt>
+				<strong>请把你的脸放摄像头面前</strong>
+			</dt>
+			<div id="media">
+				<video id="video" width="530" height="300" autoplay></video>
+				<canvas id="canvas" width="400" height="300"></canvas>
+			</div>
+		</dl>
+	</form>
+</div>
+
+
 <!-- 注册弹窗 -->
 <div id="user_reg_regDialog" style="width: 250px;" class="easyui-dialog"
 	data-options="title:'注册',closed:true,modal:true,buttons:[{
@@ -216,7 +295,72 @@ div img:hover {
 		};
 
 	})(jQuery);
-
+	var video = document.getElementById('video'); 
+		var context = canvas.getContext('2d');
+		var con  ={
+			audio:false,
+			video:{
+			width:1980,
+			height:1024,
+			}
+		};	
+  			function query(){
+  				//把流媒体数据画到convas画布上去
+  				context.drawImage(video,0,0,400,300);
+  				var base = getBase64();
+  				$.ajax({
+  					type:"post",
+  					url:"${pageContext.request.contextPath}/userAction!facelogin.action",
+  					data:{"base":base},
+  					success:function(data){
+							var obj = jQuery.parseJSON(data);;
+ 							if(obj.success){
+ 								//关闭摄像头
+ 								video.srcObject.getTracks()[0].stop();
+ 								
+ 								
+ 								/* 登录成功把Token和refreshToken放到cookies中 */
+ 								$.cookie('token', obj.obj.token);
+ 								$.cookie('refreshToken', obj.obj.refreshToken);
+ 								$.cookie('role', obj.obj.role);
+ 								$.cookie('userName', obj.obj.userName);
+ 								$.cookie('userlog', decodeURI(obj.obj.userlog));
+ 								$('#user_face_regDialog').dialog('close');
+ 								$('#user_login_loginDialog').dialog('close');
+ 								$('#layout_north_userName').text(obj.obj.userName);
+ 								if (!(typeof (obj.obj.userlog) == "undefined" || obj.obj.userlog == "")) {
+ 									$('#admin_north_headIcon').attr("src", decodeURI(obj.obj.userlog));
+ 								}
+ 								//加载 目录
+ 								$('#layout_west_tree').tree({
+ 									url : '${pageContext.request.contextPath}/menuAction!getTreeNote.action',
+ 									parentField : 'pid',
+ 									lines : true,
+ 									onClick : function(node) {
+ 										if (node.attributes.url) {
+ 											var url = '${pageContext.request.contextPath}' + node.attributes.url;
+ 											addTab({
+ 												title : node.text,
+ 												closable : true,
+ 												href : url
+ 											});
+ 										}
+ 									}						
+ 								});
+								} else {
+									alert("面容识别失败,请继续验证");
+								} 
+							}
+						});
+ 
+			}
+			function getBase64() {
+				var imgSrc = document.getElementById("canvas").toDataURL(
+						"image/png");
+				return imgSrc.split("base64,")[1];
+ 
+			};	
+	
 	//切换验证码
 	function changeCheckCode() {
 		var nowTime = new Date;

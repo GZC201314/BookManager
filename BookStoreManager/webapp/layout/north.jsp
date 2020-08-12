@@ -12,10 +12,68 @@
 </div>
 <div id="mm2" style="width: 100px;">
 	<div onclick="userCenter();">个人中心</div>
+	<div onclick="faceReg();">人脸注册</div>
 	<div>帐号设置</div>
 	<div onclick="logout();">退出</div>
 </div>
 <script type="text/javascript">
+	//人脸注册
+
+	function faceReg() {
+		$('#user_face_regDialog').dialog({
+			title : '人脸注册',
+			closed : true,
+			modal : true,
+			buttons : [ {
+				text : '人脸注册',
+				handler : function() {
+					faceRegCommit();
+				}
+			} ]
+		});
+		$('#user_face_regDialog').dialog('open');
+		var video = document.getElementById('video');
+		var context = canvas.getContext('2d');
+		var con = {
+			audio : false,
+			video : {
+				width : 1980,
+				height : 1024,
+			}
+		};
+		navigator.mediaDevices.getUserMedia(con).then(function(stream) {
+			video.srcObject = stream;
+			video.onloadmetadate = function(e) {
+				video.play();
+			}
+		});
+	}
+
+	function faceRegCommit() {
+		//把流媒体数据画到convas画布上去
+		context.drawImage(video, 0, 0, 400, 300);
+		var base = getBase64();
+		$.ajax({
+			type : "post",
+			url : "${pageContext.request.contextPath}/userAction!faceReg.action",
+			data : {
+				"base" : base
+			},
+			success : function(data) {
+				//关闭摄像头
+				video.srcObject.getTracks()[0].stop();
+				$('#user_face_regDialog').dialog('close');
+				var obj = jQuery.parseJSON(data);
+				$.messager.show({
+					title : '提示',
+					msg : obj.msg
+				});
+
+			}
+		});
+
+	}
+
 	function logout() {
 		var token = $.cookie("token");
 		var refreshToken = $.cookie("refreshToken");

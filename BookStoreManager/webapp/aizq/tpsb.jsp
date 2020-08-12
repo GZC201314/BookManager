@@ -34,9 +34,6 @@
 				msg : obj.msg
 			});
 		},
-		fail : function(d) {
-			alert(d)
-		},
 		size : 1024 * 4,
 		ext : [ 'jpg', 'jpeg', 'png', 'gif' ]
 	});

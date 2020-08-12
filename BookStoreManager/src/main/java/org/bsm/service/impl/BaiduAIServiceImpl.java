@@ -1,13 +1,18 @@
 package org.bsm.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.bsm.pageModel.AipFaceResult;
 import org.bsm.pageModel.BaiduAI;
+import org.bsm.pageModel.PageUser;
 import org.bsm.pageModel.Tpsbresult;
 import org.bsm.pageModel.Words_result;
 import org.bsm.service.BaiduAIServiceI;
 import org.bsm.util.BaiduAIAuthUtil;
+import org.bsm.util.BaiduAipInstance;
 import org.bsm.util.FileUtil;
 import org.bsm.util.GeneralBasic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baidu.aip.face.AipFace;
+import com.baidu.aip.face.MatchRequest;
+import com.baidu.aip.ocr.AipOcr;
 
 @Service("baiduAIService")
 public class BaiduAIServiceImpl implements BaiduAIServiceI {
@@ -23,25 +31,29 @@ public class BaiduAIServiceImpl implements BaiduAIServiceI {
 	@Autowired
 	StringRedisTemplate redisTemplate;
 	
+
 	@Override
 	public String uploadHeadIcon(BaiduAI baiduAI) {
 		String result = "";
+		
+		
 		if (!StringUtils.isEmpty(baiduAI.getUpload())) {
 			// 保存
 			try {
-				//判断是否本地有access_token
-				String access_token = redisTemplate.opsForValue().get("tpsb_access_token");
-				if(StringUtils.isEmpty(access_token)) {
-					//如果本地没有缓存 2592000
-					access_token = BaiduAIAuthUtil.getAuth("1OlEjVz6Zck7h4kdCpSu2GDX", "1gylrnGUjKdUbFSqUyGd54LwUCCUStno");
-					redisTemplate.opsForValue().set("tpsb_access_token", access_token, 2592000, TimeUnit.SECONDS);
-				}
-				String reString = GeneralBasic.generalBasic(baiduAI.getUpload().getCanonicalPath(), access_token);
-				Tpsbresult tpsbresult = JSONObject.parseObject(reString, Tpsbresult.class);
-				if(!StringUtils.isEmpty(tpsbresult)) {
-					List<Words_result> list = tpsbresult.getWords_result();
-					for (Words_result words_result : list) {
-						result += words_result.getWords();
+				// 初始化一个AipOcr
+		        AipOcr client = BaiduAipInstance.getOcrInstance();
+		        
+				if(!StringUtils.isEmpty(client)) {
+					// 调用接口
+					String path = baiduAI.getUpload().getCanonicalPath();
+					HashMap<String, String> map = new HashMap<>();
+					org.json.JSONObject res = client.basicGeneral(path, map);
+					Tpsbresult tpsbresult = JSONObject.parseObject(res.toString(2), Tpsbresult.class);
+					if(!StringUtils.isEmpty(tpsbresult)) {
+						List<Words_result> list = tpsbresult.getWords_result();
+						for (Words_result words_result : list) {
+							result += words_result.getWords();
+						}
 					}
 				}
 			} catch (Exception e) {
@@ -49,6 +61,25 @@ public class BaiduAIServiceImpl implements BaiduAIServiceI {
 			}
 		}
 
+		return result;
+	}
+
+
+	@Override
+	public AipFaceResult facelogin(PageUser pageUser) {
+		AipFace aipFace = BaiduAipInstance.getFaceInstance();
+		org.json.JSONObject resultJson = aipFace.search(pageUser.getBase(), "BASE64", "test",null);
+		AipFaceResult result = JSONObject.parseObject(resultJson.toString(), AipFaceResult.class);
+		return result;
+	}
+
+
+	@Override
+	public AipFaceResult faceReg(PageUser pageUser) {
+		AipFace aipFace = BaiduAipInstance.getFaceInstance();
+		//获取登录的用户名
+		org.json.JSONObject resultJson = aipFace.addUser(pageUser.getBase(), "BASE64", "test", pageUser.getUsername(), null);
+		AipFaceResult result = JSONObject.parseObject(resultJson.toString(), AipFaceResult.class);
 		return result;
 	}
 	

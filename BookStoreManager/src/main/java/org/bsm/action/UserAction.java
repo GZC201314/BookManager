@@ -16,10 +16,12 @@ import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.bsm.model.Tuser;
+import org.bsm.pageModel.AipFaceResult;
 import org.bsm.pageModel.AuthResult;
 import org.bsm.pageModel.Json;
 import org.bsm.pageModel.PageDataGrid;
 import org.bsm.pageModel.PageUser;
+import org.bsm.service.BaiduAIServiceI;
 import org.bsm.service.UserServiceI;
 import org.bsm.util.JWTUtil;
 import org.bsm.util.ValidateCode;
@@ -68,6 +70,8 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 	private UserServiceI userServiceI;
 	@Autowired
 	StringRedisTemplate redisTemplate;
+	@Autowired
+	private BaiduAIServiceI baiduAIServiceI;
 
 	@Override
 	public PageUser getModel() {
@@ -238,6 +242,63 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 	}
 
 	/**
+	 * 人脸识别登录
+	 */
+	public void facelogin() {
+		logger.info("into the facelogin function");
+		Json j = new Json();
+		try {
+			AipFaceResult aipFaceResult = baiduAIServiceI.facelogin(pageUser);
+			//如果人脸识别成功
+			if (aipFaceResult != null && aipFaceResult.getError_code()==0) {
+				//根据人脸识别的结果查询本地是否有用户记录,如果有的话,直接登录
+				String username = aipFaceResult.getResult().getUser_list().get(0).getUser_id();
+				double score =  aipFaceResult.getResult().getUser_list().get(0).getScore();
+				//如果在人脸库中找到了记录,并且匹配度达到了70%以上,允许该用户登录
+				if(score >= 70) {
+					Tuser tuser = userServiceI.validateName(username);
+					
+					if (tuser != null) {
+						// 生成token
+						String token = JWTUtil.generateToken(tuser.getName());
+						// 生成refreshToken
+						String refreshToken = UUID.randomUUID().toString();
+						// 数据放入redis
+						redisTemplate.opsForHash().put(refreshToken, "token", token);
+						redisTemplate.opsForHash().put(refreshToken, "username", tuser.getName());
+						redisTemplate.opsForHash().put(refreshToken, "role", tuser.getTrole().getRolename());
+
+						// 设置token的过期时间
+						redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
+						j.setObj(new AuthResult(token, refreshToken, tuser.getTrole().getRoleid(), tuser.getName(),
+								tuser.getUserlog()));
+						j.setMsg("登录成功.");
+						j.setSuccess(true);
+
+					} else {
+						j.setMsg("登录失败.");
+					}
+					
+				}else {
+					j.setMsg("没有在人脸库中找到你的记录,请先添加你的记录!");
+				}
+				j.setMsg("登录成功.");
+				j.setSuccess(true);
+
+			} else {
+				j.setMsg("登录失败.");
+			}
+
+		} catch (Exception e) {
+			j.setMsg(e.getMessage());
+			j.setSuccess(false);
+
+		}
+		super.writeJson(j);
+		logger.info("out into the facelogin function");
+	}
+	
+	/**
 	 * 登出
 	 */
 	public void logout() {
@@ -313,5 +374,28 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 		super.writeJson(j);
 		logger.info("out into the userInfo function");
 	}
-
+	/***
+	 * 人脸注册
+	 */
+	public void faceReg() {
+		logger.info("into the faceReg function");
+		Json j = new Json();
+		try {
+			AipFaceResult result = baiduAIServiceI.faceReg(pageUser);
+			if (result != null && result.getError_code()==0) {
+				j.setMsg("人脸注册成功");
+				j.setSuccess(true);
+			}else {
+				j.setMsg("人脸注册失败!");
+				j.setSuccess(false);
+			}
+		} catch (Exception e) {
+			j.setMsg(e.getMessage());
+			j.setSuccess(false);
+			j.setMsg("人脸注册失败");
+			logger.error(e.getMessage());
+		}
+		super.writeJson(j);
+		logger.info("out into the faceReg function");
+	}
 }

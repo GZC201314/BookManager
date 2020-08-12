@@ -15,6 +15,16 @@ public class PageUser implements java.io.Serializable {
 	private File uploadImg;
 	private String uploadFileName;
 	private String userlog;
+	
+	private String base;
+
+	public String getBase() {
+		return base;
+	}
+
+	public void setBase(String base) {
+		this.base = base;
+	}
 
 	public String getUserlog() {
 		return userlog;
