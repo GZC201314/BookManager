@@ -222,7 +222,7 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
 				redisTemplate.opsForHash().put(refreshToken, "role", tuser.getTrole().getRolename());
 
 				// 设置token的过期时间
-				redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
+				redisTemplate.expire(refreshToken, JWTUtil.REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 				j.setObj(new AuthResult(token, refreshToken, tuser.getTrole().getRoleid(), tuser.getName(),
 						tuser.getUserlog()));
 				j.setMsg("登录成功.");

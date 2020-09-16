@@ -12,6 +12,10 @@
 		class="easyui-linkbutton"
 		data-options="iconCls:'icon-cancel',plain:true"
 		onclick="clearBookFun();">清空</a>
+		<a href="#"
+		class="easyui-linkbutton" style="float: right;"
+		data-options="plain:true"
+		onclick="toexcel();">导出</a>
 </div>
 <div id="tszq_sjgl_addDialog" class="easyui-dialog"
 	data-options="closed:true,modal:true,title:'添加用户',buttons:[{
@@ -362,7 +366,14 @@
 		}
 
 	}
-
+    function toexcel() {
+    	// export with customized rows
+    	$('#tszq_sjgl_datagrid').datagrid('toExcel', {
+    	    filename: 'datagrid.xls',
+    	    worksheet: 'Worksheet'
+    	});
+	}
+	
 	$(function() {
 		$('#tszq_sjgl_datagrid').datagrid({
 			url : '${pageContext.request.contextPath}/bookAction!datagrid.action',

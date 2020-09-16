@@ -2,153 +2,82 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <script type="text/javascript" src="js/jquery-2.1.1.min.js" ></script>
-    <script type="text/javascript" src="js/bootstrap.min.js" ></script>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
-    <script type="text/javascript" src="js/vue.min.js"></script>
     <title>抓取豆瓣图书</title>
+    <script src="js/jquery-2.1.1.min.js"></script>
   </head>
   <body>
-    <div class="container">
-      <div class="page-header text-center">
-        <h1>抓取豆瓣图书</h1>
-      </div>
-      <div class="row">
-        <div class="col-lg-offset-1 col-lg-10">
-          <div class="panel panel-success">
-            <div class="panel-heading">
-              <h4>创建抓取任务</h4>
-            </div>
-            <table class="table" style="font-size: 16px;">
-              <form>
-                <tr>
-                  <th>关键词：
-                    <input type="text" name="q" id="q" style="width: 200px" />
-                  </th>
-                  <th>标签：
-                    <input type="text" name="tag" id="tag" style="width: 150px" />
-                  </th>
-                  <th>抓取数量：
-                    <input type="number" min="1" max="9999" required 
-                      name="count" id="count" style="width: 100px" />
-                  </th>
-                  <th>
-                    <button type="submit" class="btn btn-success" style="width: 100px;">
-                      创&emsp;建
-                    </button>
-                  </th>
-                </tr>
-              </form>
-            </table>
-          </div>
-          <div class="alert alert-warning" hidden id="warning" style="font-size: 16px;">
-            <button onclick="$('#warning').hide()" type="button" class="close">
-              &times;
-            </button>
-            <strong>警告！</strong>关键词与标签不能同时为空！请重新输入！
-          </div>
-          <div class="panel panel-primary" id="app">
-            <div class="panel-heading">
-              <h4>
-                已创建的抓取任务&nbsp;<span class="badge" v-text="tasks.length"></span>
-                <button onclick="clearTasks()" type="button" class="btn btn-danger pull-right" data-toggle="tooltip" title="仅清除页面记录">
-                  清空
-                </button>
-              </h4>
-            </div>
-            <table class="table table-striped" style="font-size: 16px;">
-              <thead>
-                <th>关键词</th>
-                <th>标签</th>
-                <th>抓取数量</th>
-                <th>状态</th>
-                <th>耗时(毫秒)</th>
-                <th>详细信息</th>
-              </thead>
-              <tr v-for="task in tasks">
-                <!-- 关键词 -->
-                <th v-text="task.q === '' ? 'null' : task.q"></th>
-                <!-- 标签 -->
-                <th v-text="task.tag === '' ? 'null' : task.tag"></th>
-                <!-- 抓取数量 -->
-                <th v-text="task.count"></th>
-                <!-- 状态 -->
-                <th>
-                  <i v-if="task.result === false" class="fa fa-spinner fa-pulse"></i>
-                  <span v-else-if="task.result.status" class="label label-success">成功</span>
-                  <span v-else class="label label-danger">失败</span>
-                </th>
-                <!-- 耗时 -->
-                <th v-text="task.result.time"></th>
-                <!-- 信息 -->
-                <th v-text="task.result === false ? '执行中' : task.result.msg"></th>
-              </tr>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+  <input type="text" id="clock">
+  <input type="button" value="开始" id="start" onclick="func1()">
+  <input type="button" value="结束" id="end" onclick="func2()">
   </body>
-  <script>
-    var vm = new Vue({
-      el: '#app',
-      data: {
-        tasks: []
-      }
-    });
-    $(function () { 
-      $("[data-toggle='tooltip']").tooltip(); 
-    });
-    function clearTasks() {
-      vm.tasks = [];
-    };
-    
-    $("form").submit(function() {
-      var q = $("#q").val();
-      var tag = $("#tag").val();
-      if (q === "" && tag === "") {
-        $("#warning").show();
-        return false;
-      }
-      var count = $("#count").val();
-      $("#warning").hide();
-      var task = {
-        q: q,
-        tag: tag,
-        count: count,
-        result: false
-      };
-      vm.tasks.unshift(task);
-      $("input").val("");
-      var ajaxTask = $.ajax({
-        url: "/tasks",
-        cache: false,
-        timeout: 100000,
-        type: "post",
-        data: task,
-        context: task,
-        dataType: "json",
-        success: function(data) {
-          this.result = data;
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-          this.result = {
-            status: false,
-            msg: textStatus + ':' + errorThrown
-          };
-         },
-        complete: function(XMLHttpRequest, status) {
-          if (status === "timeout") {
-            ajaxTask.abort();
-            this.result = {
-              status: false,
-              msg: "请求超时"
-            };
-          }
-        }
-      });
-      return false;
-    });
+  <script type="text/javascript">
+  function setClock() {
+    var now = setTime();
+    var clock = document.getElementById('clock');
+    clock.value = now;
+}
+var ID;
+  function func1() {
+  	setClock();
+    ID = setInterval(setClock,1000);
+}
+  function func2() {
+  debugger; 
+    clearInterval(ID)
+}
+function setTime() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth()+1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var seconds = date.getSeconds();
+    var week = date.getDay();
+    return year+"年"+month+"月"+format(day)+ "天"+hour +":"+minute+ ":"+seconds+
+" "+num_week(week);
+}
+function format(number) {
+    if(number<10){
+    return "0"+number;
+}else {
+	return number;
+}
+}
+function num_week(n) {
+    week =["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+    return week[n];
+}
+
+
+
+  //var add = new Function("a","b","alert(a+b)");
+  //add(1,2);
+  //function a1() {
+//		if(arguments.length!=3){
+//		throw new Error("arguments should be 3 ");
+//		}
+//	}
+//
+//	a1(1,2,3,4,5,6);
+
+	//var arr2 = new Array(5,"hello",true,[1,3]);
+	//for (var index= 0; index< arr2.length; index++) {
+	//	console.info(arr2[index]);
+	//}
+//var date = new Date();
+//console.log(date.getYear());
+var name = "The Window";
+var object ={
+name:"My Object",
+getName:function () {
+    var that = this;
+    return function(){
+     return that.name;
+    }
+}
+};
+alert(object.getName()());
+window.onload();
   </script>
 </html>

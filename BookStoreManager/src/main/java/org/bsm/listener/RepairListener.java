@@ -1,5 +1,7 @@
 package org.bsm.listener;
 
+import java.util.Enumeration;
+
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletContextEvent;
@@ -107,7 +109,15 @@ public class RepairListener implements ServletContextListener, ServletContextAtt
 	/**
      * @see ServletRequestListener#requestInitialized(ServletRequestEvent)
      */
-    public void requestInitialized(ServletRequestEvent arg0)  { 
+    public void requestInitialized(ServletRequestEvent arg0)  {
+		if (logger.isDebugEnabled()) {
+			logger.error("请求初始化 - start"); //$NON-NLS-1$
+		}
+		arg0.getServletContext().setAttribute("gzc", "郭志超");
+		
+		if (logger.isDebugEnabled()) {
+			logger.error("请求初始化 - end"); //$NON-NLS-1$
+		}
     }
 
 	/**
