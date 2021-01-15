@@ -132,7 +132,6 @@
 		}
 		param.menusId = id.join(',');
 		param.menusPid = pid.join(',');
-		debugger;
 	}
 
 	function addGrandMenuid1(param) {
@@ -151,7 +150,6 @@
 		});
 	}
 	function clearRoleFun() {
-		debugger;
 		$('#admin_jsgl_rolename').textbox('setText','');
 		$('#admin_jsgl_datagrid').datagrid('load', {});
 
@@ -218,7 +216,6 @@
 	function removerole() {
 		var ids = [];
 		var rows = $('#admin_jsgl_datagrid').datagrid('getChecked');
-		debugger;
 		for (var i = 0; i < rows.length; i++) {
 			ids.push("'" + rows[i].roleid + "'");
 		}

@@ -16,7 +16,13 @@
 	src="pages/lib/jquery-easyui-1.7.0/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="pages/lib/ValidateUtil.js"></script>
 <script type="text/javascript" src="pages/lib/verUpload/verUpload.js"></script>
-
+<script type="text/javascript">
+//切换验证码
+function changeCheckCode() {
+	var nowTime = new Date;
+	$("#image").attr("src", '${pageContext.request.contextPath}/userAction!check.action' + "?time=" + nowTime.getTime());
+}
+</script>
 <style type="text/css">
 .avatar {
 	display: inline-block;
@@ -131,14 +137,30 @@ h1 {
 			buttons:[{
 				text:'人脸识别',
 				handler:function(){
-				$('#user_face_regDialog').dialog('open');				
-	  			navigator.mediaDevices.getUserMedia(con)
-	  			.then(function(stream){
+				$('#user_face_regDialog').dialog('open');
+               if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                   navigator.mediaDevices.getUserMedia({
+                       video: true
+                   }).then(function (stream) {
 	  				video.srcObject = stream;
 	  				video.onloadmetadate = function(e){
 	  					video.play();
 	  				}
-	  			});
+                   }).catch(function(err){
+                       console.log(err);
+                   });
+               }else if(navigator.getMedia){
+                   navigator.getMedia({
+                       video: true
+                   }).then(function (stream) {
+                       console.log(stream);
+                       MediaStreamTrack=stream.getTracks()[1];
+                       video.src=(window.webkitURL).createObjectURL(stream);
+                       video.play();
+                   }).catch(function(err){
+                       console.log(err);
+                   });
+               }
 				}
 			},{
 				text:'注册',
@@ -181,7 +203,7 @@ h1 {
 <!-- 人脸识别弹窗 -->
 <div id="user_face_regDialog" style="width: 350px;"
 	class="easyui-dialog"
-	data-options="title:'人脸识别',closed:true,modal:true,buttons:[{
+	data-options="title:'人脸识别',closed:true,closable: false,modal:true,buttons:[{
 				text:'人脸识别',
 				iconCls:'icon-edit',
 				handler:function(){
@@ -197,7 +219,7 @@ h1 {
 				<strong>请把你的脸放摄像头面前</strong>
 			</dt>
 			<div id="media">
-				<video id="video" width="530" height="300" autoplay></video>
+				<video id="video" width="400" height="300" autoplay></video>
 				<canvas id="canvas" width="400" height="300"></canvas>
 			</div>
 		</dl>
@@ -238,7 +260,8 @@ h1 {
 </div>
 
 <script type="text/javascript">
-	(function($) {
+
+	(function($) {	
 		//备份jquery的ajax方法
 		var _ajax = $.ajax;
 		//重写jquery的ajax方法
@@ -297,11 +320,14 @@ h1 {
 		};
 
 	})(jQuery);
+	
+	
+	
 	var video = document.getElementById('video'); 
 		var context = canvas.getContext('2d');
 		var con  ={
 			audio:false,
-			video:{
+			video:{ 
 			width:1980,
 			height:1024,
 			}
@@ -319,7 +345,6 @@ h1 {
  							if(obj.success){
  								//关闭摄像头
  								video.srcObject.getTracks()[0].stop();
- 								
  								
  								/* 登录成功把Token和refreshToken放到cookies中 */
  								$.cookie('token', obj.obj.token);
@@ -363,11 +388,7 @@ h1 {
  
 			};	
 	
-	//切换验证码
-	function changeCheckCode() {
-		var nowTime = new Date;
-		$("#image").attr("src", '${pageContext.request.contextPath}/userAction!check.action' + "?time=" + nowTime.getTime());
-	}
+
 	//新增tab页签
 	function addTab(opts) {
 		var t = $('#index_centerTab');

@@ -123,7 +123,6 @@
 				text : '修改',
 				iconCls : 'icon-edit',
 				handler : function() {
-					debugger;
 					$('#tszq_sjgl_editForm').form('submit', {
 						url : '${pageContext.request.contextPath}/bookAction!edit.action',
 						success : function(r) {
@@ -205,7 +204,6 @@
 		success : function(d) {
 			var obj = jQuery.parseJSON(d);
 			if (obj.success) {
-				debugger;
 				$("#tszq_sjgl_image2").textbox("setValue", obj.obj)
 			}
 			$.messager.show({
@@ -231,7 +229,6 @@
 				type : 'post',
 				dataType : "json",
 				success : function(data) {
-					debugger;
 					if (data.success == true) {
 						$('#tszq_sjgl_code1').textbox('setValue', data.obj.code);
 						$('#tszq_sjgl_isbn1').textbox('setValue', data.obj.isbn);
@@ -268,7 +265,6 @@
 		});
 	}
 	function clearBookFun() {
-		debugger;
 		$('#tszq_sjgl_bookname').textbox('setValue', '');
 		$('#tszq_sjgl_datagrid').datagrid('load', {});
 

@@ -379,7 +379,6 @@ window.verUpload = (function () {
     // 提示框关闭倒计时函数
     function alert_totalQuery(msg,icon,tm){
     	var interval;
-    	debugger;
     	var time=1000;
     	var x;
     	if(null==tm||''==tm){

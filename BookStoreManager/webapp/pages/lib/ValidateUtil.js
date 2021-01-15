@@ -122,7 +122,6 @@ serializeObject = function(form) {
 // 提示框关闭倒计时函数
 alert_totalQuery = function(msg,icon,tm){
 	var interval;
-	debugger;
 	var time=1000;
 	var x;
 	if(null==tm||''==tm){
