@@ -1,6 +1,6 @@
 /*
  * 确认密码一致性校验
- * */
+ */
 $.extend($.fn.validatebox.defaults.rules, {
 	eqPwd : {
 		validator : function(value, param) {
@@ -41,14 +41,14 @@ $.extend($.fn.validatebox.defaults.rules, {
 });
 
 
-//扩展树加载失败的方法
+// 扩展树加载失败的方法
 $.fn.tree.defaults.onLoadError = function(arguments) {
 	var d = arguments.status;
     if(d==402){
     	// TODO
     	alert_totalQuery('Token is error,please re-acquire!','',10);
 		setTimeout(() => {
-//			清理cookie
+// 清理cookie
 		$.cookie('token', '', {
 			expires : -1
 		});
@@ -65,7 +65,7 @@ $.fn.tree.defaults.onLoadError = function(arguments) {
     	// TODO
     	alert_totalQuery('This token has expired!','',10);
 		setTimeout(() => {
-//			清理cookie
+// 清理cookie
 		$.cookie('token', '', {
 			expires : -1
 		});

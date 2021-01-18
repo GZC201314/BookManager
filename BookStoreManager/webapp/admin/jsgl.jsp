@@ -122,6 +122,7 @@
 	</div>
 </div>
 <script type="text/javascript">
+	
 	function addGrandMenuid(param) {
 		var nodes = $('#admin_yhgl_edit_grandMenutree').tree('getChecked');
 		var id = [];
@@ -154,7 +155,6 @@
 		$('#admin_jsgl_datagrid').datagrid('load', {});
 
 	}
-
 	//新增角色弹窗初始化
 	function append() {
 		$('#admin_jsgl_addForm input').val('');

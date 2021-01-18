@@ -261,7 +261,44 @@ h1 {
 
 <script type="text/javascript">
 
-	(function($) {	
+/* 设置页面长时间没有操作,退出用户登录 */
+
+var lastTime = new Date().getTime();
+        var currentTime = new Date().getTime();
+        var timeOut = 5 * 60 * 1000; //设置超时时间： 10分
+        $(function(){
+            /* 鼠标移动事件 */
+            $(document).mouseover(function(){
+                lastTime = new Date().getTime(); //更新操作时间
+            });
+        });
+
+        function testTime(){
+            currentTime = new Date().getTime(); //更新当前时间
+            console.log((currentTime - lastTime)/1000);
+            if(currentTime - lastTime > timeOut && typeof ($.cookie("token")) != "undefined" && $.cookie("token").length > 0){ //判断是否超时
+        	// 打开弹窗提示即将推出登录
+        	alert_totalQuery('由于你长时间没有操作,系统将在10秒钟后退出登录!','',10);
+		setTimeout(() => {
+//			清理cookie
+		$.cookie('token', '', {
+			expires : -1
+		});
+		$.cookie('refreshToken', '', {
+			expires : -1
+		});
+		$.cookie('role', '', {
+			expires : -1
+		});
+			window.location.reload();
+		}, 10000);
+            }
+        }
+
+        /* 定时器  间隔1秒检测是否长时间未操作页面  */
+        window.setInterval(testTime, 10000);
+
+(function($) {	
 		//备份jquery的ajax方法
 		var _ajax = $.ajax;
 		//重写jquery的ajax方法
@@ -288,7 +325,6 @@ h1 {
 						}, 10000);
 			        }
 			        if(d==403){
-			        	// TODO
 			        	alert_totalQuery('This token has expired!','',10);
 						setTimeout(() => {
 //							清理cookie
@@ -320,8 +356,7 @@ h1 {
 		};
 
 	})(jQuery);
-	
-	
+		
 	
 	var video = document.getElementById('video'); 
 		var context = canvas.getContext('2d');

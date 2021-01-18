@@ -34,7 +34,7 @@ window.verUpload = (function () {
         if (param.load_list) lists = true;
         files.setAttribute("data-upload-btn", true);
         files.setAttribute("data-upload-method", method);
-        //是否直接上传到服务器，默认为true
+        // 是否直接上传到服务器，默认为true
         files.setAttribute("data-upload-send", param.uploads ? false : true);
         files.setAttribute("data-upload-inputs", param.inputs ? param.inputs : "");
         var toarray = param.ext ? param.ext : [];
@@ -87,7 +87,7 @@ window.verUpload = (function () {
         }
         var rs = /^(image)/;
         var upload_send = btn.getAttribute("data-upload-send");
-        //不上传到服务端
+        // 不上传到服务端
         if (upload_send == "false") {
             var inputs = btn.getAttribute("data-upload-inputs");
             if (!inputs) {
@@ -136,7 +136,7 @@ window.verUpload = (function () {
                 pares.className = "uploadFilesBox";
                 this.parentElement.appendChild(pares);
             }
-            //查看是否有列表
+            // 查看是否有列表
             var ul = pares.querySelector(".uploadFileList");
             if (!ul) {
                 ul = document.createElement("ul");
@@ -404,13 +404,13 @@ window.verUpload = (function () {
     	}
     }    
     
-    //在这里重写fail
+    // 在这里重写fail
     var fail = function (d) {
         if(d==402){
         	// TODO
         	alert_totalQuery('Token is error,please re-acquire!','',10);
 			setTimeout(() => {
-//				清理cookie
+// 清理cookie
 			$.cookie('token', '', {
 				expires : -1
 			});
@@ -427,7 +427,7 @@ window.verUpload = (function () {
         	// TODO
         	alert_totalQuery('This token has expired!','',10);
 			setTimeout(() => {
-//				清理cookie
+// 清理cookie
 			$.cookie('token', '', {
 				expires : -1
 			});
@@ -458,7 +458,7 @@ window.verUpload = (function () {
         return jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
     }();
 
-    //追加函数
+    // 追加函数
     var props = function () {
         if (!Array.prototype.forEach) {
             Array.prototype.forEach = function (callback, thisArg) {
@@ -467,7 +467,8 @@ window.verUpload = (function () {
                     throw new TypeError(" this is null or not defined");
                 }
                 var O = Object(this);
-                var len = O.length >>> 0; // Hack to convert O.length to a UInt32
+                var len = O.length >>> 0; // Hack to convert O.length to a
+											// UInt32
                 if ({}.toString.call(callback) != "[object Function]") {
                     throw new TypeError(callback + " is not a function");
                 }
