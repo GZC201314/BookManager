@@ -46,14 +46,15 @@ public class UserServiceImpl implements UserServiceI {
 		tuser.setId(UUID.randomUUID().toString());
 		tuser.setCreatedatetime(new Date());
 		tuser.setLastmodifytime(new Date());
+		tuser.setIsFaceValid(t.getIsFaceValid());
 		if (!StringUtils.isEmpty(t.getRoleid())) {
-			tuser.setTrole(new Trole(Integer.parseInt(t.getRoleid()), 0));
+			tuser.setTrole(new Trole(t.getRoleid(), 0));
 		} else {// 注册默认是买家角色
 			tuser.setTrole(new Trole(3, 0));
 		}
 		userDao.save(tuser);
 		BeanUtils.copyProperties(tuser, pageUser);
-		pageUser.setRoleid(tuser.getTrole().getRoleid() + "");
+		pageUser.setRoleid(tuser.getTrole().getRoleid());
 		return pageUser;
 	}
 
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserServiceI {
 				PageUser user = new PageUser();
 				BeanUtils.copyProperties(tuser, user);
 				if (!StringUtils.isEmpty(tuser.getTrole())) {
-					user.setRoleid(tuser.getTrole().getRoleid() + "");
+					user.setRoleid(tuser.getTrole().getRoleid());
 				}
 				pageUserList.add(user);
 			}
@@ -155,12 +156,14 @@ public class UserServiceImpl implements UserServiceI {
 						tuser.setPwd(Encrypt.e(pageUser.getPwd()));
 					}
 					if (!StringUtils.isEmpty(pageUser.getRoleid())) {
-						tuser.setTrole(new Trole(Integer.parseInt(pageUser.getRoleid()), 0));
+						tuser.setTrole(new Trole(pageUser.getRoleid(), 0));
 					}
 					if (!StringUtils.isEmpty(pageUser.getLastmodifytime())) {
 						tuser.setLastmodifytime(pageUser.getLastmodifytime());
 					}
+					tuser.setIsFaceValid(pageUser.getIsFaceValid());
 					userDao.saveOrUpdate(tuser);
+					resultCode = 0;
 				}
 			} else {// 如果修改了用户的名称
 				String hql = "from Tuser where name=:name";
@@ -179,7 +182,7 @@ public class UserServiceImpl implements UserServiceI {
 							oldUser.setPwd(Encrypt.e(pageUser.getPwd()));
 						}
 						if (!StringUtils.isEmpty(pageUser.getRoleid())) {
-							oldUser.setTrole(new Trole(Integer.parseInt(pageUser.getRoleid()), 0));
+							oldUser.setTrole(new Trole(pageUser.getRoleid(), 0));
 						}
 						userDao.saveOrUpdate(oldUser);
 						resultCode = 0;
@@ -207,7 +210,7 @@ public class UserServiceImpl implements UserServiceI {
 			Tuser tuser = userDao.get(hql, params);
 			PageUser pageUser = new PageUser();
 			BeanUtils.copyProperties(tuser, pageUser);
-			pageUser.setRoleid(tuser.getTrole().getRolename());
+			pageUser.setRoleid(tuser.getTrole().getRoleid());
 			return pageUser;
 		}
 		return null;

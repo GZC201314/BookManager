@@ -387,6 +387,12 @@ var lastTime = new Date().getTime();
  								$.cookie('role', obj.obj.role);
  								$.cookie('userName', obj.obj.userName);
  								$.cookie('userlog', decodeURI(obj.obj.userlog));
+ 								$.cookie('isFaceValid', obj.obj.isFaceValid);
+ 								//取消人脸注册的选项
+ 								debugger;
+ 								if( obj.obj.isFaceValid == "1"){
+ 								    $('#faceReg').remove();
+ 								}
  								$('#user_face_regDialog').dialog('close');
  								$('#user_login_loginDialog').dialog('close');
  								$('#layout_north_userName').text(obj.obj.userName);
@@ -437,6 +443,7 @@ var lastTime = new Date().getTime();
 		$('#user_login_loginForm').form({
 			url : '${pageContext.request.contextPath}/userAction!login.action',
 			success : function(r) {
+			    debugger;
 				var obj = jQuery.parseJSON(r);
 				if (obj.success) {
 					/* 登录成功把Token和refreshToken放到cookies中 */
@@ -445,11 +452,15 @@ var lastTime = new Date().getTime();
 					$.cookie('role', obj.obj.role);
 					$.cookie('userName', obj.obj.userName);
 					$.cookie('userlog', decodeURI(obj.obj.userlog));
+					$.cookie('isFaceValid', obj.obj.isFaceValid);
 					$('#user_login_loginDialog').dialog('close');
 					$('#layout_north_userName').text(obj.obj.userName);
 					if (!(typeof (obj.obj.userlog) == "undefined" || obj.obj.userlog == "")) {
 						$('#admin_north_headIcon').attr("src", decodeURI(obj.obj.userlog));
 					}
+					if( obj.obj.isFaceValid == "1"){
+						    $('#faceReg').remove();
+						}
 					//加载 目录
 					$('#layout_west_tree').tree({
 						url : '${pageContext.request.contextPath}/menuAction!getTreeNote.action',

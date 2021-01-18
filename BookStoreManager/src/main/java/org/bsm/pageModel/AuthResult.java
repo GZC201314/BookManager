@@ -10,14 +10,17 @@ public class AuthResult {
 	private String userName;
 	
 	private String userlog;
+	
+	private Integer isFaceValid;
 
-	public AuthResult(String token, String refreshToken,Integer role,String userName,String userlog) {
+	public AuthResult(String token, String refreshToken,Integer role,String userName,String userlog,Integer isFaceValid) {
 		super();
 		this.Token = token;
 		this.refreshToken = refreshToken;
 		this.role = role;
 		this.userName = userName;
 		this.userlog = userlog;
+		this.isFaceValid = isFaceValid;
 	}
 
 	public String getToken() {
@@ -60,9 +63,19 @@ public class AuthResult {
 		this.userlog = userlog;
 	}
 
+	public Integer getIsFaceValid() {
+		return isFaceValid;
+	}
+
+	public void setIsFaceValid(Integer isFaceValid) {
+		this.isFaceValid = isFaceValid;
+	}
+
 	@Override
 	public String toString() {
 		return "AuthResult [Token=" + Token + ", refreshToken=" + refreshToken + ", role=" + role + ", userName="
-				+ userName + ", userlog=" + userlog + "]";
+				+ userName + ", userlog=" + userlog + ", isFaceValid=" + isFaceValid + "]";
 	}
+
+
 }

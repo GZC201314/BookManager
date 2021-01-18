@@ -1,6 +1,5 @@
-// default package
-// Generated 2021-1-18 22:21:03 by Hibernate Tools 4.0.1.Final
 package org.bsm.model;
+// Generated 2020-2-13 22:52:44 by Hibernate Tools 4.0.1.Final
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -11,26 +10,15 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class TbookId implements java.io.Serializable {
 
-	private int id;
 	private String code;
 	private String isbn;
 
 	public TbookId() {
 	}
 
-	public TbookId(int id, String code, String isbn) {
-		this.id = id;
+	public TbookId(String code, String isbn) {
 		this.code = code;
 		this.isbn = isbn;
-	}
-
-	@Column(name = "id", nullable = false)
-	public int getId() {
-		return this.id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	@Column(name = "code", nullable = false, length = 32)
@@ -60,9 +48,8 @@ public class TbookId implements java.io.Serializable {
 			return false;
 		TbookId castOther = (TbookId) other;
 
-		return (this.getId() == castOther.getId())
-				&& ((this.getCode() == castOther.getCode()) || (this.getCode() != null && castOther.getCode() != null
-						&& this.getCode().equals(castOther.getCode())))
+		return ((this.getCode() == castOther.getCode()) || (this.getCode() != null && castOther.getCode() != null
+				&& this.getCode().equals(castOther.getCode())))
 				&& ((this.getIsbn() == castOther.getIsbn()) || (this.getIsbn() != null && castOther.getIsbn() != null
 						&& this.getIsbn().equals(castOther.getIsbn())));
 	}
@@ -70,7 +57,6 @@ public class TbookId implements java.io.Serializable {
 	public int hashCode() {
 		int result = 17;
 
-		result = 37 * result + this.getId();
 		result = 37 * result + (getCode() == null ? 0 : this.getCode().hashCode());
 		result = 37 * result + (getIsbn() == null ? 0 : this.getIsbn().hashCode());
 		return result;

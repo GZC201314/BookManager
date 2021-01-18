@@ -15,6 +15,8 @@ public class PageUser implements java.io.Serializable {
 	private File uploadImg;
 	private String uploadFileName;
 	private String userlog;
+	// 人脸校验
+	private Integer isFaceValid=0;
 	
 	private String base;
 
@@ -32,6 +34,14 @@ public class PageUser implements java.io.Serializable {
 
 	public void setUserlog(String userlog) {
 		this.userlog = userlog;
+	}
+
+	public Integer getIsFaceValid() {
+		return isFaceValid;
+	}
+
+	public void setIsFaceValid(Integer isFaceValid) {
+		this.isFaceValid = isFaceValid;
 	}
 
 	public File getUploadImg() {
@@ -195,7 +205,7 @@ public class PageUser implements java.io.Serializable {
 	private String pwd;
 	private Date createdatetime;
 	private Date lastmodifytime;
-	private String roleid;
+	private Integer roleid;
 
 	public PageUser() {
 	}
@@ -250,11 +260,11 @@ public class PageUser implements java.io.Serializable {
 		this.lastmodifytime = lastmodifytime;
 	}
 
-	public String getRoleid() {
+	public Integer getRoleid() {
 		return roleid;
 	}
 
-	public void setRoleid(String roleid) {
+	public void setRoleid(Integer roleid) {
 		this.roleid = roleid;
 	}
 

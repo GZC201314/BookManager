@@ -12,7 +12,7 @@
 </div>
 <div id="mm2" style="width: 100px;">
 	<div onclick="userCenter();">个人中心</div>
-	<div onclick="faceReg();">人脸注册</div>
+	<div id="faceReg" onclick="faceReg();">人脸注册</div>
 	<div>帐号设置</div>
 	<div onclick="logout();">退出</div>
 </div>
@@ -34,19 +34,25 @@
 		$('#user_face_regDialog').dialog('open');
 		var video = document.getElementById('video');
 		var context = canvas.getContext('2d');
-		var con = {
-			audio : false,
-			video : {
-				width : 1980,
-				height : 1024,
-			}
-		};
-		navigator.mediaDevices.getUserMedia(con).then(function(stream) {
-			video.srcObject = stream;
-			video.onloadmetadate = function(e) {
-				video.play();
-			}
-		});
+               if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                   navigator.mediaDevices.getUserMedia({
+                       video: true
+                   }).then(function (stream) {
+	  				video.srcObject = stream;
+	  				video.onloadmetadate = function(e){
+	  					video.play();
+	  				}
+                   });
+               }else if(navigator.getMedia){
+                   navigator.getMedia({
+                       video: true
+                   }).then(function (stream) {
+                       console.log(stream);
+                       MediaStreamTrack=stream.getTracks()[1];
+                       video.src=(window.webkitURL).createObjectURL(stream);
+                       video.play();
+                   });
+               }
 	}
 
 	function faceRegCommit() {
@@ -63,6 +69,7 @@
 				//关闭摄像头
 				video.srcObject.getTracks()[0].stop();
 				$('#user_face_regDialog').dialog('close');
+				$('#faceReg').remove();
 				var obj = jQuery.parseJSON(data);
 				$.messager.show({
 					title : '提示',

@@ -157,6 +157,7 @@ public class RepairServiceImpl implements RepairServiceI {
 		admin.setId("0");
 		admin.setName("admin");
 		admin.setPwd(Encrypt.e("admin"));
+		admin.setIsFaceValid(0);
 		admin.setTrole(new Trole(0, "超级管理员", "超级管理员", "", 0, null, null));
 		userDaoI.saveOrUpdate(admin);
 	}
