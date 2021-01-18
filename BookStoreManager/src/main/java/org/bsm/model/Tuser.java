@@ -1,5 +1,6 @@
+// default package
+// Generated 2021-1-18 22:21:03 by Hibernate Tools 4.0.1.Final
 package org.bsm.model;
-// Generated 2020-2-13 22:52:44 by Hibernate Tools 4.0.1.Final
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -26,6 +27,7 @@ public class Tuser implements java.io.Serializable {
 	private Date createdatetime;
 	private Date lastmodifytime;
 	private String userlog;
+	private Integer isFaceValid;
 
 	public Tuser() {
 	}
@@ -36,7 +38,7 @@ public class Tuser implements java.io.Serializable {
 	}
 
 	public Tuser(String name, Trole trole, String id, String pwd, Date createdatetime, Date lastmodifytime,
-			String userlog) {
+			String userlog, Integer isFaceValid) {
 		this.name = name;
 		this.trole = trole;
 		this.id = id;
@@ -44,6 +46,7 @@ public class Tuser implements java.io.Serializable {
 		this.createdatetime = createdatetime;
 		this.lastmodifytime = lastmodifytime;
 		this.userlog = userlog;
+		this.isFaceValid = isFaceValid;
 	}
 
 	@Id
@@ -112,6 +115,15 @@ public class Tuser implements java.io.Serializable {
 
 	public void setUserlog(String userlog) {
 		this.userlog = userlog;
+	}
+
+	@Column(name = "isFaceValid")
+	public Integer getIsFaceValid() {
+		return this.isFaceValid;
+	}
+
+	public void setIsFaceValid(Integer isFaceValid) {
+		this.isFaceValid = isFaceValid;
 	}
 
 }

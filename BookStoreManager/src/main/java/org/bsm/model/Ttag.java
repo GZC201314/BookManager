@@ -1,6 +1,6 @@
+// default package
+// Generated 2021-1-18 22:21:03 by Hibernate Tools 4.0.1.Final
 package org.bsm.model;
-// Generated 2020-2-13 22:52:44 by Hibernate Tools 4.0.1.Final
-
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;

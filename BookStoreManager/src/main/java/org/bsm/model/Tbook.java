@@ -1,5 +1,6 @@
+// default package
+// Generated 2021-1-18 22:21:03 by Hibernate Tools 4.0.1.Final
 package org.bsm.model;
-// Generated 2020-2-13 22:52:44 by Hibernate Tools 4.0.1.Final
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -89,7 +90,7 @@ public class Tbook implements java.io.Serializable {
 
 	@EmbeddedId
 
-	@AttributeOverrides({
+	@AttributeOverrides({ @AttributeOverride(name = "id", column = @Column(name = "id", nullable = false)),
 			@AttributeOverride(name = "code", column = @Column(name = "code", nullable = false, length = 32)),
 			@AttributeOverride(name = "isbn", column = @Column(name = "isbn", nullable = false, length = 32)) })
 	public TbookId getId() {
