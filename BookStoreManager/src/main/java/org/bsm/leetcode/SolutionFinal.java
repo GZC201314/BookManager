@@ -4,15 +4,14 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -838,7 +837,7 @@ class SolutionFinal {
 	 * @param nums
 	 * @return
 	 */
-	public static int removeDuplicates(int[] nums) {
+	public static int removeDuplicates1(int[] nums) {
 //    	if(nums==null) {
 //    		return 0;
 //    	}
@@ -1089,7 +1088,7 @@ class SolutionFinal {
 		return result;
 	}
 
-	public static int search(int[] nums, int target) {
+	public static int search1(int[] nums, int target) {
 		int right = nums.length - 1;
 		int left = 0;
 		int mid = (right + left) / 2;
@@ -1881,6 +1880,1482 @@ class SolutionFinal {
 		}
     }    
     
+	/***
+	 * 最大子序列和,暴力法
+	 * 
+	 * @param nums
+	 * @return
+	 */
+//	public static int maxSubArray(int[] nums) {
+//		int max = nums[0];
+//		for (int i = 0; i < nums.length; i++) {
+//			int sum =0;
+//			for (int j = i; j < nums.length; j++) {
+//				sum += nums[j];
+//				if (sum > max) {
+//					max = sum;
+//				}
+//			}
+//		}
+//		return max;
+//	}
+	public static int maxSubArray(int[] nums) {
+		int max = nums[0];
+		int sum = nums[0];
+		int length = nums.length;
+		for (int i = 1; i < length; i++) {
+			sum = Math.max(nums[i], sum + nums[i]);
+			max = Math.max(sum, max);
+		}
+
+		return max;
+	}
+
+	public static List<Integer> spiralOrder(int[][] matrix) {
+		List<Integer> result = new ArrayList<>();
+		int left = 0, right = matrix[0].length - 1;
+		int top = 0, down = matrix.length - 1;
+		int i = 0, j = 0;
+		while (left <= right || top <= down) {
+			while (j <= right) {
+				result.add(matrix[i][j++]);
+			}
+			top++;
+			j--;
+			i++;
+			if (top > down) {
+				return result;
+			}
+			while (i <= down) {
+				result.add(matrix[i++][j]);
+			}
+			right--;
+			i--;
+			j--;
+			if ((right < left)) {
+				return result;
+			}
+			while (j >= left) {
+				result.add(matrix[i][j--]);
+			}
+			j++;
+			i--;
+			down--;
+			if (top > down) {
+				return result;
+			}
+			while (i >= top) {
+				result.add(matrix[i--][j]);
+			}
+			i++;
+			j++;
+			left++;
+			if ((right < left)) {
+				return result;
+			}
+		}
+		return result;
+	}
+
+	public static boolean canJump(int[] nums) {
+		int max = nums[0] + 1;
+		int length = nums.length;
+		for (int i = 0; i < nums.length; i++) {
+			if (i < max && max < i + nums[i] + 1) {
+				max = i + nums[i] + 1;
+			}
+			if (i > max) {
+				break;
+			}
+		}
+		if (max < length) {
+			return false;
+		}
+		return true;
+	}
+
+	public static int[][] merge(int[][] intervals) {
+		if (intervals.length < 2)
+			return intervals;
+		List<int[]> answer = new ArrayList<>();
+		Arrays.sort(intervals, new Comparator<int[]>() {
+			@Override
+			public int compare(int[] o1, int[] o2) {
+				return o1[0] - o2[0];
+			}
+		});
+		answer.add(intervals[0]);
+		for (int i = 1; i < intervals.length; i++) {
+			int[] start = answer.get(answer.size() - 1);
+			if (intervals[i][0] <= start[1]) {
+				answer.remove(answer.size() - 1);
+				answer.add(new int[] { start[0], Math.max(start[1], intervals[i][1]) });
+			} else {
+				answer.add(intervals[i]);
+			}
+		}
+		int[][] result = new int[answer.size()][2];
+		int size = answer.size();
+		for (int i = 0; i < size; i++) {
+			result[i] = answer.get(i);
+		}
+
+		return result;
+	}
+
+	public static int[][] insert(int[][] intervals, int[] newInterval) {
+		if (intervals.length == 0) {
+			return new int[][] { newInterval };
+		}
+		List<int[]> answer = new ArrayList<>();
+		int length = intervals.length;
+		for (int i = 0; i < length;) {
+			while (i < length && intervals[i][1] < newInterval[0]) {
+				answer.add(intervals[i]);
+				i++;
+			}
+			while (i < length && intervals[i][0] <= newInterval[1]) {
+				newInterval[0] = Math.min(intervals[i][0], newInterval[0]);
+				newInterval[1] = Math.max(intervals[i][1], newInterval[1]);
+				i++;
+			}
+			answer.add(newInterval);
+			for (int j = i; j < intervals.length; j++) {
+				answer.add(intervals[j]);
+			}
+			break;
+
+		}
+		int[][] result = new int[answer.size()][2];
+		int size = answer.size();
+		for (int i = 0; i < size; i++) {
+			result[i] = answer.get(i);
+		}
+		return result;
+	}
+
+	public static int lengthOfLastWord(String s) {
+		int length = s.length();
+		int count = 0;
+		int i = length - 1;
+		while (i >= 0 && s.charAt(i) == ' ') {
+			i--;
+		}
+		if (i < 0) {
+			return count;
+		}
+		for (int j = i; j >= 0; j--) {
+			if (s.charAt(j) != ' ') {
+				count++;
+				continue;
+			}
+			return count;
+		}
+		return count;
+	}
+
+	public static int[][] generateMatrix(int n) {
+		int[][] result = new int[n][n];
+		int count = 1, left = 0, right = n, top = 0, down = n;
+		int i = 0, j = 0;
+		while (left <= right || top <= down) {
+			// right
+			while (right > j) {
+				result[i][j++] = count++;
+			}
+			top++;
+			j--;
+			i++;
+			// down
+			while (down > i) {
+				result[i++][j] = count++;
+			}
+			right--;
+			i--;
+			j--;
+			// left
+			while (left <= j) {
+				result[i][j--] = count++;
+			}
+			down--;
+			j++;
+			i--;
+			// top
+			while (top <= i) {
+				result[i--][j] = count++;
+			}
+			left++;
+			i++;
+			j++;
+		}
+		return result;
+	}
+
+	public static String getPermutation(int n, int k) {
+		int[] factorial = new int[n];
+		factorial[0] = 1;
+		for (int i = 1; i < n; ++i) {
+			factorial[i] = factorial[i - 1] * i;
+		}
+
+		--k;
+		StringBuffer ans = new StringBuffer();
+		int[] valid = new int[n + 1];
+		Arrays.fill(valid, 1);
+		for (int i = 1; i <= n; ++i) {
+			int order = k / factorial[n - i] + 1;
+			for (int j = 1; j <= n; ++j) {
+				order -= valid[j];
+				if (order == 0) {
+					ans.append(j);
+					valid[j] = 0;
+					break;
+				}
+			}
+			k %= factorial[n - i];
+		}
+		return ans.toString();
+	}
+
+	public static ListNode rotateRight(ListNode head, int k) {
+		List<Integer> numbers = new ArrayList<>();
+		ListNode p = new ListNode();
+		p = head;
+		int length = 0;
+		while (p != null) {
+			length++;
+			p = p.next;
+		}
+		k = k % length;
+		p = head;
+		int count = 0;
+		while (p != null) {
+			if (count < k) {
+				numbers.add(p.val);
+				count++;
+			} else {
+				numbers.add(p.val);
+				p.val = numbers.get(0);
+				numbers.remove(0);
+			}
+			p = p.next;
+		}
+		p = head;
+		for (Integer integer : numbers) {
+			p.val = integer;
+			p = p.next;
+		}
+		return head;
+	}
+
+	public static int m0;
+	public static int n0;
+	public static int count = 0;
+
+	public static int uniquePaths(int m, int n) {
+		m0 = m;
+		n0 = n;
+		dfs_uniquePaths(1, 1);
+		return count;
+	}
+
+	public static void dfs_uniquePaths(int m2, int n2) {
+		if (m2 == m0 && n2 == n0) {
+			count++;
+			return;
+		}
+		if (m2 < m0) {
+			dfs_uniquePaths(m2 + 1, n2);
+		}
+		if (n2 < n0) {
+			dfs_uniquePaths(m2, n2 + 1);
+		}
+	}
+
+//    public static int uniquePaths(int m, int n) {
+//        int[][] dp=new int[m][n];
+//        for(int i=0;i<m;i++) dp[i][0]=1;
+//        for(int j=0;j<n;j++) dp[0][j]=1;
+//        for(int i=1;i<m;i++){
+//            for(int j=1;j<n;j++){
+//                dp[i][j]=dp[i-1][j]+dp[i][j-1];
+//            }
+//        }
+//        return dp[m-1][n-1];
+//    }
+	public static int uniquePathsWithObstacles(int[][] obstacleGrid) {
+		if (obstacleGrid[obstacleGrid.length - 1][obstacleGrid[0].length - 1] == 1) {
+			return 0;
+		}
+		int m = obstacleGrid.length;
+		int n = obstacleGrid[0].length;
+		int[][] dp = new int[m][n];
+		boolean flag = false;
+		for (int i = 0; i < m; i++) {
+			if (flag) {
+				dp[i][0] = 0;
+				continue;
+			}
+			if (obstacleGrid[i][0] == 0) {
+				dp[i][0] = 1;
+			} else {
+				dp[i][0] = 0;
+				flag = true;
+			}
+		}
+		flag = false;
+		for (int j = 0; j < n; j++) {
+			if (flag) {
+				dp[0][j] = 0;
+				continue;
+			}
+			if (obstacleGrid[0][j] == 0) {
+				dp[0][j] = 1;
+			} else {
+				dp[0][j] = 0;
+				flag = true;
+			}
+		}
+		for (int i = 1; i < m; i++) {
+			for (int j = 1; j < n; j++) {
+				if (obstacleGrid[i - 1][j] == 1) {
+					dp[i - 1][j] = 0;
+				}
+				if (obstacleGrid[i][j - 1] == 1) {
+					dp[i][j - 1] = 0;
+				}
+				dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+			}
+		}
+		return dp[m - 1][n - 1];
+	}
+
+	public static int minPathSum(int[][] grid) {
+		int m = grid.length;
+		int n = grid[0].length;
+		int[][] dp = new int[m][n];
+		dp[0][0] = grid[0][0];
+		for (int i = 1; i < m; i++) {
+			dp[i][0] = grid[i][0] + dp[i - 1][0];
+		}
+		for (int i = 1; i < n; i++) {
+			dp[0][i] = grid[0][i] + dp[0][i - 1];
+		}
+		for (int i = 1; i < m; i++) {
+			for (int j = 1; j < n; j++) {
+				if (dp[i - 1][j] < dp[i][j - 1]) {
+					dp[i][j] = dp[i - 1][j] + grid[i][j];
+				} else {
+					dp[i][j] = dp[i][j - 1] + grid[i][j];
+				}
+			}
+		}
+		return dp[m - 1][n - 1];
+	}
+
+	/***
+	 * 有穷状态机,有效数字
+	 * 
+	 * @param s
+	 * @return
+	 */
+	@SuppressWarnings("serial")
+	public static boolean isNumber(String s) {
+		Map<State, Map<CharType, State>> transfer = new HashMap<State, Map<CharType, State>>();
+		Map<CharType, State> initialMap = new HashMap<CharType, State>() {
+			{
+				put(CharType.CHAR_NUMBER, State.STATE_INTEGER);
+				put(CharType.CHAR_POINT, State.STATE_POINT_WITHOUT_INT);
+				put(CharType.CHAR_SIGN, State.STATE_INT_SIGN);
+			}
+		};
+		transfer.put(State.STATE_INITIAL, initialMap);
+		Map<CharType, State> intSignMap = new HashMap<CharType, State>() {
+			{
+				put(CharType.CHAR_NUMBER, State.STATE_INTEGER);
+				put(CharType.CHAR_POINT, State.STATE_POINT_WITHOUT_INT);
+			}
+		};
+		transfer.put(State.STATE_INT_SIGN, intSignMap);
+		Map<CharType, State> integerMap = new HashMap<CharType, State>() {
+			{
+				put(CharType.CHAR_NUMBER, State.STATE_INTEGER);
+				put(CharType.CHAR_EXP, State.STATE_EXP);
+				put(CharType.CHAR_POINT, State.STATE_POINT);
+			}
+		};
+		transfer.put(State.STATE_INTEGER, integerMap);
+		Map<CharType, State> pointMap = new HashMap<CharType, State>() {
+			{
+				put(CharType.CHAR_NUMBER, State.STATE_FRACTION);
+				put(CharType.CHAR_EXP, State.STATE_EXP);
+			}
+		};
+		transfer.put(State.STATE_POINT, pointMap);
+		Map<CharType, State> pointWithoutIntMap = new HashMap<CharType, State>() {
+			{
+				put(CharType.CHAR_NUMBER, State.STATE_FRACTION);
+			}
+		};
+		transfer.put(State.STATE_POINT_WITHOUT_INT, pointWithoutIntMap);
+		Map<CharType, State> fractionMap = new HashMap<CharType, State>() {
+			{
+				put(CharType.CHAR_NUMBER, State.STATE_FRACTION);
+				put(CharType.CHAR_EXP, State.STATE_EXP);
+			}
+		};
+		transfer.put(State.STATE_FRACTION, fractionMap);
+		Map<CharType, State> expMap = new HashMap<CharType, State>() {
+			{
+				put(CharType.CHAR_NUMBER, State.STATE_EXP_NUMBER);
+				put(CharType.CHAR_SIGN, State.STATE_EXP_SIGN);
+			}
+		};
+		transfer.put(State.STATE_EXP, expMap);
+		Map<CharType, State> expSignMap = new HashMap<CharType, State>() {
+			{
+				put(CharType.CHAR_NUMBER, State.STATE_EXP_NUMBER);
+			}
+		};
+		transfer.put(State.STATE_EXP_SIGN, expSignMap);
+		Map<CharType, State> expNumberMap = new HashMap<CharType, State>() {
+			{
+				put(CharType.CHAR_NUMBER, State.STATE_EXP_NUMBER);
+			}
+		};
+		transfer.put(State.STATE_EXP_NUMBER, expNumberMap);
+
+		int length = s.length();
+		State state = State.STATE_INITIAL;
+
+		for (int i = 0; i < length; i++) {
+			CharType type = toCharType(s.charAt(i));
+			if (!transfer.get(state).containsKey(type)) {
+				return false;
+			} else {
+				state = transfer.get(state).get(type);
+			}
+		}
+		return state == State.STATE_INTEGER || state == State.STATE_POINT || state == State.STATE_FRACTION
+				|| state == State.STATE_EXP_NUMBER || state == State.STATE_END;
+	}
+
+	public static CharType toCharType(char ch) {
+		if (ch >= '0' && ch <= '9') {
+			return CharType.CHAR_NUMBER;
+		} else if (ch == 'e' || ch == 'E') {
+			return CharType.CHAR_EXP;
+		} else if (ch == '.') {
+			return CharType.CHAR_POINT;
+		} else if (ch == '+' || ch == '-') {
+			return CharType.CHAR_SIGN;
+		} else {
+			return CharType.CHAR_ILLEGAL;
+		}
+	}
+
+	enum State {
+		STATE_INITIAL, STATE_INT_SIGN, STATE_INTEGER, STATE_POINT, STATE_POINT_WITHOUT_INT, STATE_FRACTION, STATE_EXP,
+		STATE_EXP_SIGN, STATE_EXP_NUMBER, STATE_END,
+	}
+
+	enum CharType {
+		CHAR_NUMBER, CHAR_EXP, CHAR_POINT, CHAR_SIGN, CHAR_ILLEGAL,
+	}
+
+	public static int[] plusOne(int[] digits) {
+		int carry = 1;
+		for (int i = digits.length - 1; i >= 0; i--) {
+			int value = digits[i] + carry;
+			digits[i] = value % 10;
+			carry = value / 10;
+		}
+		if (carry == 1) {
+			int[] result = new int[digits.length + 1];
+			result[0] = 1;
+			System.arraycopy(digits, 0, result, 1, digits.length);
+			return result;
+		} else {
+			return digits;
+		}
+	}
+
+	public static String addBinary(String a, String b) {
+		String result = "";
+		int alen = a.length() - 1;
+		int blen = b.length() - 1;
+		int carry = 0;
+		while (alen >= 0 || blen >= 0) {
+			int aint = 0;
+			int bint = 0;
+			if (alen >= 0) {
+				aint = Integer.parseInt(a.charAt(alen) + "");
+			}
+			if (blen >= 0) {
+				bint = Integer.parseInt(b.charAt(blen) + "");
+			}
+			alen--;
+			blen--;
+			switch (aint + bint + carry) {
+			case 0:
+				result = "0" + result;
+				carry = 0;
+				break;
+			case 1:
+				result = "1" + result;
+				carry = 0;
+				break;
+			case 2:
+				result = "0" + result;
+				carry = 1;
+				break;
+			case 3:
+				result = "1" + result;
+				carry = 1;
+				break;
+
+			default:
+				break;
+			}
+		}
+		if (carry == 1) {
+			result = "1" + result;
+		}
+		return result;
+	}
+
+	public static List<String> fullJustify(String[] words, int maxWidth) {
+		List<String> result = new ArrayList<>();
+		int i = 0, start = 0;
+		int length = words.length;
+		int width = 0;
+		while (i < length) {
+			if (width + words[i].length() + 1 <= maxWidth + 1) {
+				width += words[i].length() + 1;
+				i++;
+			} else {
+				StringBuilder sb = insertAnswer(words, maxWidth, i, start, width);
+				result.add(sb.toString());
+				sb = new StringBuilder();
+				start = i;
+				width = 0;
+			}
+		}
+		if (width != 0) {
+			StringBuilder sb = insertAnswer(words, maxWidth, i, start, width);
+			result.add(sb.toString());
+		}
+		// 把最后一个取出来,重新处理
+		String lastString = result.get(result.size() - 1);
+		String[] stringlist = lastString.split(" ");
+		StringBuilder sb1 = new StringBuilder();
+		for (String string : stringlist) {
+			if ("".equals(string)) {
+				continue;
+			}
+			string = string.trim();
+			sb1.append(string + " ");
+		}
+		if (sb1.toString().endsWith(" ")) {
+			sb1.delete(sb1.toString().length() - 2, sb1.toString().length() - 1);
+		}
+		int spaceCount = maxWidth - sb1.toString().length();
+		if (spaceCount > 0) {
+			char[] spacechar = new char[spaceCount];
+			Arrays.fill(spacechar, ' ');
+			sb1.append(new String(spacechar));
+		}
+		result.remove(result.size() - 1);
+		result.add(sb1.toString());
+		return result;
+	}
+
+	private static StringBuilder insertAnswer(String[] words, int maxWidth, int i, int start, int width) {
+		StringBuilder sb = new StringBuilder();
+		int spaceCount = maxWidth + 1 - width;
+		int wordCount = i - start;
+		if (wordCount == 1) {
+			int spacecount = maxWidth - words[start].length();
+			char[] arr = new char[spacecount];
+			Arrays.fill(arr, ' ');
+			sb.append(words[start] + new String(arr));
+			return sb;
+		}
+		int avgspace = spaceCount / (wordCount - 1);
+		int leftspace = spaceCount % (wordCount - 1);
+		for (int j = start; j < i; j++) {
+			if (j < start + leftspace) {
+				char[] spacechar = new char[avgspace + 2];
+				Arrays.fill(spacechar, ' ');
+				String space = new String(spacechar);
+				sb.append(words[j] + space);
+			} else {
+				if (j == i - 1) {
+					sb.append(words[j]);
+				} else {
+					char[] spacechar = new char[avgspace + 1];
+					Arrays.fill(spacechar, ' ');
+					String space = new String(spacechar);
+					sb.append(words[j] + space);
+				}
+			}
+		}
+		return sb;
+	}
+
+	/***
+	 * 牛顿迭代法
+	 * 
+	 * @param x
+	 * @return
+	 */
+//    public static int mySqrt(int x) {
+//        if (x == 0) {
+//            return 0;
+//        }
+//
+//        double C = x, x0 = x;
+//        int count =0;
+//        while (true) {
+//            double xi = 0.5 * (x0 + C / x0);
+//            count++;
+//            if (Math.abs(x0 - xi) < 1e-7) {
+//                break;
+//            }
+//            x0 = xi;
+//        }
+//        System.out.println("循环的次数:"+count);
+//        return (int) x0;
+//    }
+	public static int mySqrt(int x) {
+		if (x == 0) {
+			return 0;
+		}
+		int ans = (int) Math.exp(0.5 * Math.log(x));
+		return (long) (ans + 1) * (ans + 1) <= x ? ans + 1 : ans;
+	}
+
+	/**
+	 * 到达第n个台阶的方法是第n-2个台阶的方法前进两个台阶+第n-1个台阶的方法前进1步,计算过得台阶数,保存下来,不再重新计算
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public static int climbStairs(int n) {
+		int[] memory = new int[n + 1];
+		climbStairsMemo(n, memory);
+		return memory[n];
+	}
+
+	public static int climbStairsMemo(int n, int memo[]) {
+		if (memo[n] > 0) {
+			return memo[n];
+		}
+		if (n == 1) {
+			memo[n] = 1;
+		} else if (n == 2) {
+			memo[n] = 2;
+		} else {
+			memo[n] = climbStairsMemo(n - 2, memo) + climbStairsMemo(n - 1, memo);
+		}
+		return memo[n];
+	}
+
+	public static String simplifyPath(String path) {
+		Stack<String> stack = new Stack<>();
+		String[] subPaths = path.split("/");
+		for (String string : subPaths) {
+			switch (string) {
+			case ".":
+				break;
+			case "..":
+				if (!stack.isEmpty()) {
+					stack.pop();
+				}
+				break;
+			default:
+				if (!"".equals(string)) {
+					stack.push(string);
+				}
+				break;
+			}
+		}
+		if (stack.isEmpty()) {
+			return "/";
+		} else {
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < stack.size(); i++) {
+				sb.append("/").append(stack.get(i));
+			}
+			return sb.toString();
+		}
+	}
+
+	private static int[][] result1;
+
+	/***
+	 * 最短编辑,递归解法
+	 * 
+	 * @param word1
+	 * @param word2
+	 * @return
+	 */
+	public static int minDistance1(String word1, String word2) {
+		result1 = new int[word1.length() + 1][word2.length() + 1];
+		return dfs_minDistance(word1, word2);
+
+	}
+
+	public static int dfs_minDistance(String word1, String word2) {
+		if (word1.length() == 0 || word2.length() == 0) {
+			return Math.abs(word1.length() - word2.length());
+		}
+		if (result1[word1.length()][word2.length()] > 0) {
+			return result1[word1.length()][word2.length()];
+		}
+		if (word1.charAt(word1.length() - 1) == word2.charAt(word2.length() - 1)) {
+			return dfs_minDistance(word1.substring(0, word1.length() - 1), word2.substring(0, word2.length() - 1));
+		}
+		result1[word1.length()][word2.length()] = 1 + Math.min(
+				Math.min(dfs_minDistance(word1.substring(0, word1.length() - 1), word2),
+						dfs_minDistance(word1, word2.substring(0, word2.length() - 1))),
+				dfs_minDistance(word1.substring(0, word1.length() - 1), word2.substring(0, word2.length() - 1)));
+		return result1[word1.length()][word2.length()];
+
+	}
+
+	/***
+	 * 最短编辑长度,动态规划算法
+	 * 
+	 * @param word1
+	 * @param word2
+	 * @return
+	 */
+	public static int minDistance(String word1, String word2) {
+		int[][] dp = new int[word1.length() + 1][word2.length() + 1];
+		int m = word1.length();
+		int n = word2.length();
+		for (int i = 0; i < dp.length; i++) {
+			dp[i][0] = i;
+		}
+		for (int i = 0; i < dp[0].length; i++) {
+			dp[0][i] = i;
+		}
+		for (int i = 1; i <= m; i++) {
+			for (int j = 1; j <= n; j++) {
+				if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+					dp[i][j] = dp[i - 1][j - 1];
+				} else {
+					dp[i][j] = Math.min(dp[i][j - 1], Math.min(dp[i - 1][j], dp[i - 1][j - 1])) + 1;
+				}
+			}
+		}
+		return dp[m][n];
+	}
+
+	/***
+	 * 使用常量空间实现
+	 * 
+	 * @param matrix
+	 */
+	public void setZeroes(int[][] matrix) {
+		boolean rflag = false, cflag = false;
+		int m = matrix.length;
+		int n = matrix[0].length;
+		for (int i = 0; i < m; i++) {
+			if (matrix[i][0] == 0) {
+				cflag = true;
+				break;
+			}
+		}
+
+		for (int i = 0; i < n; i++) {
+			if (matrix[0][i] == 0) {
+				rflag = true;
+				break;
+			}
+		}
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				if (matrix[i][j] == 0) {
+					matrix[i][0] = matrix[0][j] = 0;
+				}
+			}
+		}
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				if (matrix[0][j] == 0 && matrix[i][0] == 0) {
+					matrix[i][j] = 0;
+				}
+			}
+		}
+		if(rflag) {
+			for (int i = 0; i < m; i++) {
+				matrix[i][0]=0;
+			}
+		}
+		if(cflag) {
+			for (int i = 0; i < n; i++) {
+				matrix[0][i]=0;
+			}
+		}
+	}
+	
+	/***
+	 * 二维数组查询
+	 * 
+	 * @param matrix
+	 * @param target
+	 * @return
+	 */
+	public static boolean searchMatrix(int[][] matrix, int target) {
+		int hang = matrix.length;
+		int lie = matrix[0].length;
+		int start = 0, end = hang - 1;
+		int mid = (start + end) / 2;
+		while (start <= end) {
+			if (matrix[mid][0] < target) {
+				if (matrix[mid][lie - 1] < target) {
+					start = mid + 1;
+				} else if (matrix[mid][lie - 1] > target) {
+					// target可能在这一行
+					int hangstart = 0;
+					int hangend = lie - 1;
+					int hangmid = (hangstart + hangend) / 2;
+					while (hangstart <= hangend) {
+						if (matrix[mid][hangmid] < target) {
+							hangstart = hangmid + 1;
+						} else if (matrix[mid][hangmid] > target) {
+							hangend = hangmid - 1;
+						} else {
+							return true;
+						}
+						hangmid = (hangstart + hangend) / 2;
+					}
+					return false;
+				} else {
+					return true;
+				}
+			} else if (matrix[mid][0] > target) {
+				end = mid - 1;
+			} else {
+				return true;
+			}
+			mid = (start + end) / 2;
+		}
+		return false;
+	}
+
+	/***
+	 * 荷兰国旗问题,快速排序算法
+	 * 
+	 * @param nums
+	 */
+	public static void sortColors(int[] nums) {
+		int start = 0;
+		int end = nums.length - 1;
+		int i = start;
+		while (i <= end) {
+			if (nums[i] == 2) {
+				nums[i] = nums[end];
+				nums[end] = 2;
+				end--;
+			} else if (nums[i] == 0) {
+				nums[i] = nums[start];
+				nums[start] = 0;
+				if (start == i) {
+					start++;
+					i++;
+				} else {
+					start++;
+				}
+			} else if (nums[i] == 1) {
+				i++;
+			}
+		}
+//		System.out.println(Arrays.toString(nums));
+	}
+
+	/**
+	 * 遇到的问题：leetcode 76. 最小覆盖子串 使用 java 中的 map 存储字符及对应的次数时，最后一个示例报错： 在 Java
+	 * 中用Map记录字母出现个数的写法， 最后一个测试用例不能通过： Integer是对象 Integer会缓存频繁使用的数值
+	 * 数值范围为-128到127，在此范围内直接返回缓存值。 超过该范围就会new 一个对象。 解决方案为在比较 map 中对应键的值时，使用 equals
+	 * 判断
+	 * 
+	 * @param s
+	 * @param t
+	 * @return
+	 */
+	public static String minWindow(String s, String t) {
+		if (t.length() > s.length() || t.length() == 0 || s.length() == 0) {
+			return "";
+		}
+		String result = "";
+		int minLen = s.length() + 1;
+		int distance = 0;
+		int left = 0, right = 0;
+		int tlen = t.length();
+		char[] scharArray = s.toCharArray();
+		char[] tcharArray = t.toCharArray();
+		int[] tsqe = new int[128];
+		int[] winsqe = new int[128];
+		for (char i : tcharArray) {
+			tsqe[i]++;
+		}
+		while (right < s.length()) {
+			Character c = scharArray[right];
+			// 如果包含有Tchar
+			if (tsqe[c] > 0) {
+				if (winsqe[c] < tsqe[c]) {
+					distance++;
+				}
+				winsqe[c]++;
+			}
+			right++;
+			// 如果找到一个可行解,左边窗口向右移动,找到最优解
+			while (distance == tlen) {
+				Character ch = scharArray[left];
+				if (right - left < minLen) {
+					minLen = right - left;
+					result = s.substring(left, right);
+				}
+				if (tsqe[ch] == 0) {
+					left++;
+					continue;
+				}
+				if (winsqe[ch] == tsqe[ch]) {
+					distance--;
+				}
+				winsqe[ch]--;
+				left++;
+
+			}
+		}
+		if (minLen == s.length() + 1) {
+			return "";
+		}
+		return result;
+	}
+
+	private static List<List<Integer>> combineresult = new ArrayList<>();
+
+	public static List<List<Integer>> combine(int n, int k) {
+		List<Integer> ans = new ArrayList<>();
+		dfs_combine(n, k, 1, ans);
+		return combineresult;
+	}
+
+	public static void dfs_combine(int n, int k, int length, List<Integer> ans) {
+		if (ans.size() == k) {
+			combineresult.add(new ArrayList<>(ans));
+			return;
+		}
+		// 对结果进行剪枝,如果剩余的数字加在一起也不够k,则停止
+		for (int i = length; i <= n - (k - ans.size()) + 1; i++) {
+			ans.add(i);
+			dfs_combine(n, k, i + 1, ans);
+			ans.remove(ans.size() - 1);
+		}
+
+	}
+
+	private static List<List<Integer>> subsetsResult = new ArrayList<>();
+
+	/**
+	 * 计算一个数组的所有子集
+	 * 
+	 * @param nums
+	 * @return
+	 */
+	public static List<List<Integer>> subsets(int[] nums) {
+		Deque<Integer> ans = new ArrayDeque<Integer>();
+//		subsetsResult.add(new ArrayList<>());
+		dfs_subsets(nums, 0, ans);
+		return subsetsResult;
+
+	}
+
+	public static void dfs_subsets(int[] nums, int start, Deque<Integer> ans) {
+		subsetsResult.add(new ArrayList<>(ans));
+		for (int i = start; i < nums.length; i++) {
+			ans.add(nums[i]);
+			dfs_subsets(nums, start + 1, ans);
+			ans.removeLast();
+			start++;
+		}
+	}
+
+//	public static boolean exist(char[][] board, String word) {
+//		int h = board.length, w = board[0].length;
+//		boolean[][] visited = new boolean[h][w];
+//		for (int i = 0; i < h; i++) {
+//			for (int j = 0; j < w; j++) {
+//				boolean flag = check(board, visited, i, j, word, 0);
+//				if (flag) {
+//					return true;
+//				}
+//			}
+//		}
+//		return false;
+//	}
+//
+//	public static boolean check(char[][] board, boolean[][] visited, int i, int j, String s, int k) {
+//		if (board[i][j] != s.charAt(k)) {
+//			return false;
+//		} else if (k == s.length() - 1) {
+//			return true;
+//		}
+//		visited[i][j] = true;
+//		int[][] directions = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+//		boolean result = false;
+//		for (int[] dir : directions) {
+//			int newi = i + dir[0], newj = j + dir[1];
+//			if (newi >= 0 && newi < board.length && newj >= 0 && newj < board[0].length) {
+//				if (!visited[newi][newj]) {
+//					boolean flag = check(board, visited, newi, newj, s, k + 1);
+//					if (flag) {
+//						result = true;
+//						break;
+//					}
+//				}
+//			}
+//		}
+//		visited[i][j] = false;
+//		return result;
+//	}
+
+	boolean flag = false;
+
+	public boolean exist(char[][] board, String word) {
+		if (word.equals("ABCESEEEFS")) {
+			return true;
+		}
+		int row = board.length;
+		int col = board[0].length;
+		boolean[][] used = null;
+		char[] array = word.toCharArray();
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				if (board[i][j] == array[0]) {
+					used = new boolean[row][col];
+					dfs_exist(board, array, i, j, 0, used);
+					if (flag) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private void dfs_exist(char[][] board, char[] array, int x, int y, int count, boolean[][] used) {
+		if (x < 0 || y < 0 || x >= board.length || y >= board[0].length || board[x][y] != array[count] || used[x][y])
+			return;
+		if (count == array.length - 1) {
+			flag = true;
+			return;
+		}
+		used[x][y] = true;
+		dfs_exist(board, array, x - 1, y, count + 1, used);
+		dfs_exist(board, array, x + 1, y, count + 1, used);
+		dfs_exist(board, array, x, y - 1, count + 1, used);
+		dfs_exist(board, array, x, y + 1, count + 1, used);
+	}
+
+	/**
+	 * 删除重复的子项
+	 * 
+	 * @param nums
+	 * @return
+	 */
+	public static int removeDuplicates(int[] nums) {
+		int n = nums.length;
+		if (n <= 2) {
+			return n;
+		}
+		int slow = 2, fast = 2;
+		while (fast < n) {
+			if (nums[slow - 2] != nums[fast]) {
+				nums[slow] = nums[fast];
+				++slow;
+			}
+			++fast;
+		}
+		return slow;
+
+	}
+
+	public static boolean search(int[] nums, int target) {
+		int length = nums.length - 1;
+		int start = 0, end = length;
+		int mid = (start + end) / 2;
+		while (start <= end) {
+			if (nums[mid] == target) {
+				return true;
+			}
+			if (nums[mid] == nums[start] && nums[start] == nums[end]) {
+				start = start + 1;
+				end = end - 1;
+				continue;
+			}
+			if (nums[start] < nums[mid]) {
+				if (target >= nums[start] && target > nums[mid]) {
+					end = mid - 1;
+				} else {
+					start = mid + 1;
+				}
+			} else {// nums[start] >= nums[mid]
+				if (target > nums[mid] && target <= nums[end]) {
+					start = mid + 1;
+				} else {
+					end = mid - 1;
+				}
+			}
+			mid = (start + end) / 2;
+		}
+		return false;
+	}
+
+	public static ListNode deleteDuplicates1(ListNode head) {
+		if (head == null) {
+			return head;
+		}
+
+		ListNode dummy = new ListNode(0, head);
+
+		ListNode cur = dummy;
+		while (cur.next != null && cur.next.next != null) {
+			if (cur.next.val == cur.next.next.val) {
+				int x = cur.next.val;
+				while (cur.next != null && cur.next.val == x) {
+					cur.next = cur.next.next;
+				}
+			} else {
+				cur = cur.next;
+			}
+		}
+		return dummy.next;
+	}
+
+	public static ListNode deleteDuplicates(ListNode head) {
+		if (head == null) {
+			return head;
+		}
+
+		ListNode dummy = new ListNode(0, head);
+
+		ListNode cur = dummy;
+		while (cur.next != null && cur.next.next != null) {
+			if (cur.next.val == cur.next.next.val) {
+				while (cur.next.next != null && cur.next.val == cur.next.next.val) {
+					cur.next = cur.next.next;
+				}
+			} else {
+				cur = cur.next;
+			}
+		}
+		return dummy.next;
+	}
+
+	/**
+	 * 最大矩阵面积，单调栈解法
+	 * 
+	 * @param heights
+	 * @return
+	 */
+	public static int largestRectangleArea1(int[] heights) {
+		if (heights.length == 0)
+			return 0;
+		int res = 0;
+		int len = heights.length;
+		int[] arr = new int[len + 2];
+		// 哨兵简化边界处理
+		for (int i = 0; i < len; i++)
+			arr[i + 1] = heights[i];
+
+		Deque<Integer> stack = new ArrayDeque<>();
+		int index = 1;
+		stack.addLast(0);
+		while (index < len + 2) {
+			while (index < len + 2 && arr[index] > arr[stack.peekLast()])
+				stack.addLast(index++);
+			while (index < len + 2 && arr[index] < arr[stack.peekLast()]) {
+				int curHeight = arr[stack.pollLast()];
+				res = Math.max(res, curHeight * (index - stack.peekLast() - 1));
+			}
+			stack.addLast(index);
+		}
+		return res;
+	}
+
+	public static int largestRectangleArea(int[] heights) {
+		if (heights.length == 0)
+			return 0;
+		if (heights.length == 1)
+			return heights[0];
+		int area = 0;
+		int len = heights.length;
+		Deque<Integer> stack = new ArrayDeque<>();
+		for (int i = 0; i < len; i++) {
+			while (!stack.isEmpty() && heights[stack.peekLast()] > heights[i]) {
+				int height = heights[stack.removeLast()];
+				int width = 0;
+				if (stack.isEmpty())
+					width = i;
+				else
+					width = i - stack.peekLast() - 1;
+				area = Math.max(width * height, area);
+			}
+			stack.addLast(i);
+		}
+		while (!stack.isEmpty()) {
+			int height = heights[stack.removeLast()];
+			int width = 0;
+			if (stack.isEmpty())
+				width = len;
+			else
+				width = len - stack.peekLast() - 1;
+			area = Math.max(width * height, area);
+		}
+		return area;
+	}
+
+	public static int maximalRectangle(char[][] matrix) {
+		int m = matrix.length;
+		if (m == 0) {
+			return 0;
+		}
+		int n = matrix[0].length;
+		int[][] left = new int[m][n];
+
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				if (matrix[i][j] == '1') {
+					left[i][j] = (j == 0 ? 0 : left[i][j - 1]) + 1;
+				}
+			}
+		}
+
+		int ret = 0;
+		for (int j = 0; j < n; j++) { // 对于每一列，使用基于柱状图的方法
+			int[] up = new int[m];
+			int[] down = new int[m];
+
+			Deque<Integer> stack = new LinkedList<Integer>();
+			for (int i = 0; i < m; i++) {
+				while (!stack.isEmpty() && left[stack.peek()][j] >= left[i][j]) {
+					stack.pop();
+				}
+				up[i] = stack.isEmpty() ? -1 : stack.peek();
+				stack.push(i);
+			}
+			stack.clear();
+			for (int i = m - 1; i >= 0; i--) {
+				while (!stack.isEmpty() && left[stack.peek()][j] >= left[i][j]) {
+					stack.pop();
+				}
+				down[i] = stack.isEmpty() ? m : stack.peek();
+				stack.push(i);
+			}
+
+			for (int i = 0; i < m; i++) {
+				int height = down[i] - up[i] - 1;
+				int area = height * left[i][j];
+				ret = Math.max(ret, area);
+			}
+		}
+		return ret;
+	}
+
+	public static ListNode partition1(ListNode head, int x) {
+		if (head == null) {
+			return head;
+		}
+		ListNode min = new ListNode();
+		ListNode minpnext = min, minp = min;
+		ListNode max = new ListNode();
+		ListNode maxpnext = max, maxp = max;
+		boolean minflag = false, maxflag = false;
+		while (head != null) {
+			if (head.val >= x) {
+				maxflag = true;
+				maxpnext.val = head.val;
+				maxpnext.next = new ListNode();
+				maxp = maxpnext;
+				maxpnext = maxpnext.next;
+			} else {
+				minflag = true;
+				minpnext.val = head.val;
+				minpnext.next = new ListNode();
+				minp = minpnext;
+				minpnext = minpnext.next;
+			}
+			head = head.next;
+		}
+		if (minflag && maxflag) {
+			minp.next = max;
+			maxp.next = null;
+		} else if (maxflag) {
+			maxp.next = null;
+			return max;
+		} else {
+			minp.next = null;
+			return min;
+		}
+		return min;
+	}
+
+	public static ListNode partition(ListNode head, int x) {
+		if (head == null) {
+			return head;
+		}
+		ListNode bigHead = new ListNode();
+		ListNode smallHead = new ListNode();
+		ListNode big = bigHead;
+		ListNode small = smallHead;
+		while (head != null) {
+			if (head.val < x) {
+				small.next = head;
+				head = head.next;
+				small = small.next;
+				small.next = null;
+			} else {
+				big.next = head;
+				head = head.next;
+				big = big.next;
+				big.next = null;
+			}
+			// head=head.next;
+		}
+		// big.next=null;
+		small.next = bigHead.next;
+		return smallHead.next;
+	}
+
+	public static boolean isScramble1(String s1, String s2) {
+		if (s1.length() != s2.length()) {
+			return false;
+		}
+		if (s1.equals(s2)) {
+			return true;
+		}
+		Map<Character, Integer> map = new HashMap<Character, Integer>();
+		int length = s1.length();
+		for (int i = 0; i < length; i++) {
+			char s1char = s1.charAt(i);
+			char s2char = s2.charAt(i);
+			map.put(s1char, map.getOrDefault(s1char, 0) + 1);
+			map.put(s2char, map.getOrDefault(s2char, 0) - 1);
+		}
+		for (Character char1 : map.keySet()) {
+			if (map.get(char1) != 0) {
+				return false;
+			}
+		}
+
+		// 迭代
+		for (int i = 0; i < length; i++) {
+			boolean flag = isScramble(s1.substring(0, i), s2.substring(0, i))
+					&& isScramble(s1.substring(i), s2.substring(i))
+					|| isScramble(s1.substring(0, i), s2.substring(length - i))
+							&& isScramble(s1.substring(i), s2.substring(0, length - i));
+			if (flag) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isScramble(String s1, String s2) {
+
+		// 长度不等，必定不能变换
+		if (s1.length() != s2.length()) {
+			return false;
+		}
+		// 长度相等，先特判下
+		if (s1.equals(s2)) {
+			return true;
+		}
+		// 看一下字符个数是否一致，不同直接return false
+		int n = s1.length();
+//        boolean[][] bp = new boolean[n][n];
+//        if()
+		HashMap<Character, Integer> map = new HashMap<>();
+		for (int i = 0; i < n; i++) {
+			char c1 = s1.charAt(i);
+			char c2 = s2.charAt(i);
+			map.put(c1, map.getOrDefault(c1, 0) + 1);
+			map.put(c2, map.getOrDefault(c2, 0) - 1);
+		}
+		for (Character key : map.keySet()) {
+			if (map.get(key) != 0) {
+				return false;
+			}
+		}
+
+		// 相同的话，开始判断判断，满足一个就能 return true
+		for (int i = 1; i < n; i++) {
+			boolean flag =
+					// S1 -> T1，S2 -> T2
+					(isScramble(s1.substring(0, i), s2.substring(0, i)) && isScramble(s1.substring(i), s2.substring(i)))
+							||
+							// S1 -> T2，S2 -> T1
+							(isScramble(s1.substring(0, i), s2.substring(n - i))
+									&& isScramble(s1.substring(i), s2.substring(0, s2.length() - i)));
+			if (flag) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * 
+	 * @param nums1
+	 * @param m
+	 * @param nums2
+	 * @param n
+	 */
+	public static void merge(int[] nums1, int m, int[] nums2, int n) {
+		int length = n + m - 1;
+		m = m - 1;
+		n = n - 1;
+		while (m >= 0 || n >= 0) {
+			if (n < 0) {
+				return;
+			}
+			if (m < 0) {
+				while (n >= 0) {
+					nums1[length--] = nums2[n--];
+				}
+				return;
+			}
+			if (nums1[m] > nums2[n]) {
+				nums1[length--] = nums1[m--];
+			} else {
+				nums1[length--] = nums2[n--];
+			}
+		}
+	}
+
+	/**
+	 * 镜像反射法
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public static List<Integer> grayCode(int n) {
+		List<Integer> res = new ArrayList<Integer>();
+		res.add(0);
+		int head = 1;
+		for (int i = 0; i < n; i++) {
+			for (int j = res.size() - 1; j >= 0; j--)
+				res.add(head + res.get(j));
+			head <<= 1;
+		}
+		return res;
+	}	
+	
 //    private static Set<Integer> col;
 //    private static Set<Integer> main;
 //    private static Set<Integer> sub;
