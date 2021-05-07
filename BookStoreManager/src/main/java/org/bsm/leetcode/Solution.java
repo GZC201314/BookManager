@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 
 import org.bsm.leetcode.model.ListNode;
 import org.bsm.leetcode.model.TreeNode;
@@ -408,7 +411,7 @@ class Solution {
 	 */
 	public static List<List<Integer>> levelOrder(TreeNode root) {
 		List<List<Integer>> reLists = new ArrayList<>();
-		if(root == null) {
+		if (root == null) {
 			return reLists;
 		}
 		Queue<TreeNode> queue1 = new LinkedList<>();
@@ -417,86 +420,252 @@ class Solution {
 		List<Integer> ans = new ArrayList<>();
 		ans.add(root.val);
 		reLists.add(ans);
-		while (!queue1.isEmpty()||!queue2.isEmpty()) {
+		while (!queue1.isEmpty() || !queue2.isEmpty()) {
 			List<Integer> ans1 = new ArrayList<>();
-			while(!queue1.isEmpty()) {
+			while (!queue1.isEmpty()) {
 				TreeNode node = queue1.poll();
-				if(node.left!=null) {
+				if (node.left != null) {
 					ans1.add(node.left.val);
 					queue2.add(node.left);
 				}
-				if(node.right!=null) {
+				if (node.right != null) {
 					ans1.add(node.right.val);
 					queue2.add(node.right);
 				}
 			}
-			if(ans1.size()!=0) {
+			if (ans1.size() != 0) {
 				reLists.add(ans1);
 			}
 			List<Integer> ans2 = new ArrayList<>();
-			while(!queue2.isEmpty()) {
+			while (!queue2.isEmpty()) {
 				TreeNode node = queue2.poll();
-				if(node.left!=null) {
+				if (node.left != null) {
 					ans2.add(node.left.val);
 					queue1.add(node.left);
 				}
-				if(node.right!=null) {
+				if (node.right != null) {
 					ans2.add(node.right.val);
 					queue1.add(node.right);
 				}
 			}
-			if(ans2.size()!=0) {
+			if (ans2.size() != 0) {
 				reLists.add(ans2);
 			}
 		}
 		return reLists;
 	}
 
-    public static List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+	public static List<List<Integer>> zigzagLevelOrder(TreeNode root) {
 		List<List<Integer>> reLists = new ArrayList<>();
-		if(root == null) {
+		if (root == null) {
 			return reLists;
 		}
-		
+
 		Deque<TreeNode> queue1 = new LinkedList<>();
 		Deque<TreeNode> queue2 = new LinkedList<>();
 		queue1.add(root);
-		while (!queue1.isEmpty()||!queue2.isEmpty()) {
+		while (!queue1.isEmpty() || !queue2.isEmpty()) {
 			List<Integer> ans1 = new ArrayList<>();
-			while(!queue1.isEmpty()) {
+			while (!queue1.isEmpty()) {
 				TreeNode node = queue1.pollLast();
 				ans1.add(node.val);
-				if(node.left!=null) {
+				if (node.left != null) {
 					queue2.add(node.left);
 				}
-				if(node.right!=null) {
+				if (node.right != null) {
 					queue2.add(node.right);
 				}
 			}
-			if(ans1.size()!=0) {
+			if (ans1.size() != 0) {
 				reLists.add(ans1);
 			}
 			List<Integer> ans2 = new ArrayList<>();
-			while(!queue2.isEmpty()) {
+			while (!queue2.isEmpty()) {
 				TreeNode node = queue2.pollLast();
 				ans2.add(node.val);
-				if(node.left!=null) {
+				if (node.left != null) {
 					queue1.add(node.left);
 				}
-				if(node.right!=null) {
+				if (node.right != null) {
 					queue1.add(node.right);
 				}
 			}
-			if(ans2.size()!=0) {
+			if (ans2.size() != 0) {
 				reLists.add(ans2);
 			}
 		}
 		return reLists;
-    }	
+	}
+
+	public static int maxDepth(TreeNode root) {
+		if (root == null) {
+			return 0;
+		}
+		if (root.left == null && root.right == null) {
+			return 1;
+		}
+		return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+	}
+
+	/**
+	 * 根据中序和先序序列构造二叉树
+	 * 
+	 * @param preorder
+	 * @param inorder
+	 * @return
+	 */
+	private static Map<Integer, Integer> map = new HashMap<>();
+	private static int post_idx;
+	public static TreeNode buildTree1(int[] preorder, int[] inorder) {
+		int prelen = preorder.length;
+		int inlen = inorder.length;
+		if (prelen != inlen) {
+			return null;
+		}
+		// 计算每个数字对应的index
+		for (int i = 0; i < inorder.length; i++) {
+			map.put(inorder[i], i);
+		}
+		return buildTree1(preorder, inorder, 0, prelen - 1, 0, prelen - 1);
+	}
+
+	public static TreeNode buildTree1(int[] preorder, int[] inorder, int preStart, int preEnd, int inStart, int inEnd) {
+		if (preStart > preEnd || inStart > inEnd) {
+			return null;
+		}
+		// 前序遍历第一个节点是根节点
+		int root_val = preorder[preStart];
+		TreeNode rootNode = new TreeNode(root_val);
+		int pIndex = map.get(root_val);
+		rootNode.left = buildTree1(preorder, inorder, preStart + 1, pIndex - inStart + preStart, inStart, pIndex - 1);
+		rootNode.right = buildTree1(preorder, inorder, pIndex - inStart + preStart + 1, preEnd, pIndex + 1, inEnd);
+		return rootNode;
+	}
+
+	/**
+	 * [9,3,15,20,7] [9,15,7,20,3]
+	 * 
+	 * @param inorder
+	 * @param postorder
+	 * @return
+	 */
+	public static TreeNode buildTree(int[] inorder, int[] postorder) {
+		int postlen = postorder.length;
+		int inlen = inorder.length;
+		if (postlen != inlen) {
+			return null;
+		}
+		// 计算每个数字对应的index
+		for (int i = 0; i < inlen; i++) {
+			map.put(inorder[i], i);
+		}
+		post_idx = postlen - 1;
+		return buildTree(inorder, postorder, 0, postlen - 1);
+	}
+
+	public static TreeNode buildTree(int[] inorder, int[] postorder, int start, int end) {
+		if (start > end) {
+			return null;
+		}
+		int root_val = postorder[post_idx];
+		TreeNode rootNode = new TreeNode(root_val);
+		int pIndex = map.get(root_val);
+		post_idx--;
+		rootNode.right = buildTree(inorder, postorder, pIndex + 1, end);
+		rootNode.left = buildTree(inorder, postorder, start, pIndex - 1);
+		return rootNode;
+	}
+
+//    int post_idx;
+//    static Map<Integer, Integer> idx_map = new HashMap<Integer, Integer>();
+//
+//    public static TreeNode helper(int[] inorder,int[] postorder,int in_left, int in_right) {
+//        // 如果这里没有节点构造二叉树了，就结束
+//        if (in_left > in_right) {
+//            return null;
+//        }
+//
+//        // 选择 post_idx 位置的元素作为当前子树根节点
+//        int root_val = postorder[post_idx];
+//        TreeNode root = new TreeNode(root_val);
+//
+//        // 根据 root 所在位置分成左右两棵子树
+//        int index = idx_map.get(root_val);
+//
+//        // 下标减一
+//        post_idx--;
+//        // 构造右子树
+//        root.right = helper(inorder,postorder,index + 1, in_right);
+//        // 构造左子树
+//        root.left = helper(inorder,postorder,in_left, index - 1);
+//        return root;
+//    }
+//
+//    public static TreeNode buildTree(int[] inorder, int[] postorder) {
+//
+//        // 从后序遍历的最后一个元素开始
+//        post_idx = postorder.length - 1;
+//
+//        // 建立（元素，下标）键值对的哈希表
+//        int idx = 0;
+//        for (Integer val : inorder) {
+//            idx_map.put(val, idx++);
+//        }
+//        
+//        return helper(inorder,postorder,0, inorder.length - 1);
+//    }
+	
+    public static List<List<Integer>> levelOrderBottom(TreeNode root) {
+		List<List<Integer>> reLists = new ArrayList<>();
+		Deque<List<Integer>> stack = new ArrayDeque<>();
+		if (root == null) {
+			return reLists;
+		}
+		Queue<TreeNode> queue1 = new LinkedList<>();
+		Queue<TreeNode> queue2 = new LinkedList<>();
+		queue1.add(root);
+		List<Integer> ans = new ArrayList<>();
+		ans.add(root.val);
+		stack.add(ans);
+		while (!queue1.isEmpty() || !queue2.isEmpty()) {
+			List<Integer> ans1 = new ArrayList<>();
+			while (!queue1.isEmpty()) {
+				TreeNode node = queue1.poll();
+				if (node.left != null) {
+					ans1.add(node.left.val);
+					queue2.add(node.left);
+				}
+				if (node.right != null) {
+					ans1.add(node.right.val);
+					queue2.add(node.right);
+				}
+			}
+			if (ans1.size() != 0) {
+				stack.addFirst(ans1);
+			}
+			List<Integer> ans2 = new ArrayList<>();
+			while (!queue2.isEmpty()) {
+				TreeNode node = queue2.poll();
+				if (node.left != null) {
+					ans2.add(node.left.val);
+					queue1.add(node.left);
+				}
+				if (node.right != null) {
+					ans2.add(node.right.val);
+					queue1.add(node.right);
+				}
+			}
+			if (ans2.size() != 0) {
+				stack.addFirst(ans2);
+			}
+		}
+		reLists.addAll(stack);
+		return reLists;
+    }
 	
 	public static void main(String[] args) {
-		TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4),null), new TreeNode(3, null, new TreeNode(5)));
-		TreeNode tree1 = new TreeNode(5, new TreeNode(2), new TreeNode(4, new TreeNode(3), new TreeNode(6)));
+		TreeNode tree = new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)));
+		TreeNode tree1 = new TreeNode(3, new TreeNode(2), new TreeNode(4, new TreeNode(3), new TreeNode(6)));
 		TreeNode tree2 = new TreeNode(2, new TreeNode(1), new TreeNode(1));
 //		ListNode five = new ListNode(2);
 //		ListNode four = new ListNode(1, five);
@@ -510,8 +679,9 @@ class Solution {
 //		int[][] arr = new int[][] { { 1, 3, 5, 7 } };
 //		char[][] arr = new char[][] {{'1','0','1','0','0'},{'1','0','1','1','1'},{'1','1','1','1','1'},{'1','0','0','1','0'}};
 //		int[][] arr = new int[][] { { 1, 5 } };
-		int[] arr = new int[] { 1, 2, 2 };
-		int[] arr1 = new int[] { 1 };
+		int[] preorder = new int[] { 3, 9, 20, 15, 7 };
+		int[] inorder = new int[] { 9, 3, 15, 20, 7 };
+		int[] postorder = new int[] { 9, 15, 7, 20, 3 };
 //		String[] strArr = new String[] {"eat", "tea", "tan", "ate", "nat", "bat"};
 
 //		char[][] board = { { 'A', 'B', 'C', 'E' }, { 'S', 'F', 'C', 'S' }, { 'A', 'D', 'E', 'E' } };
@@ -524,7 +694,7 @@ class Solution {
 		 */
 //		merge(arr,0, arr1,1);
 
-		System.out.println(zigzagLevelOrder(tree));
+		System.out.println(levelOrderBottom(tree));
 //		partition1(three, 0);
 		long end = new Date().getTime();
 		System.out.println("程序运行时间: " + (end - start));
