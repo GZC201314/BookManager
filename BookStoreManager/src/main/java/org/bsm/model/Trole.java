@@ -18,96 +18,96 @@ import javax.persistence.Table;
 @Table(name = "trole", catalog = "bookmanager")
 public class Trole implements java.io.Serializable {
 
-	private int roleid;
-	private String rolename;
-	private String remark;
-	private String excol;
-	private int disabled;
-	private Set<Tauthorize> tauthorizes = new HashSet<Tauthorize>(0);
-	private Set<Tuser> tusers = new HashSet<Tuser>(0);
+    private int roleid;
+    private String rolename;
+    private String remark;
+    private String excol;
+    private int disabled;
+    private Set<Tauthorize> tauthorizes = new HashSet<Tauthorize>(0);
+    private Set<Tuser> tusers = new HashSet<Tuser>(0);
 
-	public Trole() {
-	}
+    public Trole() {
+    }
 
-	public Trole(int roleid, int disabled) {
-		this.roleid = roleid;
-		this.disabled = disabled;
-	}
+    public Trole(int roleid, int disabled) {
+        this.roleid = roleid;
+        this.disabled = disabled;
+    }
 
-	public Trole(int roleid, String rolename, String remark, String excol, int disabled, Set<Tauthorize> tauthorizes,
-			Set<Tuser> tusers) {
-		this.roleid = roleid;
-		this.rolename = rolename;
-		this.remark = remark;
-		this.excol = excol;
-		this.disabled = disabled;
-		this.tauthorizes = tauthorizes;
-		this.tusers = tusers;
-	}
+    public Trole(int roleid, String rolename, String remark, String excol, int disabled, Set<Tauthorize> tauthorizes,
+                 Set<Tuser> tusers) {
+        this.roleid = roleid;
+        this.rolename = rolename;
+        this.remark = remark;
+        this.excol = excol;
+        this.disabled = disabled;
+        this.tauthorizes = tauthorizes;
+        this.tusers = tusers;
+    }
 
-	@Id
+    @Id
 
-	@Column(name = "roleid", unique = true, nullable = false)
-	public int getRoleid() {
-		return this.roleid;
-	}
+    @Column(name = "roleid", unique = true, nullable = false)
+    public int getRoleid() {
+        return this.roleid;
+    }
 
-	public void setRoleid(int roleid) {
-		this.roleid = roleid;
-	}
+    public void setRoleid(int roleid) {
+        this.roleid = roleid;
+    }
 
-	@Column(name = "rolename", length = 36)
-	public String getRolename() {
-		return this.rolename;
-	}
+    @Column(name = "rolename", length = 36)
+    public String getRolename() {
+        return this.rolename;
+    }
 
-	public void setRolename(String rolename) {
-		this.rolename = rolename;
-	}
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
+    }
 
-	@Column(name = "remark", length = 100)
-	public String getRemark() {
-		return this.remark;
-	}
+    @Column(name = "remark", length = 100)
+    public String getRemark() {
+        return this.remark;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-	@Column(name = "excol", length = 200)
-	public String getExcol() {
-		return this.excol;
-	}
+    @Column(name = "excol", length = 200)
+    public String getExcol() {
+        return this.excol;
+    }
 
-	public void setExcol(String excol) {
-		this.excol = excol;
-	}
+    public void setExcol(String excol) {
+        this.excol = excol;
+    }
 
-	@Column(name = "disabled", nullable = false)
-	public int getDisabled() {
-		return this.disabled;
-	}
+    @Column(name = "disabled", nullable = false)
+    public int getDisabled() {
+        return this.disabled;
+    }
 
-	public void setDisabled(int disabled) {
-		this.disabled = disabled;
-	}
+    public void setDisabled(int disabled) {
+        this.disabled = disabled;
+    }
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "trole")
-	public Set<Tauthorize> getTauthorizes() {
-		return this.tauthorizes;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trole")
+    public Set<Tauthorize> getTauthorizes() {
+        return this.tauthorizes;
+    }
 
-	public void setTauthorizes(Set<Tauthorize> tauthorizes) {
-		this.tauthorizes = tauthorizes;
-	}
+    public void setTauthorizes(Set<Tauthorize> tauthorizes) {
+        this.tauthorizes = tauthorizes;
+    }
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "trole")
-	public Set<Tuser> getTusers() {
-		return this.tusers;
-	}
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trole")
+    public Set<Tuser> getTusers() {
+        return this.tusers;
+    }
 
-	public void setTusers(Set<Tuser> tusers) {
-		this.tusers = tusers;
-	}
+    public void setTusers(Set<Tuser> tusers) {
+        this.tusers = tusers;
+    }
 
 }

@@ -8,16 +8,16 @@ import org.bsm.pageModel.PageDataGrid;
 import org.bsm.pageModel.Role;
 
 public interface RoleServiceI {
-	public List<Combobox> getRoleItem();
-	
-	public Role save(Role role);
-	
-	public PageDataGrid datagrid(Role role);
-	
-	public Integer update(Role role);
-	
-	public void removeRole(Role role);
-	
-	public List<Menu> getGrandMenus(Role role);
-	
+    public List<Combobox> getRoleItem();
+
+    public Role save(Role role);
+
+    public PageDataGrid datagrid(Role role);
+
+    public Integer update(Role role);
+
+    public void removeRole(Role role);
+
+    public List<Menu> getGrandMenus(Role role);
+
 }

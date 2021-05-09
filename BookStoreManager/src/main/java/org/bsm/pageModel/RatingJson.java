@@ -10,7 +10,8 @@ public class RatingJson {
     private Double average;
     private Integer numRaters;
 
-    public RatingJson() {}
+    public RatingJson() {
+    }
 
     public Integer getMax() {
         return max;
@@ -43,7 +44,7 @@ public class RatingJson {
     public void setNumRaters(Integer numRaters) {
         this.numRaters = numRaters;
     }
-    
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);

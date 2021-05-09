@@ -7,8 +7,9 @@ public class TagJson {
 
     private String name;
     private Integer count;
-    
-    public TagJson() {}
+
+    public TagJson() {
+    }
 
     public String getName() {
         return name;
@@ -25,7 +26,7 @@ public class TagJson {
     public void setCount(Integer count) {
         this.count = count;
     }
-    
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);

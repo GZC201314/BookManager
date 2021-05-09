@@ -35,121 +35,121 @@ import com.alibaba.fastjson.JSON;
 /**
  * Servlet Filter implementation class AuthFilter
  */
-@WebFilter(description = "鉴权过滤器", urlPatterns = { "/AuthFilter" })
+@WebFilter(description = "鉴权过滤器", urlPatterns = {"/AuthFilter"})
 public class AuthFilter implements Filter {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = LogManager.getLogger(AuthFilter.class.getName());
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = LogManager.getLogger(AuthFilter.class.getName());
 
-	private static ApplicationContext ctx = null;
+    private static ApplicationContext ctx = null;
 
-	/**
-	 * Default constructor.
-	 */
-	public AuthFilter() {
-		// TODO Auto-generated constructor stub
-	}
+    /**
+     * Default constructor.
+     */
+    public AuthFilter() {
+        // TODO Auto-generated constructor stub
+    }
 
-	/**
-	 * @see Filter#destroy()
-	 */
-	public void destroy() {
-		// TODO Auto-generated method stub
-	}
+    /**
+     * @see Filter#destroy()
+     */
+    public void destroy() {
+        // TODO Auto-generated method stub
+    }
 
-	/**
-	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-	 */
-	public void doFilter(ServletRequest request, ServletResponse response1, FilterChain chain)
-			throws IOException, ServletException {
-		// place your code here
-		logger.info("鉴权过滤器!!!!!!!!!");
-		request.setCharacterEncoding("utf-8");
-		HttpServletRequest req = (HttpServletRequest) request;
-		HttpServletResponse response = (HttpServletResponse) response1;
-		HashMap<String, Object> params = new HashMap(req.getParameterMap());
-		String url = req.getServletPath();
-		String refreshToken = "";
-		String token = "";
-		String userName = "";
-		if (StringUtils.isEmpty(url)) {
-			return;
-			// TODO
-		} else if (url.contains("check") || url.contains("login") || url.contains("reg") || url.contains("repair")
-				|| url.contains("validateName")) {// 如果是注册和登录以及数据库修复则跳过过滤器
-			chain.doFilter(request, response);
-		} else {
+    /**
+     * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
+     */
+    public void doFilter(ServletRequest request, ServletResponse response1, FilterChain chain)
+            throws IOException, ServletException {
+        // place your code here
+        logger.info("鉴权过滤器!!!!!!!!!");
+        request.setCharacterEncoding("utf-8");
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpServletResponse response = (HttpServletResponse) response1;
+        HashMap<String, Object> params = new HashMap(req.getParameterMap());
+        String url = req.getServletPath();
+        String refreshToken = "";
+        String token = "";
+        String userName = "";
+        if (StringUtils.isEmpty(url)) {
+            return;
+            // TODO
+        } else if (url.contains("check") || url.contains("login") || url.contains("reg") || url.contains("repair")
+                || url.contains("validateName")) {// 如果是注册和登录以及数据库修复则跳过过滤器
+            chain.doFilter(request, response);
+        } else {
 
-			// 其他的action需要校验是否有权限访问
-			Cookie[] cookies = req.getCookies();
-			if (cookies != null && cookies.length > 0) {
-				for (Cookie cookie : cookies) {
-					if ("token".equals(cookie.getName())) {
-						token = cookie.getValue();
-						params.put("token", token);
-					}
-					if ("refreshToken".equals(cookie.getName())) {
-						refreshToken = cookie.getValue();
-						params.put("refreshToken", refreshToken);
-					}
-					if ("userName".equals(cookie.getName())) {
-						userName = cookie.getValue();
-						URLDecoder urlDecoder = new URLDecoder();
-						userName = urlDecoder.decode(userName, "UTF-8");
-						params.put("username", userName);
-					}
-				}
-			}
-			
-			ParameterRequestWrapper wrapRequest=new ParameterRequestWrapper(req,params);    
-			request=wrapRequest;
-			// 请求中的token是否在redis中存在,获取cookies里边的Token
-			ServletContext sc = req.getSession().getServletContext();
-			ctx = WebApplicationContextUtils.getWebApplicationContext(sc);
-			RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) ctx.getBean("redisTemplate");
+            // 其他的action需要校验是否有权限访问
+            Cookie[] cookies = req.getCookies();
+            if (cookies != null && cookies.length > 0) {
+                for (Cookie cookie : cookies) {
+                    if ("token".equals(cookie.getName())) {
+                        token = cookie.getValue();
+                        params.put("token", token);
+                    }
+                    if ("refreshToken".equals(cookie.getName())) {
+                        refreshToken = cookie.getValue();
+                        params.put("refreshToken", refreshToken);
+                    }
+                    if ("userName".equals(cookie.getName())) {
+                        userName = cookie.getValue();
+                        URLDecoder urlDecoder = new URLDecoder();
+                        userName = urlDecoder.decode(userName, "UTF-8");
+                        params.put("username", userName);
+                    }
+                }
+            }
 
-			String redisToken = (String) redisTemplate.opsForHash().get(refreshToken, "token");
-			ErrorMsg errorMsg = new ErrorMsg();
-			if (!token.equals(redisToken)) {
-				response.setContentType("application/json;charset=UTF-8");
-	            response.setCharacterEncoding("UTF-8");
-	            response.sendError(402);
-	            Json eJson = new Json();
-	            errorMsg.setErrorCode(402);
-	            errorMsg.setErrorMsg("token is error!!!");
-	            eJson.setObj(errorMsg);
-	            String json = JSON.toJSONStringWithDateFormat(eJson, "yyyy-MM-dd HH:mm:ss");
-	            OutputStream out = response.getOutputStream();
-	            out.write(json.getBytes("UTF-8"));
-	            out.flush();
-	            return;
-			}
-			boolean verifyResult = JWTUtil.verify(token);
-			if (!verifyResult) {
-				response.setContentType("application/json;charset=UTF-8");
-	            response.setCharacterEncoding("UTF-8");
-	            response.sendError(403);
-	            Json eJson = new Json();
-	            errorMsg.setErrorCode(403);
-	            errorMsg.setErrorMsg("token is out time!!!");
-	            eJson.setObj(errorMsg);
-	            String json = JSON.toJSONStringWithDateFormat(eJson, "yyyy-MM-dd HH:mm:ss");
-	            OutputStream out = response.getOutputStream();
-	            out.write(json.getBytes("UTF-8"));
-	            out.flush();
-	            return;
-			}
+            ParameterRequestWrapper wrapRequest = new ParameterRequestWrapper(req, params);
+            request = wrapRequest;
+            // 请求中的token是否在redis中存在,获取cookies里边的Token
+            ServletContext sc = req.getSession().getServletContext();
+            ctx = WebApplicationContextUtils.getWebApplicationContext(sc);
+            RedisTemplate<String, String> redisTemplate = (RedisTemplate<String, String>) ctx.getBean("redisTemplate");
 
-			chain.doFilter(request, response);
-		}
-	}
+            String redisToken = (String) redisTemplate.opsForHash().get(refreshToken, "token");
+            ErrorMsg errorMsg = new ErrorMsg();
+            if (!token.equals(redisToken)) {
+                response.setContentType("application/json;charset=UTF-8");
+                response.setCharacterEncoding("UTF-8");
+                response.sendError(402);
+                Json eJson = new Json();
+                errorMsg.setErrorCode(402);
+                errorMsg.setErrorMsg("token is error!!!");
+                eJson.setObj(errorMsg);
+                String json = JSON.toJSONStringWithDateFormat(eJson, "yyyy-MM-dd HH:mm:ss");
+                OutputStream out = response.getOutputStream();
+                out.write(json.getBytes("UTF-8"));
+                out.flush();
+                return;
+            }
+            boolean verifyResult = JWTUtil.verify(token);
+            if (!verifyResult) {
+                response.setContentType("application/json;charset=UTF-8");
+                response.setCharacterEncoding("UTF-8");
+                response.sendError(403);
+                Json eJson = new Json();
+                errorMsg.setErrorCode(403);
+                errorMsg.setErrorMsg("token is out time!!!");
+                eJson.setObj(errorMsg);
+                String json = JSON.toJSONStringWithDateFormat(eJson, "yyyy-MM-dd HH:mm:ss");
+                OutputStream out = response.getOutputStream();
+                out.write(json.getBytes("UTF-8"));
+                out.flush();
+                return;
+            }
 
-	/**
-	 * @see Filter#init(FilterConfig)
-	 */
-	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
-	}
+            chain.doFilter(request, response);
+        }
+    }
+
+    /**
+     * @see Filter#init(FilterConfig)
+     */
+    public void init(FilterConfig fConfig) throws ServletException {
+        // TODO Auto-generated method stub
+    }
 
 }

@@ -14,95 +14,95 @@ import javax.persistence.Table;
 @Table(name = "tmovie", catalog = "bookmanager")
 public class Tmovie implements java.io.Serializable {
 
-	private String serialNumber;
-	private String pictureAddress;
-	private String movieName;
-	private String introduce;
-	private Float star;
-	private String evaluate;
-	private String describetion;
+    private String serialNumber;
+    private String pictureAddress;
+    private String movieName;
+    private String introduce;
+    private Float star;
+    private String evaluate;
+    private String describetion;
 
-	public Tmovie() {
-	}
+    public Tmovie() {
+    }
 
-	public Tmovie(String serialNumber) {
-		this.serialNumber = serialNumber;
-	}
+    public Tmovie(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 
-	public Tmovie(String serialNumber, String pictureAddress, String movieName, String introduce, Float star,
-			String evaluate, String describetion) {
-		this.serialNumber = serialNumber;
-		this.pictureAddress = pictureAddress;
-		this.movieName = movieName;
-		this.introduce = introduce;
-		this.star = star;
-		this.evaluate = evaluate;
-		this.describetion = describetion;
-	}
+    public Tmovie(String serialNumber, String pictureAddress, String movieName, String introduce, Float star,
+                  String evaluate, String describetion) {
+        this.serialNumber = serialNumber;
+        this.pictureAddress = pictureAddress;
+        this.movieName = movieName;
+        this.introduce = introduce;
+        this.star = star;
+        this.evaluate = evaluate;
+        this.describetion = describetion;
+    }
 
-	@Id
+    @Id
 
-	@Column(name = "serial_number", unique = true, nullable = false, length = 10)
-	public String getSerialNumber() {
-		return this.serialNumber;
-	}
+    @Column(name = "serial_number", unique = true, nullable = false, length = 10)
+    public String getSerialNumber() {
+        return this.serialNumber;
+    }
 
-	public void setSerialNumber(String serialNumber) {
-		this.serialNumber = serialNumber;
-	}
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
 
-	@Column(name = "picture_address", length = 128)
-	public String getPictureAddress() {
-		return this.pictureAddress;
-	}
+    @Column(name = "picture_address", length = 128)
+    public String getPictureAddress() {
+        return this.pictureAddress;
+    }
 
-	public void setPictureAddress(String pictureAddress) {
-		this.pictureAddress = pictureAddress;
-	}
+    public void setPictureAddress(String pictureAddress) {
+        this.pictureAddress = pictureAddress;
+    }
 
-	@Column(name = "movie_name", length = 128)
-	public String getMovieName() {
-		return this.movieName;
-	}
+    @Column(name = "movie_name", length = 128)
+    public String getMovieName() {
+        return this.movieName;
+    }
 
-	public void setMovieName(String movieName) {
-		this.movieName = movieName;
-	}
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
+    }
 
-	@Column(name = "introduce", length = 65535)
-	public String getIntroduce() {
-		return this.introduce;
-	}
+    @Column(name = "introduce", length = 65535)
+    public String getIntroduce() {
+        return this.introduce;
+    }
 
-	public void setIntroduce(String introduce) {
-		this.introduce = introduce;
-	}
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
 
-	@Column(name = "star", precision = 12, scale = 0)
-	public Float getStar() {
-		return this.star;
-	}
+    @Column(name = "star", precision = 12, scale = 0)
+    public Float getStar() {
+        return this.star;
+    }
 
-	public void setStar(Float star) {
-		this.star = star;
-	}
+    public void setStar(Float star) {
+        this.star = star;
+    }
 
-	@Column(name = "evaluate", length = 32)
-	public String getEvaluate() {
-		return this.evaluate;
-	}
+    @Column(name = "evaluate", length = 32)
+    public String getEvaluate() {
+        return this.evaluate;
+    }
 
-	public void setEvaluate(String evaluate) {
-		this.evaluate = evaluate;
-	}
+    public void setEvaluate(String evaluate) {
+        this.evaluate = evaluate;
+    }
 
-	@Column(name = "describetion", length = 65535)
-	public String getDescribetion() {
-		return this.describetion;
-	}
+    @Column(name = "describetion", length = 65535)
+    public String getDescribetion() {
+        return this.describetion;
+    }
 
-	public void setDescribetion(String describetion) {
-		this.describetion = describetion;
-	}
+    public void setDescribetion(String describetion) {
+        this.describetion = describetion;
+    }
 
 }

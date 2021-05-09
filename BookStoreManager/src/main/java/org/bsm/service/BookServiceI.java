@@ -12,18 +12,18 @@ import org.bsm.pageModel.Role;
 public interface BookServiceI {
 
     public Book getBookInfobyIsbn(BookQuery bookQuery);
-    
+
     public PageDataGrid datagrid(BookQuery bookQuery);
-    
+
     public void removeBook(BookQuery bookQuery);
-    
+
     public List<Combobox> getRoleItem();
+
     /**
-     * 
      * @param role
      * @return
      */
     public void update(BookQuery bookQuery);
-    
+
     public String uploadBookIcon(BookQuery bookQuery);
 }

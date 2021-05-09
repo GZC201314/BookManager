@@ -6,23 +6,23 @@ import java.util.List;
 @SuppressWarnings("rawtypes")
 public class PageDataGrid {
 
-	private Long total = 0L;
+    private Long total = 0L;
 
-	private List rows = new ArrayList<>();
+    private List rows = new ArrayList<>();
 
-	public Long getTotal() {
-		return total;
-	}
+    public Long getTotal() {
+        return total;
+    }
 
-	public void setTotal(Long total) {
-		this.total = total;
-	}
+    public void setTotal(Long total) {
+        this.total = total;
+    }
 
-	public List getRows() {
-		return rows;
-	}
+    public List getRows() {
+        return rows;
+    }
 
-	public void setRows(List rows) {
-		this.rows = rows;
-	}
+    public void setRows(List rows) {
+        this.rows = rows;
+    }
 }

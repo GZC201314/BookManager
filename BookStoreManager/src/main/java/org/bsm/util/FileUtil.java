@@ -9,12 +9,13 @@ import java.util.Base64;
 
 /**
  * 判断 数组/集合 为空的工具类
- * @author
  *
+ * @author
  */
 public class FileUtil {
-	/**
+    /**
      * 文件转base64字符串
+     *
      * @param file
      * @return
      */

@@ -11,11 +11,13 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
+
 public class PDFDocument {
     private static final String ORIG = "src/main/resources/image/myplot.png";
     private static final String OUTPUT_FOLDER = "/";
-	@Test
-	public void pdfTest() throws MalformedURLException, FileNotFoundException {
+
+    @Test
+    public void pdfTest() throws MalformedURLException, FileNotFoundException {
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter(OUTPUT_FOLDER + "ImageToPdf.pdf"));
         Document document = new Document(pdfDocument);
         ImageData imageData = ImageDataFactory.create(ORIG);
@@ -24,5 +26,5 @@ public class PDFDocument {
         image.setAutoScaleHeight(true);
         document.add(image);
         pdfDocument.close();
-	}
+    }
 }

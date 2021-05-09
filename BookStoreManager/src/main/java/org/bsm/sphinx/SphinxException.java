@@ -4,19 +4,22 @@
 
 package org.bsm.sphinx;
 
-/** Exception thrown on attempts to pass invalid arguments to Sphinx API methods. */
-public class SphinxException extends Exception
-{
-	/** Trivial constructor. */
-	public SphinxException()
-	{
-	}
+/**
+ * Exception thrown on attempts to pass invalid arguments to Sphinx API methods.
+ */
+public class SphinxException extends Exception {
+    /**
+     * Trivial constructor.
+     */
+    public SphinxException() {
+    }
 
-	/** Constructor from error message string. */
-	public SphinxException ( String message )
-	{
-		super ( message );
-	}
+    /**
+     * Constructor from error message string.
+     */
+    public SphinxException(String message) {
+        super(message);
+    }
 }
 
 /*

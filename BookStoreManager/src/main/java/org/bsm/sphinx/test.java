@@ -11,7 +11,7 @@ public class test {
     public static final String APP_ID = "18595904";
     public static final String API_KEY = "1OlEjVz6Zck7h4kdCpSu2GDX";
     public static final String SECRET_KEY = "1gylrnGUjKdUbFSqUyGd54LwUCCUStno";
-    private static int    num    = 0;
+    private static int num = 0;
 //    public static void main(String[] args) {
 ////        baiduaip();
 //        final Webcam webcam = Webcam.getDefault();
@@ -61,8 +61,8 @@ public class test {
 //    	
 //    }
 
-	private static void baiduaip() {
-		// 初始化一个AipOcr
+    private static void baiduaip() {
+        // 初始化一个AipOcr
         AipOcr client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
 
         // 可选：设置网络连接参数
@@ -79,5 +79,5 @@ public class test {
         HashMap<String, String> map = new HashMap<>();
         JSONObject res = client.basicGeneral(path, map);
         System.out.println(res.toString(2));
-	}
+    }
 }

@@ -20,110 +20,110 @@ import javax.persistence.TemporalType;
 @Table(name = "tuser", catalog = "bookmanager")
 public class Tuser implements java.io.Serializable {
 
-	private String name;
-	private Trole trole;
-	private String id;
-	private String pwd;
-	private Date createdatetime;
-	private Date lastmodifytime;
-	private String userlog;
-	private Integer isFaceValid;
+    private String name;
+    private Trole trole;
+    private String id;
+    private String pwd;
+    private Date createdatetime;
+    private Date lastmodifytime;
+    private String userlog;
+    private Integer isFaceValid;
 
-	public Tuser() {
-	}
+    public Tuser() {
+    }
 
-	public Tuser(String name, String id) {
-		this.name = name;
-		this.id = id;
-	}
+    public Tuser(String name, String id) {
+        this.name = name;
+        this.id = id;
+    }
 
-	public Tuser(String name, Trole trole, String id, String pwd, Date createdatetime, Date lastmodifytime,
-			String userlog, Integer isFaceValid) {
-		this.name = name;
-		this.trole = trole;
-		this.id = id;
-		this.pwd = pwd;
-		this.createdatetime = createdatetime;
-		this.lastmodifytime = lastmodifytime;
-		this.userlog = userlog;
-		this.isFaceValid = isFaceValid;
-	}
+    public Tuser(String name, Trole trole, String id, String pwd, Date createdatetime, Date lastmodifytime,
+                 String userlog, Integer isFaceValid) {
+        this.name = name;
+        this.trole = trole;
+        this.id = id;
+        this.pwd = pwd;
+        this.createdatetime = createdatetime;
+        this.lastmodifytime = lastmodifytime;
+        this.userlog = userlog;
+        this.isFaceValid = isFaceValid;
+    }
 
-	@Id
+    @Id
 
-	@Column(name = "name", unique = true, nullable = false, length = 36)
-	public String getName() {
-		return this.name;
-	}
+    @Column(name = "name", unique = true, nullable = false, length = 36)
+    public String getName() {
+        return this.name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "roleid")
-	public Trole getTrole() {
-		return this.trole;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roleid")
+    public Trole getTrole() {
+        return this.trole;
+    }
 
-	public void setTrole(Trole trole) {
-		this.trole = trole;
-	}
+    public void setTrole(Trole trole) {
+        this.trole = trole;
+    }
 
-	@Column(name = "id", nullable = false, length = 36)
-	public String getId() {
-		return this.id;
-	}
+    @Column(name = "id", nullable = false, length = 36)
+    public String getId() {
+        return this.id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	@Column(name = "pwd")
-	public String getPwd() {
-		return this.pwd;
-	}
+    @Column(name = "pwd")
+    public String getPwd() {
+        return this.pwd;
+    }
 
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "createdatetime", length = 19)
-	public Date getCreatedatetime() {
-		return this.createdatetime;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "createdatetime", length = 19)
+    public Date getCreatedatetime() {
+        return this.createdatetime;
+    }
 
-	public void setCreatedatetime(Date createdatetime) {
-		this.createdatetime = createdatetime;
-	}
+    public void setCreatedatetime(Date createdatetime) {
+        this.createdatetime = createdatetime;
+    }
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "lastmodifytime", length = 19)
-	public Date getLastmodifytime() {
-		return this.lastmodifytime;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "lastmodifytime", length = 19)
+    public Date getLastmodifytime() {
+        return this.lastmodifytime;
+    }
 
-	public void setLastmodifytime(Date lastmodifytime) {
-		this.lastmodifytime = lastmodifytime;
-	}
+    public void setLastmodifytime(Date lastmodifytime) {
+        this.lastmodifytime = lastmodifytime;
+    }
 
-	@Column(name = "userlog", length = 256)
-	public String getUserlog() {
-		return this.userlog;
-	}
+    @Column(name = "userlog", length = 256)
+    public String getUserlog() {
+        return this.userlog;
+    }
 
-	public void setUserlog(String userlog) {
-		this.userlog = userlog;
-	}
+    public void setUserlog(String userlog) {
+        this.userlog = userlog;
+    }
 
-	@Column(name = "isFaceValid")
-	public Integer getIsFaceValid() {
-		return this.isFaceValid;
-	}
+    @Column(name = "isFaceValid")
+    public Integer getIsFaceValid() {
+        return this.isFaceValid;
+    }
 
-	public void setIsFaceValid(Integer isFaceValid) {
-		this.isFaceValid = isFaceValid;
-	}
+    public void setIsFaceValid(Integer isFaceValid) {
+        this.isFaceValid = isFaceValid;
+    }
 
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
    http://www.springframework.org/schema/beans
    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
    http://www.springframework.org/schema/aop
@@ -17,57 +17,57 @@
    http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
    http://www.springframework.org/schema/context
    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
-	<!-- 自动加载配置文件 -->
-	<context:property-placeholder
-		location="classpath:config.properties"></context:property-placeholder>
-	<!--自动扫描dao,service包 -->
-	<context:component-scan
-		base-package="org.bsm.service.impl,org.bsm.dao"></context:component-scan>
+    <!-- 自动加载配置文件 -->
+    <context:property-placeholder
+            location="classpath:config.properties"></context:property-placeholder>
+    <!--自动扫描dao,service包 -->
+    <context:component-scan
+            base-package="org.bsm.service.impl,org.bsm.dao"></context:component-scan>
 
 
-	<bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
-		<property name="maxIdle" value="${redis.maxIdle}" />
-		<property name="maxTotal" value="${redis.maxActive}" />
-		<property name="maxWaitMillis" value="${redis.maxWait}" />
-		<property name="testOnBorrow" value="${redis.testOnBorrow}" />
-		<property name="testOnReturn" value="${redis.testOnReturn}" />
-	</bean>
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxTotal" value="${redis.maxActive}"/>
+        <property name="maxWaitMillis" value="${redis.maxWait}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+        <property name="testOnReturn" value="${redis.testOnReturn}"/>
+    </bean>
 
-	<bean id="connectionFactory"
-		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-		p:host-name="${redis.host}" p:port="${redis.port}"
-		p:password="${redis.pass}" p:pool-config-ref="poolConfig" />
+    <bean id="connectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:host-name="${redis.host}" p:port="${redis.port}"
+          p:password="${redis.pass}" p:pool-config-ref="poolConfig"/>
 
-	<bean id="redisTemplate"
-		class="org.springframework.data.redis.core.StringRedisTemplate">
-		<property name="connectionFactory" ref="connectionFactory" />
-		<property name="keySerializer">
-			<bean
-				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-		</property>
-		<property name="valueSerializer">
-			<bean
-				class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-		</property>
-	</bean>
+    <bean id="redisTemplate"
+          class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="keySerializer">
+            <bean
+                    class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="valueSerializer">
+            <bean
+                    class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+    </bean>
 
 
-	<mongo:mongo replica-set="${mongo.hostport}">
+    <mongo:mongo replica-set="${mongo.hostport}">
 
-		<mongo:options
-			connections-per-host="${mongo.connectionsPerHost}"
-			threads-allowed-to-block-for-connection-multiplier="${mongo.threadsAllowedToBlockForConnectionMultiplier}"
-			connect-timeout="${mongo.connectTimeout}"
-			max-wait-time="${mongo.maxWaitTime}" auto-connect-retry="true"
-			socket-keep-alive="true" socket-timeout="${mongo.socketTimeout}"
-			slave-ok="true" write-number="1" write-timeout="0" write-fsync="true" />
-	</mongo:mongo>
-	<mongo:db-factory username="root" password="root"
-		dbname="bsm" mongo-ref="mongo" />
+        <mongo:options
+                connections-per-host="${mongo.connectionsPerHost}"
+                threads-allowed-to-block-for-connection-multiplier="${mongo.threadsAllowedToBlockForConnectionMultiplier}"
+                connect-timeout="${mongo.connectTimeout}"
+                max-wait-time="${mongo.maxWaitTime}" auto-connect-retry="true"
+                socket-keep-alive="true" socket-timeout="${mongo.socketTimeout}"
+                slave-ok="true" write-number="1" write-timeout="0" write-fsync="true"/>
+    </mongo:mongo>
+    <mongo:db-factory username="root" password="root"
+                      dbname="bsm" mongo-ref="mongo"/>
 
-	<bean id="MongoTemplate"
-		class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg name="mongoDbFactory"
-			ref="mongoDbFactory" />
-	</bean>
+    <bean id="MongoTemplate"
+          class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory"
+                         ref="mongoDbFactory"/>
+    </bean>
 </beans>

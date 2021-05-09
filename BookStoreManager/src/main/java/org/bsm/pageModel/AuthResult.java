@@ -1,81 +1,81 @@
 package org.bsm.pageModel;
 
 public class AuthResult {
-	private String Token;
-	
-	private String refreshToken;
-	
-	private Integer role;
-	
-	private String userName;
-	
-	private String userlog;
-	
-	private Integer isFaceValid;
+    private String Token;
 
-	public AuthResult(String token, String refreshToken,Integer role,String userName,String userlog,Integer isFaceValid) {
-		super();
-		this.Token = token;
-		this.refreshToken = refreshToken;
-		this.role = role;
-		this.userName = userName;
-		this.userlog = userlog;
-		this.isFaceValid = isFaceValid;
-	}
+    private String refreshToken;
 
-	public String getToken() {
-		return Token;
-	}
+    private Integer role;
 
-	public void setToken(String token) {
-		Token = token;
-	}
+    private String userName;
 
-	public String getRefreshToken() {
-		return refreshToken;
-	}
+    private String userlog;
 
-	public void setRefreshToken(String refreshToken) {
-		this.refreshToken = refreshToken;
-	}
+    private Integer isFaceValid;
 
-	public Integer getRole() {
-		return role;
-	}
+    public AuthResult(String token, String refreshToken, Integer role, String userName, String userlog, Integer isFaceValid) {
+        super();
+        this.Token = token;
+        this.refreshToken = refreshToken;
+        this.role = role;
+        this.userName = userName;
+        this.userlog = userlog;
+        this.isFaceValid = isFaceValid;
+    }
 
-	public void setRole(Integer role) {
-		this.role = role;
-	}
+    public String getToken() {
+        return Token;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public void setToken(String token) {
+        Token = token;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public String getRefreshToken() {
+        return refreshToken;
+    }
 
-	public String getUserlog() {
-		return userlog;
-	}
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 
-	public void setUserlog(String userlog) {
-		this.userlog = userlog;
-	}
+    public Integer getRole() {
+        return role;
+    }
 
-	public Integer getIsFaceValid() {
-		return isFaceValid;
-	}
+    public void setRole(Integer role) {
+        this.role = role;
+    }
 
-	public void setIsFaceValid(Integer isFaceValid) {
-		this.isFaceValid = isFaceValid;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	@Override
-	public String toString() {
-		return "AuthResult [Token=" + Token + ", refreshToken=" + refreshToken + ", role=" + role + ", userName="
-				+ userName + ", userlog=" + userlog + ", isFaceValid=" + isFaceValid + "]";
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserlog() {
+        return userlog;
+    }
+
+    public void setUserlog(String userlog) {
+        this.userlog = userlog;
+    }
+
+    public Integer getIsFaceValid() {
+        return isFaceValid;
+    }
+
+    public void setIsFaceValid(Integer isFaceValid) {
+        this.isFaceValid = isFaceValid;
+    }
+
+    @Override
+    public String toString() {
+        return "AuthResult [Token=" + Token + ", refreshToken=" + refreshToken + ", role=" + role + ", userName="
+                + userName + ", userlog=" + userlog + ", isFaceValid=" + isFaceValid + "]";
+    }
 
 
 }

@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 抓取任务的完成情况记录类
+ *
  * @author Corvey
  * @version 1.0.0
  */
@@ -13,8 +14,9 @@ public class TaskResultJson {
     private Boolean status;
     private Long time;
     private String msg;
-    
-    public TaskResultJson() {}
+
+    public TaskResultJson() {
+    }
 
     public Boolean getStatus() {
         return status;
@@ -39,7 +41,7 @@ public class TaskResultJson {
     public void setMsg(String msg) {
         this.msg = msg;
     }
-    
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);

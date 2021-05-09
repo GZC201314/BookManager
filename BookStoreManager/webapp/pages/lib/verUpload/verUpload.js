@@ -375,71 +375,73 @@ window.verUpload = (function () {
         console.log(d);
 
     };
-    
+
     // 提示框关闭倒计时函数
-    function alert_totalQuery(msg,icon,tm){
-    	var interval;
-    	var time=1000;
-    	var x;
-    	if(null==tm||''==tm){
-    		x=Number(3);
-    	}else{
-    		x=Number(tm);
-    	}
-    	//
-    	if(null==icon||''==icon){
-    		icon="infoSunnyIcon";
-    	}
-    	$.messager.alert(' ','<font size=\"2\" color=\"#666666\"><strong>'+msg+'</strong></font>',icon,function(){});
-    	$(".messager-window .window-header .panel-title").append("系统提示（"+x+"秒后自动关闭）");
-    	interval=setInterval(fun,time);
-    	function fun(){
-    		--x;
-    		if(x==0){
-    	      clearInterval(interval);
-    		  $(".messager-body").window('close');	
-    		}
-    		$(".messager-window .window-header .panel-title").text("");
-    		$(".messager-window .window-header .panel-title").append("系统提示（"+x+"秒后自动关闭）");
-    	}
-    }    
-    
+    function alert_totalQuery(msg, icon, tm) {
+        var interval;
+        var time = 1000;
+        var x;
+        if (null == tm || '' == tm) {
+            x = Number(3);
+        } else {
+            x = Number(tm);
+        }
+        //
+        if (null == icon || '' == icon) {
+            icon = "infoSunnyIcon";
+        }
+        $.messager.alert(' ', '<font size=\"2\" color=\"#666666\"><strong>' + msg + '</strong></font>', icon, function () {
+        });
+        $(".messager-window .window-header .panel-title").append("系统提示（" + x + "秒后自动关闭）");
+        interval = setInterval(fun, time);
+
+        function fun() {
+            --x;
+            if (x == 0) {
+                clearInterval(interval);
+                $(".messager-body").window('close');
+            }
+            $(".messager-window .window-header .panel-title").text("");
+            $(".messager-window .window-header .panel-title").append("系统提示（" + x + "秒后自动关闭）");
+        }
+    }
+
     // 在这里重写fail
     var fail = function (d) {
-        if(d==402){
-        	// TODO
-        	alert_totalQuery('Token is error,please re-acquire!','',10);
-			setTimeout(() => {
+        if (d == 402) {
+            // TODO
+            alert_totalQuery('Token is error,please re-acquire!', '', 10);
+            setTimeout(() => {
 // 清理cookie
-			$.cookie('token', '', {
-				expires : -1
-			});
-			$.cookie('refreshToken', '', {
-				expires : -1
-			});
-			$.cookie('role', '', {
-				expires : -1
-			});
-				window.location.reload();
-			}, 10000);
+                $.cookie('token', '', {
+                    expires: -1
+                });
+                $.cookie('refreshToken', '', {
+                    expires: -1
+                });
+                $.cookie('role', '', {
+                    expires: -1
+                });
+                window.location.reload();
+            }, 10000);
         }
-        if(d==403){
-        	// TODO
-        	alert_totalQuery('This token has expired!','',10);
-			setTimeout(() => {
+        if (d == 403) {
+            // TODO
+            alert_totalQuery('This token has expired!', '', 10);
+            setTimeout(() => {
 // 清理cookie
-			$.cookie('token', '', {
-				expires : -1
-			});
-			$.cookie('refreshToken', '', {
-				expires : -1
-			});
-			$.cookie('role', '', {
-				expires : -1
-			});
-				window.location.reload();
-			}, 10000);
-        }        
+                $.cookie('token', '', {
+                    expires: -1
+                });
+                $.cookie('refreshToken', '', {
+                    expires: -1
+                });
+                $.cookie('role', '', {
+                    expires: -1
+                });
+                window.location.reload();
+            }, 10000);
+        }
     };
 
     var getPath = function () {
@@ -468,7 +470,7 @@ window.verUpload = (function () {
                 }
                 var O = Object(this);
                 var len = O.length >>> 0; // Hack to convert O.length to a
-											// UInt32
+                // UInt32
                 if ({}.toString.call(callback) != "[object Function]") {
                     throw new TypeError(callback + " is not a function");
                 }

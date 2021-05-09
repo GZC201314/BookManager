@@ -32,6 +32,7 @@ public class BaiduAIAuthUtil {
     /**
      * 获取API访问token
      * 该token有一定的有效期，需要自行管理，当失效时需重新获取.
+     *
      * @param ak - 百度云官网获取的 API Key
      * @param sk - 百度云官网获取的 Securet Key
      * @return assess_token 示例：
@@ -79,6 +80,7 @@ public class BaiduAIAuthUtil {
         }
         return null;
     }
+
     public static void main(String[] args) {
 //    	int[] arr = {1,3,5,7};
 //    	System.out.println(Arrays.toString(Arrays.stream(arr).boxed().toArray(Integer[]::new)));
@@ -90,5 +92,5 @@ public class BaiduAIAuthUtil {
 //				System.err.println("Hello World !");
 //			}
 //		}, 0, 1000);
-	}
+    }
 }

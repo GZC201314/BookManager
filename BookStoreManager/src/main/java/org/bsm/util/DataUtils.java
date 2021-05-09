@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * JSON工具类，主要使用jackson实现
+ *
  * @author Corvey
  * @version 1.0.0
  */
@@ -21,15 +22,16 @@ public class DataUtils {
 
     private static final String CHARSET_NAME = "UTF-8";
     private static ObjectMapper mapper;
-    
+
     static {
         mapper = new ObjectMapper();
         // 设置忽略未知的属性
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
-    
+
     /**
      * 从URL地址中获取json（字符串形式）
+     *
      * @param url 目标地址
      * @return json（字符串形式）
      * @throws IOException
@@ -41,61 +43,67 @@ public class DataUtils {
         in.close();
         return ret;
     }
+
     /**
      * 从URL地址中获取HTML（字符串形式）
+     *
      * @param url 目标地址
      * @return HTML（字符串形式）
      * @throws IOException
      */
     public static String getHtmlStringFromURL(String url) throws IOException {
-    	URL _url = new URL(url);
-    	InputStream in = _url.openStream();
-    	String ret = inputStream2String(in);
-    	in.close();
-    	return ret;
+        URL _url = new URL(url);
+        InputStream in = _url.openStream();
+        String ret = inputStream2String(in);
+        in.close();
+        return ret;
     }
-    
+
     /**
      * 从json（字符串形式）中获取某一属性
+     *
      * @param jsonString json（字符串形式）
-     * @param fieldName 属性名
+     * @param fieldName  属性名
      * @return json中该属性的值（字符串形式）
      * @throws IOException
      */
-    public static String getField(String jsonString, String fieldName) 
+    public static String getField(String jsonString, String fieldName)
             throws IOException {
         JsonNode node = mapper.readTree(jsonString);
         return node.get(fieldName).toString();
     }
-    
+
     /**
      * 将json（字符串形式）转换为java中的实例
+     *
      * @param jsonString json（字符串形式）
-     * @param valueType 转换目标的类
+     * @param valueType  转换目标的类
      * @return valueType的实例
      * @throws IOException
      */
-    public static <T> T json2Object(String jsonString, Class<T> valueType) 
+    public static <T> T json2Object(String jsonString, Class<T> valueType)
             throws IOException {
         return mapper.readValue(jsonString, valueType);
     }
-    
+
     /**
      * 将JS中的数组（字符串形式）转换为java中的列表
-     * @param jsArrayString JS的数组（字符串形式）
+     *
+     * @param jsArrayString   JS的数组（字符串形式）
      * @param collectionClass 列表的实现类
-     * @param elementClass 列表元素所属类
+     * @param elementClass    列表元素所属类
      * @return collectionClass的实例
      * @throws IOException
      */
-    public static <T> T json2List(String jsArrayString, Class<?> collectionClass, Class<?> elementClass) 
+    public static <T> T json2List(String jsArrayString, Class<?> collectionClass, Class<?> elementClass)
             throws IOException {
         JavaType jt = getCollectionType(collectionClass, elementClass);
         return mapper.readValue(jsArrayString, jt);
     }
-    
+
     /**
      * 将Java中的实例转换为json（字符串形式）
+     *
      * @param object 实例
      * @return json（字符串形式）
      */
@@ -108,19 +116,21 @@ public class DataUtils {
         }
         return jsonString;
     }
-    
+
     /**
      * 由列表实现的类和列表元素的类，构造jackson中的JavaType
+     *
      * @param collectionClass 列表实现类
-     * @param elementClass 列表元素类
+     * @param elementClass    列表元素类
      * @return jackson中的JavaType
      */
     private static JavaType getCollectionType(Class<?> collectionClass, Class<?> elementClass) {
         return mapper.getTypeFactory().constructParametricType(collectionClass, elementClass);
     }
-    
+
     /**
      * 获取inputStream的内容并返回
+     *
      * @param in inputStream
      * @return inputStream的内容
      * @throws IOException

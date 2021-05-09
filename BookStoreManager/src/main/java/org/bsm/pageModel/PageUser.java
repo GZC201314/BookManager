@@ -6,266 +6,266 @@ import java.util.Date;
 
 public class PageUser implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3243653850988254719L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 3243653850988254719L;
 
-	// 上传的头像图像
-	private File uploadImg;
-	private String uploadFileName;
-	private String userlog;
-	// 人脸校验
-	private Integer isFaceValid=0;
-	
-	private String base;
+    // 上传的头像图像
+    private File uploadImg;
+    private String uploadFileName;
+    private String userlog;
+    // 人脸校验
+    private Integer isFaceValid = 0;
 
-	public String getBase() {
-		return base;
-	}
+    private String base;
 
-	public void setBase(String base) {
-		this.base = base;
-	}
+    public String getBase() {
+        return base;
+    }
 
-	public String getUserlog() {
-		return userlog;
-	}
+    public void setBase(String base) {
+        this.base = base;
+    }
 
-	public void setUserlog(String userlog) {
-		this.userlog = userlog;
-	}
+    public String getUserlog() {
+        return userlog;
+    }
 
-	public Integer getIsFaceValid() {
-		return isFaceValid;
-	}
+    public void setUserlog(String userlog) {
+        this.userlog = userlog;
+    }
 
-	public void setIsFaceValid(Integer isFaceValid) {
-		this.isFaceValid = isFaceValid;
-	}
+    public Integer getIsFaceValid() {
+        return isFaceValid;
+    }
 
-	public File getUploadImg() {
-		return uploadImg;
-	}
+    public void setIsFaceValid(Integer isFaceValid) {
+        this.isFaceValid = isFaceValid;
+    }
 
-	public void setUploadImg(File uploadImg) {
-		this.uploadImg = uploadImg;
-	}
+    public File getUploadImg() {
+        return uploadImg;
+    }
 
-	public String getUploadFileName() {
-		return uploadFileName;
-	}
+    public void setUploadImg(File uploadImg) {
+        this.uploadImg = uploadImg;
+    }
 
-	public void setUploadFileName(String uploadFileName) {
-		this.uploadFileName = uploadFileName;
-	}
+    public String getUploadFileName() {
+        return uploadFileName;
+    }
 
-	/**
-	 * 登出传参
-	 */
-	private String token;
-	private String refreshToken;
+    public void setUploadFileName(String uploadFileName) {
+        this.uploadFileName = uploadFileName;
+    }
 
-	public String getToken() {
-		return token;
-	}
+    /**
+     * 登出传参
+     */
+    private String token;
+    private String refreshToken;
 
-	public void setToken(String token) {
-		this.token = token;
-	}
+    public String getToken() {
+        return token;
+    }
 
-	public String getRefreshToken() {
-		return refreshToken;
-	}
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-	public void setRefreshToken(String refreshToken) {
-		this.refreshToken = refreshToken;
-	}
+    public String getRefreshToken() {
+        return refreshToken;
+    }
 
-	/**
-	 * 修改用户使用字段
-	 */
-	private String oldname;
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 
-	public String getOldname() {
-		return oldname;
-	}
+    /**
+     * 修改用户使用字段
+     */
+    private String oldname;
 
-	public void setOldname(String oldname) {
-		this.oldname = oldname;
-	}
+    public String getOldname() {
+        return oldname;
+    }
 
-	private String ids;
+    public void setOldname(String oldname) {
+        this.oldname = oldname;
+    }
 
-	public String getIds() {
-		return ids;
-	}
+    private String ids;
 
-	public void setIds(String ids) {
-		this.ids = ids;
-	}
+    public String getIds() {
+        return ids;
+    }
 
-	private int page;
-	private int rows;
+    public void setIds(String ids) {
+        this.ids = ids;
+    }
 
-	public int getPage() {
-		return page;
-	}
+    private int page;
+    private int rows;
 
-	public void setPage(int page) {
-		this.page = page;
-	}
+    public int getPage() {
+        return page;
+    }
 
-	public int getRows() {
-		return rows;
-	}
+    public void setPage(int page) {
+        this.page = page;
+    }
 
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
+    public int getRows() {
+        return rows;
+    }
 
-	// 查询条件字段
-	private Date startcreatetime;
-	private Date endcreatetime;
-	private Date startmodifytime;
-	private Date endmodifytime;
-	private String username;
-	private String userName;
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    // 查询条件字段
+    private Date startcreatetime;
+    private Date endcreatetime;
+    private Date startmodifytime;
+    private Date endmodifytime;
+    private String username;
+    private String userName;
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	// 查询排序字段
-	private String sort;
-	private String order;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public String getSort() {
-		return sort;
-	}
+    // 查询排序字段
+    private String sort;
+    private String order;
 
-	public void setSort(String sort) {
-		this.sort = sort;
-	}
+    public String getSort() {
+        return sort;
+    }
 
-	public String getOrder() {
-		return order;
-	}
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 
-	public void setOrder(String order) {
-		this.order = order;
-	}
+    public String getOrder() {
+        return order;
+    }
 
-	public Date getStartcreatetime() {
-		return startcreatetime;
-	}
+    public void setOrder(String order) {
+        this.order = order;
+    }
 
-	public void setStartcreatetime(Date startcreatetime) {
-		this.startcreatetime = startcreatetime;
-	}
+    public Date getStartcreatetime() {
+        return startcreatetime;
+    }
 
-	public Date getEndcreatetime() {
-		return endcreatetime;
-	}
+    public void setStartcreatetime(Date startcreatetime) {
+        this.startcreatetime = startcreatetime;
+    }
 
-	public void setEndcreatetime(Date endcreatetime) {
-		this.endcreatetime = endcreatetime;
-	}
+    public Date getEndcreatetime() {
+        return endcreatetime;
+    }
 
-	public Date getStartmodifytime() {
-		return startmodifytime;
-	}
+    public void setEndcreatetime(Date endcreatetime) {
+        this.endcreatetime = endcreatetime;
+    }
 
-	public void setStartmodifytime(Date startmodifytime) {
-		this.startmodifytime = startmodifytime;
-	}
+    public Date getStartmodifytime() {
+        return startmodifytime;
+    }
 
-	public Date getEndmodifytime() {
-		return endmodifytime;
-	}
+    public void setStartmodifytime(Date startmodifytime) {
+        this.startmodifytime = startmodifytime;
+    }
 
-	public void setEndmodifytime(Date endmodifytime) {
-		this.endmodifytime = endmodifytime;
-	}
+    public Date getEndmodifytime() {
+        return endmodifytime;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public void setEndmodifytime(Date endmodifytime) {
+        this.endmodifytime = endmodifytime;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	private String id;
-	private String name;
-	private String pwd;
-	private Date createdatetime;
-	private Date lastmodifytime;
-	private Integer roleid;
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public PageUser() {
-	}
+    private String id;
+    private String name;
+    private String pwd;
+    private Date createdatetime;
+    private Date lastmodifytime;
+    private Integer roleid;
 
-	public PageUser(String id) {
-		this.id = id;
-	}
+    public PageUser() {
+    }
 
-	public PageUser(String id, String name, String pwd) {
-		this.id = id;
-		this.name = name;
-		this.pwd = pwd;
-	}
+    public PageUser(String id) {
+        this.id = id;
+    }
 
-	public String getId() {
-		return this.id;
-	}
+    public PageUser(String id, String name, String pwd) {
+        this.id = id;
+        this.name = name;
+        this.pwd = pwd;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return this.id;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return this.name;
+    }
 
-	public String getPwd() {
-		return this.pwd;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setPwd(String pwd) {
-		this.pwd = pwd;
-	}
+    public String getPwd() {
+        return this.pwd;
+    }
 
-	public Date getCreatedatetime() {
-		return createdatetime;
-	}
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
 
-	public void setCreatedatetime(Date createdatetime) {
-		this.createdatetime = createdatetime;
-	}
+    public Date getCreatedatetime() {
+        return createdatetime;
+    }
 
-	public Date getLastmodifytime() {
-		return lastmodifytime;
-	}
+    public void setCreatedatetime(Date createdatetime) {
+        this.createdatetime = createdatetime;
+    }
 
-	public void setLastmodifytime(Date lastmodifytime) {
-		this.lastmodifytime = lastmodifytime;
-	}
+    public Date getLastmodifytime() {
+        return lastmodifytime;
+    }
 
-	public Integer getRoleid() {
-		return roleid;
-	}
+    public void setLastmodifytime(Date lastmodifytime) {
+        this.lastmodifytime = lastmodifytime;
+    }
 
-	public void setRoleid(Integer roleid) {
-		this.roleid = roleid;
-	}
+    public Integer getRoleid() {
+        return roleid;
+    }
+
+    public void setRoleid(Integer roleid) {
+        this.roleid = roleid;
+    }
 
 }

@@ -1,83 +1,88 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <title>抓取豆瓣图书</title>
     <script src="js/jquery-2.1.1.min.js"></script>
-  </head>
-  <body>
-  <input type="text" id="clock">
-  <input type="button" value="开始" id="start" onclick="func1()">
-  <input type="button" value="结束" id="end" onclick="func2()">
-  </body>
-  <script type="text/javascript">
-  
-  function setClock() {
-    var now = setTime();
-    var clock = document.getElementById('clock');
-    clock.value = now;
-}
-var ID;
-  function func1() {
-  	setClock();
-    ID = setInterval(setClock,1000);
-}
-  function func2() {
-    clearInterval(ID)
-}
-function setTime() {
-    var date = new Date();
-    var year = date.getFullYear();
-    var month = date.getMonth()+1;
-    var day = date.getDate();
-    var hour = date.getHours();
-    var minute = date.getMinutes();
-    var seconds = date.getSeconds();
-    var week = date.getDay();
-    return year+"年"+month+"月"+format(day)+ "天"+hour +":"+minute+ ":"+seconds+
-" "+num_week(week);
-}
-function format(number) {
-    if(number<10){
-    return "0"+number;
-}else {
-	return number;
-}
-}
-function num_week(n) {
-    week =["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
-    return week[n];
-}
+</head>
+<body>
+<input type="text" id="clock">
+<input type="button" value="开始" id="start" onclick="func1()">
+<input type="button" value="结束" id="end" onclick="func2()">
+</body>
+<script type="text/javascript">
 
-
-
-  //var add = new Function("a","b","alert(a+b)");
-  //add(1,2);
-  //function a1() {
-//		if(arguments.length!=3){
-//		throw new Error("arguments should be 3 ");
-//		}
-//	}
-//
-//	a1(1,2,3,4,5,6);
-
-	//var arr2 = new Array(5,"hello",true,[1,3]);
-	//for (var index= 0; index< arr2.length; index++) {
-	//	console.info(arr2[index]);
-	//}
-//var date = new Date();
-//console.log(date.getYear());
-var name = "The Window";
-var object ={
-name:"My Object",
-getName:function () {
-    var that = this;
-    return function(){
-     return that.name;
+    function setClock() {
+        var now = setTime();
+        var clock = document.getElementById('clock');
+        clock.value = now;
     }
-}
-};
-alert(object.getName()());
-window.onload();
-  </script>
+
+    var ID;
+
+    function func1() {
+        setClock();
+        ID = setInterval(setClock, 1000);
+    }
+
+    function func2() {
+        clearInterval(ID)
+    }
+
+    function setTime() {
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var hour = date.getHours();
+        var minute = date.getMinutes();
+        var seconds = date.getSeconds();
+        var week = date.getDay();
+        return year + "年" + month + "月" + format(day) + "天" + hour + ":" + minute + ":" + seconds +
+            " " + num_week(week);
+    }
+
+    function format(number) {
+        if (number < 10) {
+            return "0" + number;
+        } else {
+            return number;
+        }
+    }
+
+    function num_week(n) {
+        week = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+        return week[n];
+    }
+
+
+    //var add = new Function("a","b","alert(a+b)");
+    //add(1,2);
+    //function a1() {
+    //		if(arguments.length!=3){
+    //		throw new Error("arguments should be 3 ");
+    //		}
+    //	}
+    //
+    //	a1(1,2,3,4,5,6);
+
+    //var arr2 = new Array(5,"hello",true,[1,3]);
+    //for (var index= 0; index< arr2.length; index++) {
+    //	console.info(arr2[index]);
+    //}
+    //var date = new Date();
+    //console.log(date.getYear());
+    var name = "The Window";
+    var object = {
+        name: "My Object",
+        getName: function () {
+            var that = this;
+            return function () {
+                return that.name;
+            }
+        }
+    };
+    alert(object.getName()());
+    window.onload();
+</script>
 </html>

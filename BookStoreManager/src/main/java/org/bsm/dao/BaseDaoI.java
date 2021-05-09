@@ -6,32 +6,32 @@ import java.util.Map;
 
 public interface BaseDaoI<T> {
 
-	public Serializable save(T t);
-	
-	public void delete(T t);
+    public Serializable save(T t);
 
-	public void update(T t);
-	
-	public void saveOrUpdate(T t);
-	
-	public T get(String hql);
+    public void delete(T t);
 
-	public T get(String hql, Map<String, Object> params);
+    public void update(T t);
 
-	public List<T> find(String hql);
+    public void saveOrUpdate(T t);
 
-	public List<T> find(String hql, Map<String, Object> params);
-	
-	public List<T> find(String hql, int page, int rows);
+    public T get(String hql);
 
-	public List<T> find(String hql, Map<String, Object> params, int page, int rows);
+    public T get(String hql, Map<String, Object> params);
 
-	public Long count(String hql);
+    public List<T> find(String hql);
 
-	public Long count(String hql, Map<String, Object> params);
-	
-	public int executeHql(String hql);
-	
-	public int executeHql(String hql, Map<String, Object> params);
+    public List<T> find(String hql, Map<String, Object> params);
+
+    public List<T> find(String hql, int page, int rows);
+
+    public List<T> find(String hql, Map<String, Object> params, int page, int rows);
+
+    public Long count(String hql);
+
+    public Long count(String hql, Map<String, Object> params);
+
+    public int executeHql(String hql);
+
+    public int executeHql(String hql, Map<String, Object> params);
 
 }

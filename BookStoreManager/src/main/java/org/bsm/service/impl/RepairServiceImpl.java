@@ -16,150 +16,149 @@ import org.springframework.stereotype.Service;
 @Service("repairService")
 public class RepairServiceImpl implements RepairServiceI {
 
-	@Autowired
-	BaseDaoI<Tuser> userDaoI;
+    @Autowired
+    BaseDaoI<Tuser> userDaoI;
 
-	@Autowired
-	BaseDaoI<Tmenu> menuDaoI;
+    @Autowired
+    BaseDaoI<Tmenu> menuDaoI;
 
-	public BaseDaoI<Tuser> getUserDao() {
-		return userDaoI;
-	}
+    public BaseDaoI<Tuser> getUserDao() {
+        return userDaoI;
+    }
 
-	public void setUserDao(BaseDaoI<Tuser> userDao) {
-		this.userDaoI = userDao;
-	}
+    public void setUserDao(BaseDaoI<Tuser> userDao) {
+        this.userDaoI = userDao;
+    }
 
-	public BaseDaoI<Tmenu> getMenuDao() {
-		return menuDaoI;
-	}
+    public BaseDaoI<Tmenu> getMenuDao() {
+        return menuDaoI;
+    }
 
-	public void setMenuDao(BaseDaoI<Tmenu> menuDao) {
-		this.menuDaoI = menuDao;
-	}
+    public void setMenuDao(BaseDaoI<Tmenu> menuDao) {
+        this.menuDaoI = menuDao;
+    }
 
-	@Override
-	public void repair() {
-		// 修复用户数据
-		repairUser();
-		// 修复菜单数据
-		repairMenu();
-	}
+    @Override
+    public void repair() {
+        // 修复用户数据
+        repairUser();
+        // 修复菜单数据
+        repairMenu();
+    }
 
-	private void repairMenu() {
-		Tmenu root = new Tmenu();
-		root.setId("0");
-		root.setText("首页");
-		root.setUrl("");
-		menuDaoI.saveOrUpdate(root);
-		Tmenu tszq = new Tmenu();
-		tszq.setId("tszq");
-		tszq.setTmenu(root);
-		tszq.setText("图书专区");
-		menuDaoI.saveOrUpdate(tszq);
-		
-		Tmenu tsgl = new Tmenu();
-		tsgl.setId("tsgl");
-		tsgl.setTmenu(tszq);
-		tsgl.setText("图书管理");
-		tsgl.setUrl("/tszq/tsgl.jsp");
-		menuDaoI.saveOrUpdate(tsgl);
-		
-		Tmenu aizq = new Tmenu();
-		aizq.setId("aizq");
-		aizq.setTmenu(root);
-		aizq.setText("智能专区");
-		menuDaoI.saveOrUpdate(aizq);
-		
-		Tmenu tpsb = new Tmenu();
-		tpsb.setId("tpsb");
-		tpsb.setTmenu(aizq);
-		tpsb.setText("图片识别");
-		tpsb.setUrl("/aizq/tpsb.jsp");
-		menuDaoI.saveOrUpdate(tpsb);
-		
-		
-		Tmenu yhzx = new Tmenu();
-		yhzx.setId("yhzx");
-		yhzx.setTmenu(root);
-		yhzx.setText("用户中心");
-		menuDaoI.saveOrUpdate(yhzx);
+    private void repairMenu() {
+        Tmenu root = new Tmenu();
+        root.setId("0");
+        root.setText("首页");
+        root.setUrl("");
+        menuDaoI.saveOrUpdate(root);
+        Tmenu tszq = new Tmenu();
+        tszq.setId("tszq");
+        tszq.setTmenu(root);
+        tszq.setText("图书专区");
+        menuDaoI.saveOrUpdate(tszq);
 
-		Tmenu grzx = new Tmenu();
-		grzx.setId("grzx");
-		grzx.setTmenu(yhzx);
-		grzx.setText("个人中心");
-		grzx.setUrl("/admin/grzx.jsp");
-		menuDaoI.saveOrUpdate(grzx);
-		
-		Tmenu xxxg = new Tmenu();
-		xxxg.setId("xxxg");
-		xxxg.setTmenu(yhzx);
-		xxxg.setText("信息修改");
-		xxxg.setUrl("/admin/xxxg.jsp");
-		menuDaoI.saveOrUpdate(xxxg);
-		
-		
-		Tmenu xtgl = new Tmenu();
-		xtgl.setId("xtgl");
-		xtgl.setTmenu(root);
-		xtgl.setText("系统管理");
-		menuDaoI.saveOrUpdate(xtgl);
-		
-		
+        Tmenu tsgl = new Tmenu();
+        tsgl.setId("tsgl");
+        tsgl.setTmenu(tszq);
+        tsgl.setText("图书管理");
+        tsgl.setUrl("/tszq/tsgl.jsp");
+        menuDaoI.saveOrUpdate(tsgl);
 
-		Tmenu yhgl = new Tmenu();
-		yhgl.setId("yhgl");
-		yhgl.setTmenu(xtgl);
-		yhgl.setText("用户管理");
-		yhgl.setUrl("/admin/yhgl.jsp");
-		menuDaoI.saveOrUpdate(yhgl);
+        Tmenu aizq = new Tmenu();
+        aizq.setId("aizq");
+        aizq.setTmenu(root);
+        aizq.setText("智能专区");
+        menuDaoI.saveOrUpdate(aizq);
 
-		Tmenu jsgl = new Tmenu();
-		jsgl.setId("jsgl");
-		jsgl.setTmenu(xtgl);
-		jsgl.setText("角色管理");
-		jsgl.setIconCls("icon-save");
-		jsgl.setUrl("/admin/jsgl.jsp");
-		menuDaoI.saveOrUpdate(jsgl);
+        Tmenu tpsb = new Tmenu();
+        tpsb.setId("tpsb");
+        tpsb.setTmenu(aizq);
+        tpsb.setText("图片识别");
+        tpsb.setUrl("/aizq/tpsb.jsp");
+        menuDaoI.saveOrUpdate(tpsb);
 
-		Tmenu qxgl = new Tmenu();
-		qxgl.setId("qxgl");
-		qxgl.setTmenu(xtgl);
-		qxgl.setText("权限管理");
-		qxgl.setUrl("/admin/qxgl.jsp");
-		menuDaoI.saveOrUpdate(qxgl);
 
-		Tmenu cdgl = new Tmenu();
-		cdgl.setId("cdgl");
-		cdgl.setTmenu(xtgl);
-		cdgl.setText("菜单管理");
-		cdgl.setUrl("/admin/cdgl.jsp");
-		menuDaoI.saveOrUpdate(cdgl);
+        Tmenu yhzx = new Tmenu();
+        yhzx.setId("yhzx");
+        yhzx.setTmenu(root);
+        yhzx.setText("用户中心");
+        menuDaoI.saveOrUpdate(yhzx);
 
-		Tmenu buggl = new Tmenu();
-		buggl.setId("buggl");
-		buggl.setTmenu(xtgl);
-		buggl.setText("BUG管理");
-		buggl.setUrl("/admin/buggl.jsp");
-		menuDaoI.saveOrUpdate(buggl);
-	}
+        Tmenu grzx = new Tmenu();
+        grzx.setId("grzx");
+        grzx.setTmenu(yhzx);
+        grzx.setText("个人中心");
+        grzx.setUrl("/admin/grzx.jsp");
+        menuDaoI.saveOrUpdate(grzx);
 
-	private void repairUser() {
-		String hql = "from Tuser where id != '0' and name=:name";
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("name", "admin");
-		Tuser t = userDaoI.get(hql, params);
-		if (t != null) {
-			t.setName(t.getName() + "_" + UUID.randomUUID().toString());
-		}
-		Tuser admin = new Tuser();
-		admin.setId("0");
-		admin.setName("admin");
-		admin.setPwd(Encrypt.e("admin"));
-		admin.setIsFaceValid(0);
-		admin.setTrole(new Trole(0, "超级管理员", "超级管理员", "", 0, null, null));
-		userDaoI.saveOrUpdate(admin);
-	}
+        Tmenu xxxg = new Tmenu();
+        xxxg.setId("xxxg");
+        xxxg.setTmenu(yhzx);
+        xxxg.setText("信息修改");
+        xxxg.setUrl("/admin/xxxg.jsp");
+        menuDaoI.saveOrUpdate(xxxg);
+
+
+        Tmenu xtgl = new Tmenu();
+        xtgl.setId("xtgl");
+        xtgl.setTmenu(root);
+        xtgl.setText("系统管理");
+        menuDaoI.saveOrUpdate(xtgl);
+
+
+        Tmenu yhgl = new Tmenu();
+        yhgl.setId("yhgl");
+        yhgl.setTmenu(xtgl);
+        yhgl.setText("用户管理");
+        yhgl.setUrl("/admin/yhgl.jsp");
+        menuDaoI.saveOrUpdate(yhgl);
+
+        Tmenu jsgl = new Tmenu();
+        jsgl.setId("jsgl");
+        jsgl.setTmenu(xtgl);
+        jsgl.setText("角色管理");
+        jsgl.setIconCls("icon-save");
+        jsgl.setUrl("/admin/jsgl.jsp");
+        menuDaoI.saveOrUpdate(jsgl);
+
+        Tmenu qxgl = new Tmenu();
+        qxgl.setId("qxgl");
+        qxgl.setTmenu(xtgl);
+        qxgl.setText("权限管理");
+        qxgl.setUrl("/admin/qxgl.jsp");
+        menuDaoI.saveOrUpdate(qxgl);
+
+        Tmenu cdgl = new Tmenu();
+        cdgl.setId("cdgl");
+        cdgl.setTmenu(xtgl);
+        cdgl.setText("菜单管理");
+        cdgl.setUrl("/admin/cdgl.jsp");
+        menuDaoI.saveOrUpdate(cdgl);
+
+        Tmenu buggl = new Tmenu();
+        buggl.setId("buggl");
+        buggl.setTmenu(xtgl);
+        buggl.setText("BUG管理");
+        buggl.setUrl("/admin/buggl.jsp");
+        menuDaoI.saveOrUpdate(buggl);
+    }
+
+    private void repairUser() {
+        String hql = "from Tuser where id != '0' and name=:name";
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("name", "admin");
+        Tuser t = userDaoI.get(hql, params);
+        if (t != null) {
+            t.setName(t.getName() + "_" + UUID.randomUUID().toString());
+        }
+        Tuser admin = new Tuser();
+        admin.setId("0");
+        admin.setName("admin");
+        admin.setPwd(Encrypt.e("admin"));
+        admin.setIsFaceValid(0);
+        admin.setTrole(new Trole(0, "超级管理员", "超级管理员", "", 0, null, null));
+        userDaoI.saveOrUpdate(admin);
+    }
 
 }
