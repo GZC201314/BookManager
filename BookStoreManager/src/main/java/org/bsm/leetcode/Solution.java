@@ -1,17 +1,6 @@
 package org.bsm.leetcode;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 import org.bsm.leetcode.model.ListNode;
 import org.bsm.leetcode.model.TreeNode;
@@ -768,8 +757,28 @@ class Solution {
         return pathSumResult;
     }
 
+    /**
+     * 114. 二叉树展开为链表(算法思想，把右子树，加到左子树的最右边，然后把整个左子树放到根节点的右节点上，每运算一次)
+     * @param root
+     */
+    public static void flatten(TreeNode root) {
+        TreeNode curr = root;
+        while (curr !=null){
+            TreeNode pre = curr.left;
+            if(pre !=null){
+                while (pre.right!=null){
+                    pre = pre.right;
+                }
+                pre.right = curr.right;
+                curr.right = curr.left;
+                curr.left = null;
+            }
+            curr  = curr.right;
+        }
+    }
+
     public static void main(String[] args) {
-        TreeNode tree = new TreeNode(5, new TreeNode(4, new TreeNode(11, new TreeNode(7), new TreeNode(2)), null), new TreeNode(8, new TreeNode(13), new TreeNode(4, new TreeNode(5), new TreeNode(1))));
+        TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(3), new TreeNode(4)), new TreeNode(5, null, new TreeNode(6)));
         TreeNode tree1 = new TreeNode(3, new TreeNode(2), new TreeNode(4, new TreeNode(3), new TreeNode(6)));
         TreeNode tree2 = new TreeNode(2, new TreeNode(1), new TreeNode(1));
         ListNode five = new ListNode(0, new ListNode(5, new ListNode(9)));
@@ -798,8 +807,8 @@ class Solution {
          * [1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1] 2
          */
 //		merge(arr,0, arr1,1);
-
-        System.out.println(pathSum(tree, 22));
+        flatten(tree);
+//        System.out.println();
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
