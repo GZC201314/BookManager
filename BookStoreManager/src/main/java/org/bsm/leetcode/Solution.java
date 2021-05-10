@@ -3,6 +3,7 @@ package org.bsm.leetcode;
 import java.util.*;
 
 import org.bsm.leetcode.model.ListNode;
+import org.bsm.leetcode.model.Node;
 import org.bsm.leetcode.model.TreeNode;
 
 /**
@@ -759,26 +760,109 @@ class Solution {
 
     /**
      * 114. 二叉树展开为链表(算法思想，把右子树，加到左子树的最右边，然后把整个左子树放到根节点的右节点上，每运算一次)
+     *
      * @param root
      */
     public static void flatten(TreeNode root) {
         TreeNode curr = root;
-        while (curr !=null){
+        while (curr != null) {
             TreeNode pre = curr.left;
-            if(pre !=null){
-                while (pre.right!=null){
+            if (pre != null) {
+                while (pre.right != null) {
                     pre = pre.right;
                 }
                 pre.right = curr.right;
                 curr.right = curr.left;
                 curr.left = null;
             }
-            curr  = curr.right;
+            curr = curr.right;
         }
     }
 
+    /**
+     * 115. 不同的子序列(动态规划算法)
+     * dp[i][j] 代表 T 前 i 字符串可以由 S j 字符串组成最多个数.
+     * <p>
+     * 转移方程
+     * <p>
+     * 当 S[j] == T[i] , dp[i][j] = dp[i-1][j-1] + dp[i][j-1];
+     * <p>
+     * 当 S[j] != T[i] , dp[i][j] = dp[i][j-1]
+     *
+     * @param s
+     * @param t
+     * @return 不同的子序列的个数
+     */
+    public static int numDistinct(String s, String t) {
+        if (t.length() > s.length()) {
+            return 0;
+        }
+        int m = s.length();
+        int n = t.length();
+        int[][] dp = new int[n + 1][m + 1];
+        for (int i = 0; i <= m; i++) {
+            dp[0][i] = 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                if (s.charAt(j - 1) == t.charAt(i - 1)) {
+                    dp[i][j] = dp[i][j - 1] + dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+        return dp[n][m];
+    }
+
+    /**
+     * 116. 填充每个节点的下一个右侧节点指针
+     * 队列方法
+     * @param root
+     * @return
+     */
+//    public static Node connect_deque(Node root) {
+//        if (root == null) {
+//            return null;
+//        }
+//        Deque<Node> deque = new ArrayDeque<>();
+//        deque.add(root);
+//        int count = 0;
+//        while (!deque.isEmpty()){
+//            for (int i = 0; i < Math.pow(2, count); i++) {
+//                Node node = deque.pollFirst();
+//                if (i != Math.pow(2, count) - 1) {
+//                    node.next = deque.peekFirst();
+//                }
+//                if(node.left!=null){
+//                    deque.addLast(node.left);
+//                    deque.addLast(node.right);
+//                }
+//            }
+//            count++;
+//        }
+//        return root;
+//    }
+    public static Node connect(Node root) {
+        if (root == null) {
+            return null;
+        }
+        if (root.left == null) {
+            return root;
+        }
+        root.left.next = root.right;
+        Node left = root.left;
+        Node right = root.right;
+        if (root.next != null) {
+            right.next = root.next.left;
+        }
+        connect(root.left);
+        connect(root.right);
+        return root;
+    }
     public static void main(String[] args) {
-        TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(3), new TreeNode(4)), new TreeNode(5, null, new TreeNode(6)));
+        TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
+        Node node = new Node(1, new Node(2, new Node(4), new Node(5), null), new Node(3, new Node(6), new Node(7), null), null);
         TreeNode tree1 = new TreeNode(3, new TreeNode(2), new TreeNode(4, new TreeNode(3), new TreeNode(6)));
         TreeNode tree2 = new TreeNode(2, new TreeNode(1), new TreeNode(1));
         ListNode five = new ListNode(0, new ListNode(5, new ListNode(9)));
@@ -807,8 +891,8 @@ class Solution {
          * [1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1] 2
          */
 //		merge(arr,0, arr1,1);
-        flatten(tree);
-//        System.out.println();
+//        flatten(tree);
+        System.out.println(connect(node));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
