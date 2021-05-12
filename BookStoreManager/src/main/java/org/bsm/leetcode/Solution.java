@@ -818,6 +818,7 @@ class Solution {
     /**
      * 116. 填充每个节点的下一个右侧节点指针
      * 队列方法
+     *
      * @param root
      * @return
      */
@@ -843,7 +844,7 @@ class Solution {
 //        }
 //        return root;
 //    }
-    public static Node connect(Node root) {
+    public static Node connect1(Node root) {
         if (root == null) {
             return null;
         }
@@ -856,10 +857,136 @@ class Solution {
         if (root.next != null) {
             right.next = root.next.left;
         }
-        connect(root.left);
-        connect(root.right);
+        connect1(root.left);
+        connect1(root.right);
         return root;
     }
+
+    /**
+     * 117. 填充每个节点的下一个右侧节点指针,不是完全二叉树 II
+     *
+     * @param root
+     * @return
+     */
+    public static Node connect(Node root) {
+        List<List<Integer>> reLists = new ArrayList<>();
+        if (root == null) {
+            return null;
+        }
+        Queue<Node> queue1 = new LinkedList<>();
+        Queue<Node> queue2 = new LinkedList<>();
+        queue1.add(root);
+        while (!queue1.isEmpty() || !queue2.isEmpty()) {
+            while (!queue1.isEmpty()) {
+                Node node = queue1.poll();
+                if (queue1.peek() != null) {
+                    node.next = queue1.peek();
+                }
+                if (node.left != null) {
+                    queue2.add(node.left);
+                }
+                if (node.right != null) {
+                    queue2.add(node.right);
+                }
+            }
+            while (!queue2.isEmpty()) {
+                Node node = queue2.poll();
+                if (queue2.peek() != null) {
+                    node.next = queue1.peek();
+                }
+                if (node.left != null) {
+                    queue1.add(node.left);
+                }
+                if (node.right != null) {
+                    queue1.add(node.right);
+                }
+            }
+        }
+        return root;
+    }
+
+    /**
+     * 118. 杨辉三角
+     *
+     * @param numRows
+     * @return
+     */
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (numRows == 0) {
+            return result;
+        }
+        List<Integer> row1 = new ArrayList<>();
+        row1.add(1);
+        result.add(row1);
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> row = new ArrayList<>();
+            row.add(1);
+            List<Integer> rowlast = result.get(result.size() - 1);
+            for (int j = 1; j < rowlast.size(); j++) {
+                row.add(rowlast.get(j - 1) + rowlast.get(j));
+            }
+            row.add(1);
+            result.add(row);
+        }
+        return result;
+    }
+
+    /**
+     * 119. 杨辉三角 II
+     * 给定一个非负索引 k，其中 k ≤ 33，返回杨辉三角的第 k 行。
+     *
+     * @param rowIndex
+     * @return
+     */
+    public static List<Integer> getRow(int rowIndex) {
+        List<Integer> row1 = new ArrayList<>();
+        row1.add(1);
+        for (int i = 1; i < rowIndex; i++) {
+            List<Integer> row = new ArrayList<>();
+            row.add(1);
+            for (int j = 1; j < row1.size(); j++) {
+                row.add(row1.get(j - 1) + row1.get(j));
+            }
+            row.add(1);
+            row1 = new ArrayList<>(row);
+        }
+        return row1;
+    }
+
+    /**
+     * 120. 三角形最小路径和
+     * 给定一个三角形 triangle ，找出自顶向下的最小路径和。
+     *
+     * @param triangle 三角形 triangle
+     * @return 最小路径和
+     */
+    public static int minimumTotal(List<List<Integer>> triangle) {
+        if (triangle == null) {
+            return 0;
+        }
+        for (int i = 1; i < triangle.size(); i++) {
+            for (int j = 0; j < triangle.get(i).size(); j++) {
+                if(j==0){
+                    triangle.get(i).set(j,triangle.get(i - 1).get(j)+triangle.get(i).get(j));
+                }else if (j == triangle.get(i - 1).size()) {
+                    triangle.get(i).set(j, triangle.get(i - 1).get(j - 1) + triangle.get(i).get(j));
+                } else {
+                    int min = Math.min(triangle.get(i - 1).get(j - 1), triangle.get(i - 1).get(j));
+                    triangle.get(i).set(j, min + triangle.get(i).get(j));
+                }
+            }
+        }
+        int min = triangle.get(triangle.size() - 1).get(0);
+        for (int i = 1; i < triangle.get(triangle.size() - 1).size(); i++) {
+            if (min > triangle.get(triangle.size() - 1).get(i)) {
+                min = triangle.get(triangle.size() - 1).get(i);
+            }
+        }
+        return min;
+    }
+
+
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
         Node node = new Node(1, new Node(2, new Node(4), new Node(5), null), new Node(3, new Node(6), new Node(7), null), null);
@@ -880,6 +1007,11 @@ class Solution {
         int[] preorder = new int[]{-10, -3, 0, 5, 9};
         int[] inorder = new int[]{9, 3, 15, 20, 7};
         int[] postorder = new int[]{9, 15, 7, 20, 3};
+        List<List<Integer>> triangle = new ArrayList<>();
+        triangle.add(new ArrayList<>(Arrays.asList(2)));
+        triangle.add(new ArrayList<>(Arrays.asList(3, 4)));
+        triangle.add(new ArrayList<>(Arrays.asList(6, 5, 7)));
+        triangle.add(new ArrayList<>(Arrays.asList(4, 1, 8, 3)));
 //		String[] strArr = new String[] {"eat", "tea", "tan", "ate", "nat", "bat"};
 
 //		char[][] board = { { 'A', 'B', 'C', 'E' }, { 'S', 'F', 'C', 'S' }, { 'A', 'D', 'E', 'E' } };
@@ -892,7 +1024,7 @@ class Solution {
          */
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(connect(node));
+        System.out.println(minimumTotal(triangle));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
