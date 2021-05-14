@@ -1014,18 +1014,49 @@ class Solution {
         return maxprofit;
     }
 
-//    public static int maxProfit(int[] prices) {
-//        int min = Integer.MAX_VALUE;
-//        int max = prices[0];
-//        for (int i = 0; i < prices.length; i++) {
-//            if (prices[i] < min) {
-//                min = prices[i];
-//            } else if () {
-//                maxprofit = prices[i] - min;
-//            }
-//        }
-//        return maxprofit;
-//    }
+    /**
+     * 122. 买卖股票的最佳时机 II
+     * @param prices 价格数组
+     * @return
+     */
+    public static int maxProfit2(int[] prices) {
+        int max =0;
+        int length = prices.length;
+        for (int i = 1; i < length; i++) {
+            if(prices[i]>prices[i-1]){
+                max +=(prices[i]-prices[i-1]);
+            }
+        }
+        return max;
+    }
+
+    /**
+     * 123. 买卖股票的最佳时机 III
+     * 给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+     *
+     * 设计一个算法来计算你所能获取的最大利润。你最多可以完成两笔交易。
+     *
+     * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+     * 状态转移方程
+     * buy1 = max{buy1,-prices[i]}
+     * sell1 = max{sell1,prices[i]+buy1}
+     * buy2 = max{buy2,sell1-prices[i]}
+     * sell2 = max{sell2,buy2+prices[i]}
+     * @param prices 价格数组
+     * @return 最大利润
+     */
+    public static int maxProfit(int[] prices) {
+        int n = prices.length;
+        int buy1 = -prices[0], sell1 = 0;
+        int buy2 = -prices[0], sell2 = 0;
+        for (int i = 1; i < n; ++i) {
+            buy1 = Math.max(buy1, -prices[i]);
+            sell1 = Math.max(sell1, buy1 + prices[i]);
+            buy2 = Math.max(buy2, sell1 - prices[i]);
+            sell2 = Math.max(sell2, buy2 + prices[i]);
+        }
+        return sell2;
+    }
 
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
@@ -1059,9 +1090,7 @@ class Solution {
 //		nextPermutation(arr);
 //		String[] strarr = new String[] { "What", "must", "be", "acknowledgment", "shall", "be" };
         long start = new Date().getTime();
-        /**
-         * [1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,1,1,1,1] 2
-         */
+
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
         System.out.println(maxProfit1(new int[]{1, 2}));
