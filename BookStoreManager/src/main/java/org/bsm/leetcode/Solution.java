@@ -1016,15 +1016,16 @@ class Solution {
 
     /**
      * 122. 买卖股票的最佳时机 II
+     *
      * @param prices 价格数组
      * @return
      */
     public static int maxProfit2(int[] prices) {
-        int max =0;
+        int max = 0;
         int length = prices.length;
         for (int i = 1; i < length; i++) {
-            if(prices[i]>prices[i-1]){
-                max +=(prices[i]-prices[i-1]);
+            if (prices[i] > prices[i - 1]) {
+                max += (prices[i] - prices[i - 1]);
             }
         }
         return max;
@@ -1033,15 +1034,16 @@ class Solution {
     /**
      * 123. 买卖股票的最佳时机 III
      * 给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
-     *
+     * <p>
      * 设计一个算法来计算你所能获取的最大利润。你最多可以完成两笔交易。
-     *
+     * <p>
      * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
      * 状态转移方程
      * buy1 = max{buy1,-prices[i]}
      * sell1 = max{sell1,prices[i]+buy1}
      * buy2 = max{buy2,sell1-prices[i]}
      * sell2 = max{sell2,buy2+prices[i]}
+     *
      * @param prices 价格数组
      * @return 最大利润
      */
@@ -1057,6 +1059,67 @@ class Solution {
         }
         return sell2;
     }
+
+    /**
+     * 124. 二叉树中的最大路径和
+     * 路径 被定义为一条从树中任意节点出发，沿父节点-子节点连接，达到任意节点的序列。同一个节点在一条路径序列中 至多出现一次 。该路径 至少包含一个 节点，且不一定经过根节点。
+     * 路径和 是路径中各节点值的总和。
+     * 给你一个二叉树的根节点 root，返回其 最大路径和 。
+     *
+     * @param root
+     * @return
+     */
+    private static int max = Integer.MIN_VALUE;
+
+    public static int maxPathSum(TreeNode root) {
+        maxSum(root);
+        return max;
+
+    }
+
+    public static int maxSum(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        int leftNum = Math.max(maxSum(node.left), 0);
+        int rightNum = Math.max(maxSum(node.right), 0);
+        if (max < (node.val + leftNum + rightNum)) {
+            max = (node.val + leftNum + rightNum);
+        }
+        return node.val + Math.max(leftNum, rightNum);
+    }
+
+    /**
+     * 125. 验证回文串
+     * 给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+     * 说明：本题中，我们将空字符串定义为有效的回文串。
+     *
+     * @param s
+     * @return
+     */
+    public static boolean isPalindrome(String s) {
+        int end = s.length() - 1;
+        int start = 0;
+        while (start < end) {
+            if (Character.isLetterOrDigit(s.charAt(start)) && Character.isLetterOrDigit(s.charAt(end))) {
+                if (Character.toUpperCase(s.charAt(start)) != Character.toUpperCase(s.charAt(end))) {
+                    return false;
+                } else {
+                    start++;
+                    end--;
+                }
+            } else if (!Character.isLetterOrDigit(s.charAt(start))) {
+                start++;
+            } else if (!Character.isLetterOrDigit(s.charAt(end))) {
+                end--;
+            }
+        }
+        return true;
+    }
+
+//    public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+//
+//    }
 
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
@@ -1093,7 +1156,7 @@ class Solution {
 
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(maxProfit1(new int[]{1, 2}));
+        System.out.println(isPalindrome("race a car"));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
