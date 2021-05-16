@@ -1117,9 +1117,68 @@ class Solution {
         return true;
     }
 
-//    public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
-//
-//    }
+    /**
+     * 127. 单词接龙
+     * 字典 wordList 中从单词 beginWord 和 endWord 的 转换序列 是一个按下述规格形成的序列：
+     *
+     * 序列中第一个单词是 beginWord 。
+     * 序列中最后一个单词是 endWord 。
+     * 每次转换只能改变一个字母。
+     * 转换过程中的中间单词必须是字典wordList 中的单词。
+     * 给你两个单词 beginWord和 endWord 和一个字典 wordList ，找到从beginWord 到endWord 的 最短转换序列 中的 单词数目 。如果不存在这样的转换序列，返回 0。
+     *
+     * @param beginWord
+     * @param endWord
+     * @param wordList
+     * @return
+     */
+    public static int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (wordList.size() == 0 || !wordList.contains(endWord)) {
+            return 0;
+        }
+        // 第 1 步：先将 wordList 放到哈希表里，便于判断某个单词是否在 wordList 里
+        Set<String> wordSet = new HashSet<>(wordList);
+        wordSet.remove(beginWord);
+        // 第 2 步：图的广度优先遍历，必须使用队列和表示是否访问过的 visited 哈希表
+        Queue<String> queue = new ArrayDeque<>();
+        queue.offer(beginWord);
+        Queue<String> visited = new ArrayDeque<>();
+        visited.offer(beginWord);
+        // 第 3 步：开始广度优先遍历，包含起点，因此初始化的时候步数为 1
+        int step = 1;
+        int wordlen = beginWord.length();
+        while (!queue.isEmpty()) {
+            int wordSize = queue.size();
+            //循环每一个节点，构造部图构
+            for (int i = 0; i < wordSize; i++) {
+                String word = queue.poll();
+                for (int j = 0; j < wordlen; j++) {
+                    char oldchar = word.charAt(j);
+                    for (char k = 'a'; k <= 'z'; k++) {
+                        if (k == oldchar) {
+                            continue;
+                        }
+                        //对于有重复的字符要特殊处理
+//                        String newWord = word.replace(oldchar, k);
+                        char[] chars = word.toCharArray();
+                        chars[j] = k;
+                        String newWord = new String(chars);
+                        if (newWord.equals(endWord)) {
+                            return step + 1;
+                        }
+                        if (wordSet.contains(newWord)) {
+                            if (!visited.contains(newWord)) {
+                                visited.add(newWord);
+                                queue.add(newWord);
+                            }
+                        }
+                    }
+                }
+            }
+            step++;
+        }
+        return 0;
+    }
 
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
@@ -1151,12 +1210,12 @@ class Solution {
 //		char[][] board = { { 'A', 'B', 'C', 'E' }, { 'S', 'F', 'C', 'S' }, { 'A', 'D', 'E', 'E' } };
 //		String word = "ABCCED";
 //		nextPermutation(arr);
-//		String[] strarr = new String[] { "What", "must", "be", "acknowledgment", "shall", "be" };
+        List<String> strlist = new ArrayList<>(Arrays.asList("lest","leet","lose","code","lode","robe","lost"));
         long start = new Date().getTime();
 
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(isPalindrome("race a car"));
+        System.out.println(ladderLength("leet", "code", strlist));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
