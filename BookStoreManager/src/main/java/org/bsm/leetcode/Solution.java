@@ -1120,7 +1120,7 @@ class Solution {
     /**
      * 127. 单词接龙
      * 字典 wordList 中从单词 beginWord 和 endWord 的 转换序列 是一个按下述规格形成的序列：
-     *
+     * <p>
      * 序列中第一个单词是 beginWord 。
      * 序列中最后一个单词是 endWord 。
      * 每次转换只能改变一个字母。
@@ -1180,14 +1180,43 @@ class Solution {
         return 0;
     }
 
+    /**
+     * 129. 求根节点到叶节点数字之和
+     * 给你一个二叉树的根节点 root ，树中每个节点都存放有一个 0 到 9 之间的数字。
+     * 每条从根节点到叶节点的路径都代表一个数字：
+     * <p>
+     * 例如，从根节点到叶节点的路径 1 -> 2 -> 3 表示数字 123 。
+     * 计算从根节点到叶节点生成的 所有数字之和 。
+     * <p>
+     * 叶节点 是指没有子节点的节点。
+     *
+     * @param root
+     * @return
+     */
+    public static int sumNumbers(TreeNode root) {
+        return dfs_sumNumbers(root,0);
+    }
+
+    public static int dfs_sumNumbers(TreeNode root, int levelSum) {
+        if (root == null) {
+            return 0;
+        }
+        int sum = levelSum * 10 + root.val;
+        if (root.left == null && root.right == null) {
+            return sum;
+        }
+        return dfs_sumNumbers(root.left,sum)+dfs_sumNumbers(root.right,sum);
+    }
+
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
         Node node = new Node(1, new Node(2, new Node(4), new Node(5), null), new Node(3, new Node(6), new Node(7), null), null);
-        TreeNode tree1 = new TreeNode(3, new TreeNode(2), new TreeNode(4, new TreeNode(3), new TreeNode(6)));
+        TreeNode tree1 = new TreeNode(1, new TreeNode(2), new TreeNode(3));
         TreeNode tree2 = new TreeNode(2, new TreeNode(1), new TreeNode(1));
         ListNode five = new ListNode(0, new ListNode(5, new ListNode(9)));
         ListNode four = new ListNode(-3, five);
         ListNode l1 = new ListNode(-10, four);
+        TreeNode l2 = new TreeNode(4, new TreeNode(9, new TreeNode(5), new TreeNode(1)), new TreeNode(0));
 //
 //		ListNode f = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
         ListNode f = new ListNode(5);
@@ -1210,12 +1239,12 @@ class Solution {
 //		char[][] board = { { 'A', 'B', 'C', 'E' }, { 'S', 'F', 'C', 'S' }, { 'A', 'D', 'E', 'E' } };
 //		String word = "ABCCED";
 //		nextPermutation(arr);
-        List<String> strlist = new ArrayList<>(Arrays.asList("lest","leet","lose","code","lode","robe","lost"));
+        List<String> strlist = new ArrayList<>(Arrays.asList("lest", "leet", "lose", "code", "lode", "robe", "lost"));
         long start = new Date().getTime();
 
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(ladderLength("leet", "code", strlist));
+        System.out.println(sumNumbers(l2));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
