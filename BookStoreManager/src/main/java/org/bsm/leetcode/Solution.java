@@ -127,11 +127,11 @@ class Solution {
 
     public static List<String> restoreIpAddresses(String s) {
         segments = new int[SEG_COUNT];
-        dfs(s, 0, 0);
+        dfs_findLadders(s, 0, 0);
         return ans;
     }
 
-    public static void dfs(String s, int segId, int segStart) {
+    public static void dfs_findLadders(String s, int segId, int segStart) {
         // 如果找到了 4 段 IP 地址并且遍历完了字符串，那么就是一种答案
         if (segId == SEG_COUNT) {
             if (segStart == s.length()) {
@@ -155,7 +155,7 @@ class Solution {
         // 由于不能有前导零，如果当前数字为 0，那么这一段 IP 地址只能为 0
         if (s.charAt(segStart) == '0') {
             segments[segId] = 0;
-            dfs(s, segId + 1, segStart + 1);
+            dfs_findLadders(s, segId + 1, segStart + 1);
         }
 
         // 一般情况，枚举每一种可能性并递归
@@ -164,7 +164,7 @@ class Solution {
             addr = addr * 10 + (s.charAt(segEnd) - '0');
             if (addr > 0 && addr <= 0xFF) {
                 segments[segId] = addr;
-                dfs(s, segId + 1, segEnd + 1);
+                dfs_findLadders(s, segId + 1, segEnd + 1);
             } else {
                 break;
             }
@@ -1194,7 +1194,7 @@ class Solution {
      * @return
      */
     public static int sumNumbers(TreeNode root) {
-        return dfs_sumNumbers(root,0);
+        return dfs_sumNumbers(root, 0);
     }
 
     public static int dfs_sumNumbers(TreeNode root, int levelSum) {
@@ -1205,7 +1205,141 @@ class Solution {
         if (root.left == null && root.right == null) {
             return sum;
         }
-        return dfs_sumNumbers(root.left,sum)+dfs_sumNumbers(root.right,sum);
+        return dfs_sumNumbers(root.left, sum) + dfs_sumNumbers(root.right, sum);
+    }
+
+    /**
+     * 126. 单词接龙 II
+     * <p>
+     * 按字典wordList 完成从单词 beginWord 到单词 endWord 转化，一个表示此过程的 转换序列 是形式上像
+     * beginWord ->s1->s2->...->sk这样的单词序列，并满足：
+     * 每对相邻的单词之间仅有单个字母不同。
+     * 转换过程中的每个单词si（1<=i<=k）必须是字典wordList中的单词。注意beginWord不必是字典wordList中的单词。
+     * sk==endWord
+     * 给你两个单词beginWord和endWord，以及一个字典wordList。
+     * 请你找出并返回所有从beginWord到endWord的最短转换序列，
+     * 如果不存在这样的转换序列，返回一个空列表。
+     * 每个序列都应该以单词列表[beginWord,s1,s2,...,sk]的形式返回。
+     *
+     * @param beginWord
+     * @param endWord
+     * @param wordList
+     * @return
+     */
+    public static List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
+        List<List<String>> res = new ArrayList<>();
+        // 因为需要快速判断扩展出的单词是否在 wordList 里，因此需要将 wordList 存入哈希表，这里命名为「字典」
+        Set<String> dict = new HashSet<>(wordList);
+        // 特殊用例判断
+        if (!dict.contains(endWord)) {
+            return res;
+        }
+
+        dict.remove(beginWord);
+
+        // 第 1 步：广度优先遍历建图
+        // 记录扩展出的单词是在第几次扩展的时候得到的，key：单词，value：在广度优先遍历的第几层
+        Map<String, Integer> steps = new HashMap<>();
+        steps.put(beginWord, 0);
+        // 记录了单词是从哪些单词扩展而来，key：单词，value：单词列表，这些单词可以变换到 key ，它们是一对多关系
+        Map<String, List<String>> from = new HashMap<>();
+        int step = 1;
+        boolean found = false;
+        int wordLen = beginWord.length();
+        Queue<String> queue = new LinkedList<>();
+        queue.offer(beginWord);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                String currWord = queue.poll();
+                char[] charArray = currWord.toCharArray();
+                // 将每一位替换成 26 个小写英文字母
+                for (int j = 0; j < wordLen; j++) {
+                    char origin = charArray[j];
+                    for (char c = 'a'; c <= 'z'; c++) {
+                        charArray[j] = c;
+                        String nextWord = String.valueOf(charArray);
+                        if (steps.containsKey(nextWord) && step == steps.get(nextWord)) {
+                            from.get(nextWord).add(currWord);
+                        }
+                        if (!dict.contains(nextWord)) {
+                            continue;
+                        }
+                        // 如果从一个单词扩展出来的单词以前遍历过，距离一定更远，为了避免搜索到已经遍历到，且距离更远的单词，需要将它从 dict 中删除
+                        dict.remove(nextWord);
+                        // 这一层扩展出的单词进入队列
+                        queue.offer(nextWord);
+
+                        // 记录 nextWord 从 currWord 而来
+                        from.putIfAbsent(nextWord, new ArrayList<>());
+                        from.get(nextWord).add(currWord);
+                        // 记录 nextWord 的 step
+                        steps.put(nextWord, step);
+                        if (nextWord.equals(endWord)) {
+                            found = true;
+                        }
+                    }
+                    charArray[j] = origin;
+                }
+            }
+            step++;
+            if (found) {
+                break;
+            }
+        }
+
+        // 第 2 步：深度优先遍历找到所有解，从 endWord 恢复到 beginWord ，所以每次尝试操作 path 列表的头部
+        if (found) {
+            Deque<String> path = new ArrayDeque<>();
+            path.add(endWord);
+            dfs_findLadders(from, path, beginWord, endWord, res);
+        }
+        return res;
+    }
+
+    public static void dfs_findLadders(Map<String, List<String>> from, Deque<String> path, String beginWord, String cur, List<List<String>> res) {
+        if (cur.equals(beginWord)) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        for (String precursor : from.get(cur)) {
+            path.addFirst(precursor);
+            dfs_findLadders(from, path, beginWord, precursor, res);
+            path.removeFirst();
+        }
+    }
+
+    /**
+     * 128. 最长连续序列
+     * 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+     * 进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？
+     *
+     * @param nums
+     * @return
+     */
+    public static int longestConsecutive(int[] nums) {
+        Set<Integer> set_nums = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            set_nums.add(nums[i]);
+        }
+        int longestConsecutive = 0;
+
+        for (int integer : set_nums) {
+            int currlongestCons = 0;
+            int currNum = 0;
+            if (!set_nums.contains(integer - 1)) {
+                currlongestCons++;
+                currNum = integer;
+                while (set_nums.contains(currNum + 1)) {
+                    currlongestCons++;
+                    currNum++;
+                }
+                if (longestConsecutive < currlongestCons) {
+                    longestConsecutive = currlongestCons;
+                }
+            }
+        }
+        return longestConsecutive;
     }
 
     public static void main(String[] args) {
