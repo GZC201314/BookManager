@@ -1342,6 +1342,97 @@ class Solution {
         return longestConsecutive;
     }
 
+    /**
+     * 130. 被围绕的区域
+     * 给你一个 m x n 的矩阵 board ，由若干字符 'X' 和 'O' ，找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+     *
+     * @param board 围棋矩阵
+     */
+    public static void solve(char[][] board) {
+        if (board == null) {
+            return;
+        }
+        int gao = board.length;
+        int chang = board[0].length;
+        // 从矩阵的边缘向内部扩散寻找没被包围的“O”
+        for (int i = 0; i < gao; i++) {
+            dfs_solve(board, i, 0);
+            dfs_solve(board, i, chang - 1);
+        }
+        for (int i = 0; i < chang; i++) {
+            dfs_solve(board, 0, i);
+            dfs_solve(board, gao - 1, i);
+        }
+        for (int i = 0; i < gao; i++) {
+            for (int j = 0; j < chang; j++) {
+                if (board[i][j] == '#') {
+                    board[i][j] = 'O';
+                } else if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+
+    public static void dfs_solve(char[][] board, int x, int y) {
+        int chang = board[0].length;
+        int gao = board.length;
+        if (x < 0 || x >= gao || y < 0 || y >= chang || board[x][y] != 'O') {
+            return;
+        }
+        board[x][y] = '#';
+        dfs_solve(board, x + 1, y);
+        dfs_solve(board, x - 1, y);
+        dfs_solve(board, x, y + 1);
+        dfs_solve(board, x, y - 1);
+    }
+
+    /**
+     * 131. 分割回文串
+     * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
+     * <p>
+     * 回文串 是正着读和反着读都一样的字符串。
+     *
+     * @param s
+     * @return
+     */
+    private static List<List<String>> partition_result = new ArrayList<>();
+    // 存储s[i][j] 是否是回文串，防止重复计算
+    private static boolean[][] checkStr;
+
+    public static List<List<String>> partition(String s) {
+        int n = s.length();
+
+        checkStr = new boolean[n][n];
+        for (int i = 0; i < n; ++i) {
+            Arrays.fill(checkStr[i], true);
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i + 1; j < n; j++) {
+                checkStr[i][j] = s.charAt(i) == s.charAt(j) && checkStr[i + 1][j - 1];
+            }
+        }
+        List<String> res = new ArrayList<>();
+        dfs_partition(s,res,0);
+        return partition_result;
+    }
+
+    public static void dfs_partition(String s, List<String> res, int i) {
+        int n = s.length();
+        if (i == n) {
+            partition_result.add(new ArrayList<>(res));
+            return;
+        }
+        for (int j = i; j < n; j++) {
+            if (checkStr[i][j]) {
+                res.add(s.substring(i,j+1));
+                dfs_partition(s,res,j-1);
+                res.remove(res.size()-1);
+            }
+        }
+    }
+
+
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
         Node node = new Node(1, new Node(2, new Node(4), new Node(5), null), new Node(3, new Node(6), new Node(7), null), null);
