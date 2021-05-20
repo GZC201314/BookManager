@@ -1413,7 +1413,7 @@ class Solution {
             }
         }
         List<String> res = new ArrayList<>();
-        dfs_partition(s,res,0);
+        dfs_partition(s, res, 0);
         return partition_result;
     }
 
@@ -1425,13 +1425,57 @@ class Solution {
         }
         for (int j = i; j < n; j++) {
             if (checkStr[i][j]) {
-                res.add(s.substring(i,j+1));
-                dfs_partition(s,res,j-1);
-                res.remove(res.size()-1);
+                res.add(s.substring(i, j + 1));
+                dfs_partition(s, res, j - 1);
+                res.remove(res.size() - 1);
             }
         }
     }
 
+    /**
+     * 132. 分割回文串 II
+     * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是回文。
+     * <p>
+     * 返回符合要求的 最少分割次数 。
+     *
+     * @param s
+     * @return
+     */
+    private static int[] f;
+
+    public static int minCut(String s) {
+        int n = s.length();
+        f = new int[n];
+        f[0] = 0;
+        char[] chararr = s.toCharArray();
+        for (int i = 1; i < n; i++) {
+            //寻找之前最小的分割
+            int min = Integer.MAX_VALUE;
+            for (int j = 0; j <= i; j++) {
+                if (checkHWS(chararr,j,i)){
+                    if(j==0){
+                        min =0;
+                    }else if(f[j-1]+1<min){
+                        min = f[j-1]+1;
+                    }
+                }
+            }
+            f[i] = min;
+
+        }
+        return f[n-1];
+    }
+
+    public static boolean checkHWS(char[] chararr, int left, int right) {
+        while (left < right) {
+            if (chararr[left] != chararr[right]) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
 
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
@@ -1469,7 +1513,7 @@ class Solution {
 
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(sumNumbers(l2));
+        System.out.println(minCut("aab"));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
