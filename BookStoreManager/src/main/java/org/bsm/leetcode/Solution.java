@@ -1452,18 +1452,18 @@ class Solution {
             //寻找之前最小的分割
             int min = Integer.MAX_VALUE;
             for (int j = 0; j <= i; j++) {
-                if (checkHWS(chararr,j,i)){
-                    if(j==0){
-                        min =0;
-                    }else if(f[j-1]+1<min){
-                        min = f[j-1]+1;
+                if (checkHWS(chararr, j, i)) {
+                    if (j == 0) {
+                        min = 0;
+                    } else if (f[j - 1] + 1 < min) {
+                        min = f[j - 1] + 1;
                     }
                 }
             }
             f[i] = min;
 
         }
-        return f[n-1];
+        return f[n - 1];
     }
 
     public static boolean checkHWS(char[] chararr, int left, int right) {
@@ -1475,6 +1475,69 @@ class Solution {
             right--;
         }
         return true;
+    }
+
+    /**
+     * 133. 克隆图
+     * 给你无向 连通 图中一个节点的引用，请你返回该图的 深拷贝（克隆）。
+     *
+     * @param node
+     * @return
+     */
+    private static Map<Node, Node> visited = new HashMap<>();
+
+    public static Node cloneGraph(Node node) {
+        if (node == null) {
+            return null;
+        }
+        if (visited.containsKey(node)) {
+            return visited.get(node);
+        }
+        Node cloneNode = new Node(node.val, new ArrayList<>());
+        visited.put(node, cloneNode);
+        for (Node neighbor : node.neighbors) {
+            cloneNode.neighbors.add(cloneGraph(neighbor));
+        }
+        return cloneNode;
+    }
+
+    /**
+     * 134. 加油站
+     * <p>
+     * 在一条环路上有个加油站，其中第i个加油站有汽油gas[i]升。
+     * <p>
+     * 你有一辆油箱容量无限的的汽车，从第 i 个加油站开往第 i+1个加油站需要消耗汽油cost[i]升。你从其中的一个加油站出发，开始时油箱为空。
+     * <p>
+     * 如果你可以绕环路行驶一周，则返回出发时加油站的编号，否则返回 -1。
+     *
+     * @param gas
+     * @param cost
+     * @return
+     */
+    public static int canCompleteCircuit(int[] gas, int[] cost) {
+        int size = gas.length;
+        int result = -1;
+        int gasNum = 0;
+        for (int i = 0; i < size; i++) {
+            if (gasNum + gas[i] < cost[i]) {
+                continue;
+            }
+            gasNum += (gas[i] - cost[i]);
+            int newgasNum = gasNum;
+            boolean isOK = true;
+            for (int j = i + 1; j < size + i + 1; j++) {
+                if (newgasNum + gas[j % size] < cost[j % size]) {
+                    isOK = false;
+                    break;
+                }
+                newgasNum += (gas[j % size] - cost[j % size]);
+            }
+            gasNum = 0;
+            if (isOK) {
+                return i;
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {
@@ -1495,8 +1558,8 @@ class Solution {
 //		int[][] arr = new int[][] { { 1, 3, 5, 7 } };
 //		char[][] arr = new char[][] {{'1','0','1','0','0'},{'1','0','1','1','1'},{'1','1','1','1','1'},{'1','0','0','1','0'}};
 //		int[][] arr = new int[][] { { 1, 5 } };
-        int[] preorder = new int[]{-10, -3, 0, 5, 9};
-        int[] inorder = new int[]{9, 3, 15, 20, 7};
+        int[] preorder = new int[]{5, 1, 2, 3, 4};
+        int[] inorder = new int[]{4, 4, 1, 5, 1};
         int[] postorder = new int[]{9, 15, 7, 20, 3};
         List<List<Integer>> triangle = new ArrayList<>();
         triangle.add(new ArrayList<>(Arrays.asList(2)));
@@ -1513,7 +1576,7 @@ class Solution {
 
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(minCut("aab"));
+        System.out.println(canCompleteCircuit(preorder, inorder));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
