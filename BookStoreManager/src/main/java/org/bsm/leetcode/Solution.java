@@ -1540,6 +1540,43 @@ class Solution {
         return result;
     }
 
+    /**
+     * 135. 分发糖果
+     * 老师想给孩子们分发糖果，有N个孩子站成了一条直线，老师会根据每个孩子的表现，预先给他们评分。
+     * 你需要按照以下要求，帮助老师给这些孩子分发糖果：
+     * 每个孩子至少分配到 1 个糖果。
+     * 评分更高的孩子必须比他两侧的邻位孩子获得更多的糖果。
+     * 那么这样下来，老师至少需要准备多少颗糖果呢？
+     * <p>
+     * 算法：左规则 右规则 选取对应位置的最大值
+     *
+     * @param ratings
+     * @return
+     */
+    public static int candy(int[] ratings) {
+        int length = ratings.length;
+        int[] dp = new int[length];
+        dp[0] = 1;
+        for (int i = 1; i < length; i++) {
+            if (ratings[i - 1] < ratings[i]) {
+                dp[i] = dp[i - 1] + 1;
+            } else {
+                dp[i] = 1;
+            }
+        }
+        int result = 0;
+        int right = 1;
+        for (int i = length - 2; i >= 0; i--) {
+            if (ratings[i + 1] < ratings[i]) {
+                right++;
+            } else {
+                right = 1;
+            }
+            result += Math.max(dp[i], right);
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
         Node node = new Node(1, new Node(2, new Node(4), new Node(5), null), new Node(3, new Node(6), new Node(7), null), null);
@@ -1558,7 +1595,7 @@ class Solution {
 //		int[][] arr = new int[][] { { 1, 3, 5, 7 } };
 //		char[][] arr = new char[][] {{'1','0','1','0','0'},{'1','0','1','1','1'},{'1','1','1','1','1'},{'1','0','0','1','0'}};
 //		int[][] arr = new int[][] { { 1, 5 } };
-        int[] preorder = new int[]{5, 1, 2, 3, 4};
+        int[] preorder = new int[]{1, 0, 2};
         int[] inorder = new int[]{4, 4, 1, 5, 1};
         int[] postorder = new int[]{9, 15, 7, 20, 3};
         List<List<Integer>> triangle = new ArrayList<>();
@@ -1576,7 +1613,7 @@ class Solution {
 
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(canCompleteCircuit(preorder, inorder));
+        System.out.println(candy(preorder));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
