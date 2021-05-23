@@ -2,6 +2,7 @@ package org.bsm.leetcode;
 
 import java.util.*;
 
+import org.apache.struts2.components.Head;
 import org.bsm.leetcode.model.ListNode;
 import org.bsm.leetcode.model.Node;
 import org.bsm.leetcode.model.TreeNode;
@@ -1577,6 +1578,95 @@ class Solution {
         return result;
     }
 
+    /**
+     * 136. 只出现一次的数字
+     * <p>
+     * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+     *
+     * @param nums
+     * @return
+     */
+    public static int singleNumber2(int[] nums) {
+        Set<Integer> integerSet = new HashSet<>();
+        int n = nums.length;
+        for (int num : nums) {
+            if (!integerSet.contains(num)) {
+                integerSet.add(num);
+            } else {
+                integerSet.remove(num);
+            }
+        }
+        int result = 0;
+        for (Integer integer : integerSet) {
+            result = (int) integer;
+        }
+        return result;
+
+    }
+
+    /**
+     * 136. 只出现一次的数字
+     * <p>
+     * 给定一个非空整数数组，除了某个元素只出现一次以外，其余每个元素均出现两次。找出那个只出现了一次的元素。
+     * 使用异或算法保证使用常数的村塾空间
+     *
+     * @param nums
+     * @return
+     */
+    public static int singleNumber1(int[] nums) {
+        int result = 0;
+        for (int num : nums) {
+            result ^= num;
+        }
+        return result;
+
+    }
+
+    /**
+     * 137. 只出现一次的数字 II
+     * <p>
+     * 给你一个整数数组 nums ，除某个元素仅出现 一次 外，其余每个元素都恰出现 三次 。请你找出并返回那个只出现了一次的元素。
+     *
+     * @param nums
+     * @return
+     */
+    public static int singleNumber(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+
+        }
+        for (Integer key : map.keySet()) {
+            if (map.get(key) == 1) {
+                return key;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 138. 复制带随机指针的链表
+     * <p>
+     * 构造已知链表的深拷贝
+     *
+     * @param head
+     * @return
+     */
+    private static Map<Node, Node> mapNode = new HashMap<>();
+    public static Node copyRandomList(Node head) {
+        if (head == null) {
+            return null;
+        }
+        if(mapNode.containsKey(head)){
+            return mapNode.get(head);
+        }
+        Node node = new Node(head.val);
+        mapNode.put(head,node);
+        node.next = copyRandomList(head.next);
+        node.random = copyRandomList(head.random);
+        return node;
+    }
+
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
         Node node = new Node(1, new Node(2, new Node(4), new Node(5), null), new Node(3, new Node(6), new Node(7), null), null);
@@ -1587,6 +1677,20 @@ class Solution {
         ListNode l1 = new ListNode(-10, four);
         TreeNode l2 = new TreeNode(4, new TreeNode(9, new TreeNode(5), new TreeNode(1)), new TreeNode(0));
 //
+        Node node1 = new Node(7);
+        Node node2 = new Node(13);
+        Node node3 = new Node(11);
+        Node node4 = new Node(10);
+        Node node5 = new Node(1);
+        node1.next =node2;
+        node2.next = node3;
+        node2.random = node1;
+        node3.next = node4;
+        node3.random = node5;
+        node4.next = node5;
+        node4.random = node3;
+        node5.random = node1;
+
 //		ListNode f = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new ListNode(5)))));
         ListNode f = new ListNode(5);
 //		ListNode l2 = new ListNode(1, three);
@@ -1595,7 +1699,7 @@ class Solution {
 //		int[][] arr = new int[][] { { 1, 3, 5, 7 } };
 //		char[][] arr = new char[][] {{'1','0','1','0','0'},{'1','0','1','1','1'},{'1','1','1','1','1'},{'1','0','0','1','0'}};
 //		int[][] arr = new int[][] { { 1, 5 } };
-        int[] preorder = new int[]{1, 0, 2};
+        int[] preorder = new int[]{4, 1, 2, 1, 2};
         int[] inorder = new int[]{4, 4, 1, 5, 1};
         int[] postorder = new int[]{9, 15, 7, 20, 3};
         List<List<Integer>> triangle = new ArrayList<>();
@@ -1613,7 +1717,7 @@ class Solution {
 
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(candy(preorder));
+        System.out.println(copyRandomList(node1));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
