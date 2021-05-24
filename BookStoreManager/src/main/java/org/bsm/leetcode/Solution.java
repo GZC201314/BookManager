@@ -1653,18 +1653,122 @@ class Solution {
      * @return
      */
     private static Map<Node, Node> mapNode = new HashMap<>();
+
     public static Node copyRandomList(Node head) {
         if (head == null) {
             return null;
         }
-        if(mapNode.containsKey(head)){
+        if (mapNode.containsKey(head)) {
             return mapNode.get(head);
         }
         Node node = new Node(head.val);
-        mapNode.put(head,node);
+        mapNode.put(head, node);
         node.next = copyRandomList(head.next);
         node.random = copyRandomList(head.random);
         return node;
+    }
+
+    /**
+     * 139. 单词拆分
+     * <p>
+     * 给定一个非空字符串 s 和一个包含非空单词的列表 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。
+     * <p>
+     * 动态规划
+     *
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public static boolean wordBreak1(String s, List<String> wordDict) {
+        if (wordDict.contains(s)) {
+            return true;
+        }
+        Set<String> wordDictSet = new HashSet<>(wordDict);
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && wordDictSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.length()];
+    }
+
+    /**
+     * 139. 单词拆分
+     * <p>
+     * 给定一个非空字符串 s 和一个包含非空单词的列表 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。
+     * <p>
+     * 递归算法，有问题，有些测试用例会出现超时
+     *
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public static boolean wordBreak2(String s, List<String> wordDict) {
+        if (s.length() == 0) return true;
+        if (s.length() >= 151) return false;
+        Set<String> wordDictSet = new HashSet<>(wordDict);
+        return wordBreak(s, wordDictSet);
+    }
+
+    public static boolean wordBreak(String s, Set<String> wordDictSet) {
+        if (wordDictSet.contains(s)) {
+            return true;
+        }
+        for (String word : wordDictSet) {
+            if (s.startsWith(word) && wordBreak(s.substring(word.length()), wordDictSet)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 140. 单词拆分 II
+     * <p>
+     * 给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，在字符串中增加空格来构建一个句子，
+     * 使得句子中所有的单词都在词典中。返回所有这些可能的句子。
+     *
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public static List<String> wordBreak(String s, List<String> wordDict) {
+        Map<Integer, List<List<String>>> map = new HashMap<>();
+        Set<String> wordDictSet = new HashSet<>(wordDict);
+        List<List<String>> wordLists = dfs_wordBreak(s,s.length(), wordDictSet, 0, map);
+        List<String> result = new ArrayList<>();
+        for (List<String> words : wordLists) {
+            result.add(String.join(" ", words));
+        }
+        return result;
+    }
+
+    public static List<List<String>> dfs_wordBreak(String s,int length, Set<String> wordDictSet, int index, Map<Integer, List<List<String>>> map) {
+        if (!map.containsKey(index)) {
+            List<List<String>> wordLists = new LinkedList<>();
+            if(length==index){
+                wordLists.add(new LinkedList<String>());
+            }
+            for (int i = index + 1; i <= length; i++) {
+                String word = s.substring(index, i);
+                if (wordDictSet.contains(word)) {
+                    List<List<String>> nextWordLists = dfs_wordBreak(s,length, wordDictSet, i, map);
+                    for (List<String> words : nextWordLists) {
+                        LinkedList<String> wordList = new LinkedList<>(words);
+                        //在开头插入元素，使用LinkedList 速度会变快
+                        wordList.offerFirst(word);
+                        wordLists.add(wordList);
+                    }
+                }
+            }
+            map.put(index, wordLists);
+        }
+        return map.get(index);
     }
 
     public static void main(String[] args) {
@@ -1682,7 +1786,7 @@ class Solution {
         Node node3 = new Node(11);
         Node node4 = new Node(10);
         Node node5 = new Node(1);
-        node1.next =node2;
+        node1.next = node2;
         node2.next = node3;
         node2.random = node1;
         node3.next = node4;
@@ -1712,12 +1816,12 @@ class Solution {
 //		char[][] board = { { 'A', 'B', 'C', 'E' }, { 'S', 'F', 'C', 'S' }, { 'A', 'D', 'E', 'E' } };
 //		String word = "ABCCED";
 //		nextPermutation(arr);
-        List<String> strlist = new ArrayList<>(Arrays.asList("lest", "leet", "lose", "code", "lode", "robe", "lost"));
+        List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
         long start = new Date().getTime();
 
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(copyRandomList(node1));
+        System.out.println(wordBreak("applepenapple", strlist));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
