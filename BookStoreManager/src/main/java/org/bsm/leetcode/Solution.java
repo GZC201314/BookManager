@@ -1740,7 +1740,7 @@ class Solution {
     public static List<String> wordBreak(String s, List<String> wordDict) {
         Map<Integer, List<List<String>>> map = new HashMap<>();
         Set<String> wordDictSet = new HashSet<>(wordDict);
-        List<List<String>> wordLists = dfs_wordBreak(s,s.length(), wordDictSet, 0, map);
+        List<List<String>> wordLists = dfs_wordBreak(s, s.length(), wordDictSet, 0, map);
         List<String> result = new ArrayList<>();
         for (List<String> words : wordLists) {
             result.add(String.join(" ", words));
@@ -1748,16 +1748,16 @@ class Solution {
         return result;
     }
 
-    public static List<List<String>> dfs_wordBreak(String s,int length, Set<String> wordDictSet, int index, Map<Integer, List<List<String>>> map) {
+    public static List<List<String>> dfs_wordBreak(String s, int length, Set<String> wordDictSet, int index, Map<Integer, List<List<String>>> map) {
         if (!map.containsKey(index)) {
             List<List<String>> wordLists = new LinkedList<>();
-            if(length==index){
+            if (length == index) {
                 wordLists.add(new LinkedList<String>());
             }
             for (int i = index + 1; i <= length; i++) {
                 String word = s.substring(index, i);
                 if (wordDictSet.contains(word)) {
-                    List<List<String>> nextWordLists = dfs_wordBreak(s,length, wordDictSet, i, map);
+                    List<List<String>> nextWordLists = dfs_wordBreak(s, length, wordDictSet, i, map);
                     for (List<String> words : nextWordLists) {
                         LinkedList<String> wordList = new LinkedList<>(words);
                         //在开头插入元素，使用LinkedList 速度会变快
@@ -1769,6 +1769,53 @@ class Solution {
             map.put(index, wordLists);
         }
         return map.get(index);
+    }
+
+    /**
+     * 141. 环形链表
+     *
+     *
+     * 快慢指针，如果存在环，快指针在未来的某个时刻一定可以追上慢指针
+     *
+     * @param head
+     * @return
+     */
+    public static boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (slow != fast) {
+            if(fast == null || fast.next == null){
+                return false;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return true;
+    }
+
+    /**
+     *142. 环形链表 II
+     *给定一个链表，返回链表开始入环的第一个节点。如果链表无环，则返回null。
+     *为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+     *
+     * @param head
+     * @return
+     */
+    public static ListNode detectCycle(ListNode head) {
+        Set<ListNode> set = new HashSet<>();
+        if(head == null || head.next == null){
+            return null;
+        }
+        while (head !=null){
+            if(!set.add(head)){
+                return head;
+            }
+            head = head.next;
+        }
+        return null;
     }
 
     public static void main(String[] args) {
