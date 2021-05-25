@@ -1804,7 +1804,7 @@ class Solution {
      * @param head
      * @return
      */
-    public static ListNode detectCycle(ListNode head) {
+    public static ListNode detectCycle1(ListNode head) {
         Set<ListNode> set = new HashSet<>();
         if(head == null || head.next == null){
             return null;
@@ -1816,6 +1816,93 @@ class Solution {
             head = head.next;
         }
         return null;
+    }
+    /**
+     *142. 环形链表 II
+     *给定一个链表，返回链表开始入环的第一个节点。如果链表无环，则返回null。
+     *为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+     *
+     * 相遇后，再从头开始前进，另一个指针从相遇位置开始前进，再次相遇的位置就是换的开始节点
+     * @param head
+     * @return
+     */
+    public ListNode detectCycle(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode slow = head, fast = head;
+        while (fast != null) {
+            slow = slow.next;
+            if (fast.next != null) {
+                fast = fast.next.next;
+            } else {
+                return null;
+            }
+            if (fast == slow) {
+                ListNode ptr = head;
+                while (ptr != slow) {
+                    ptr = ptr.next;
+                    slow = slow.next;
+                }
+                return ptr;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 143. 重排链表
+     *
+     * 给定一个单链表L：L0→L1→…→Ln-1→Ln ，
+     * 将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
+     *
+     * 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+     *
+     * @param head
+     */
+    public static void reorderList(ListNode head) {
+        Deque<ListNode> stack = new ArrayDeque<>();
+        while (head !=null){
+            stack.addLast(head);
+            head = head.next;
+        }
+        ListNode newHead = stack.peekFirst();
+        ListNode tail = newHead;
+        while (!stack.isEmpty()){
+            ListNode start = stack.pollFirst();
+            ListNode end = stack.pollLast();
+            if(start != tail){
+                tail.next = start;
+            }
+            start.next = end;
+            tail = end;
+            if(tail!= null){
+                tail.next = null;
+            }
+
+        }
+    }
+
+    /**
+     * 144. 二叉树的前序遍历
+     *
+     * 给你二叉树的根节点 root ，返回它节点值的 前序 遍历。
+     * @param root
+     * @return
+     */
+    public static List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        dfs_preorderTraversal(root,result);
+        return result;
+
+    }
+    public static void dfs_preorderTraversal(TreeNode root,List<Integer> result){
+        if(root == null){
+            return;
+        }
+        result.add(root.val);
+        dfs_preorderTraversal(root.left,result);
+        dfs_preorderTraversal(root.right,result);
     }
 
     public static void main(String[] args) {
