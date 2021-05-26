@@ -1773,8 +1773,8 @@ class Solution {
 
     /**
      * 141. 环形链表
-     *
-     *
+     * <p>
+     * <p>
      * 快慢指针，如果存在环，快指针在未来的某个时刻一定可以追上慢指针
      *
      * @param head
@@ -1787,7 +1787,7 @@ class Solution {
         ListNode slow = head;
         ListNode fast = head.next;
         while (slow != fast) {
-            if(fast == null || fast.next == null){
+            if (fast == null || fast.next == null) {
                 return false;
             }
             slow = slow.next;
@@ -1797,32 +1797,34 @@ class Solution {
     }
 
     /**
-     *142. 环形链表 II
-     *给定一个链表，返回链表开始入环的第一个节点。如果链表无环，则返回null。
-     *为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+     * 142. 环形链表 II
+     * 给定一个链表，返回链表开始入环的第一个节点。如果链表无环，则返回null。
+     * 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
      *
      * @param head
      * @return
      */
     public static ListNode detectCycle1(ListNode head) {
         Set<ListNode> set = new HashSet<>();
-        if(head == null || head.next == null){
+        if (head == null || head.next == null) {
             return null;
         }
-        while (head !=null){
-            if(!set.add(head)){
+        while (head != null) {
+            if (!set.add(head)) {
                 return head;
             }
             head = head.next;
         }
         return null;
     }
+
     /**
-     *142. 环形链表 II
-     *给定一个链表，返回链表开始入环的第一个节点。如果链表无环，则返回null。
-     *为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
-     *
+     * 142. 环形链表 II
+     * 给定一个链表，返回链表开始入环的第一个节点。如果链表无环，则返回null。
+     * 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。注意，pos 仅仅是用于标识环的情况，并不会作为参数传递到函数中。
+     * <p>
      * 相遇后，再从头开始前进，另一个指针从相遇位置开始前进，再次相遇的位置就是换的开始节点
+     *
      * @param head
      * @return
      */
@@ -1852,31 +1854,31 @@ class Solution {
 
     /**
      * 143. 重排链表
-     *
+     * <p>
      * 给定一个单链表L：L0→L1→…→Ln-1→Ln ，
      * 将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
-     *
+     * <p>
      * 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
      *
      * @param head
      */
     public static void reorderList(ListNode head) {
         Deque<ListNode> stack = new ArrayDeque<>();
-        while (head !=null){
+        while (head != null) {
             stack.addLast(head);
             head = head.next;
         }
         ListNode newHead = stack.peekFirst();
         ListNode tail = newHead;
-        while (!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             ListNode start = stack.pollFirst();
             ListNode end = stack.pollLast();
-            if(start != tail){
+            if (start != tail) {
                 tail.next = start;
             }
             start.next = end;
             tail = end;
-            if(tail!= null){
+            if (tail != null) {
                 tail.next = null;
             }
 
@@ -1885,24 +1887,74 @@ class Solution {
 
     /**
      * 144. 二叉树的前序遍历
-     *
+     * <p>
      * 给你二叉树的根节点 root ，返回它节点值的 前序 遍历。
+     *
      * @param root
      * @return
      */
     public static List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<>();
-        dfs_preorderTraversal(root,result);
+        dfs_preorderTraversal(root, result);
         return result;
 
     }
-    public static void dfs_preorderTraversal(TreeNode root,List<Integer> result){
-        if(root == null){
+
+    public static void dfs_preorderTraversal(TreeNode root, List<Integer> result) {
+        if (root == null) {
             return;
         }
         result.add(root.val);
-        dfs_preorderTraversal(root.left,result);
-        dfs_preorderTraversal(root.right,result);
+        dfs_preorderTraversal(root.left, result);
+        dfs_preorderTraversal(root.right, result);
+    }
+
+    /**
+     * 145. 二叉树的后序遍历
+     * <p>
+     * 给定一个二叉树，返回它的 后序 遍历。
+     *
+     * @param root
+     * @return
+     */
+    public static List<Integer> postorderTraversal1(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        if (root == null) {
+            return result;
+        }
+        dfs_postorderTraversal(root, result);
+        return result;
+    }
+
+    public static void dfs_postorderTraversal(TreeNode root, List<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        dfs_postorderTraversal(root.left, result);
+        dfs_postorderTraversal(root.right, result);
+        result.add(root.val);
+    }
+
+    public static List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        TreeNode prev = null;
+        while (root != null || !stack.isEmpty()) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            if(root.right==null || root.right == prev){
+                result.add(root.val);
+                prev = root;
+                root = null;
+            }else{
+                stack.push(root);
+                root = root.right;
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {
