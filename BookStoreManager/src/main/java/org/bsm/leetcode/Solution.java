@@ -1945,11 +1945,11 @@ class Solution {
                 root = root.left;
             }
             root = stack.pop();
-            if(root.right==null || root.right == prev){
+            if (root.right == null || root.right == prev) {
                 result.add(root.val);
                 prev = root;
                 root = null;
-            }else{
+            } else {
                 stack.push(root);
                 root = root.right;
             }
@@ -1957,15 +1957,94 @@ class Solution {
         return result;
     }
 
+    /**
+     * 147. 对链表进行插入排序
+     *
+     * @param head
+     * @return
+     */
+    public static ListNode insertionSortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode XNNode = new ListNode();
+        XNNode.next = new ListNode(head.val);
+        head = head.next;
+        while (head != null) {
+            ListNode p = XNNode.next;
+            ListNode q = p;
+            //判断当前元素是不是比第一个元素小
+            if (p.val > head.val) {
+                XNNode.next = new ListNode(head.val);
+                XNNode.next.next = p;
+                head = head.next;
+                continue;
+            }
+            while (p != null) {
+                if (p.next != null && p.next.val > head.val) {
+                    p.next = new ListNode(head.val,p.next);
+                    break;
+                }
+                q = p;
+                p = p.next;
+            }
+            if (p == null) {
+                q.next = new ListNode(head.val);
+            }
+            head = head.next;
+        }
+        return XNNode.next;
+    }
+
+    /**
+     * 148. 排序链表
+     * 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+     * @param head
+     * @return
+     */
+    public static ListNode sortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode XNNode = new ListNode();
+        XNNode.next = new ListNode(head.val);
+        head = head.next;
+        while (head != null) {
+            ListNode p = XNNode.next;
+            ListNode q = p;
+            //判断当前元素是不是比第一个元素小
+            if (p.val > head.val) {
+                XNNode.next = new ListNode(head.val);
+                XNNode.next.next = p;
+                head = head.next;
+                continue;
+            }
+            while (p != null) {
+                if (p.next != null && p.next.val > head.val) {
+                    p.next = new ListNode(head.val,p.next);
+                    break;
+                }
+                q = p;
+                p = p.next;
+            }
+            if (p == null) {
+                q.next = new ListNode(head.val);
+            }
+            head = head.next;
+        }
+        return XNNode.next;
+    }
+
     public static void main(String[] args) {
         TreeNode tree = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6), new TreeNode(7)));
         Node node = new Node(1, new Node(2, new Node(4), new Node(5), null), new Node(3, new Node(6), new Node(7), null), null);
         TreeNode tree1 = new TreeNode(1, new TreeNode(2), new TreeNode(3));
         TreeNode tree2 = new TreeNode(2, new TreeNode(1), new TreeNode(1));
-        ListNode five = new ListNode(0, new ListNode(5, new ListNode(9)));
+        ListNode five = new ListNode(2, new ListNode(5, new ListNode(9)));
         ListNode four = new ListNode(-3, five);
         ListNode l1 = new ListNode(-10, four);
         TreeNode l2 = new TreeNode(4, new TreeNode(9, new TreeNode(5), new TreeNode(1)), new TreeNode(0));
+        ListNode l3 = new ListNode(4, new ListNode(2, new ListNode(1, new ListNode(3))));
 //
         Node node1 = new Node(7);
         Node node2 = new Node(13);
@@ -2007,7 +2086,7 @@ class Solution {
 
 //		merge(arr,0, arr1,1);
 //        flatten(tree);
-        System.out.println(wordBreak("applepenapple", strlist));
+        System.out.println(insertionSortList(l3));
 //		partition1(three, 0);
         long end = new Date().getTime();
         System.out.println("程序运行时间: " + (end - start));
