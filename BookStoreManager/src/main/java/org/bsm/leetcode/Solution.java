@@ -1982,7 +1982,7 @@ class Solution {
             }
             while (p != null) {
                 if (p.next != null && p.next.val > head.val) {
-                    p.next = new ListNode(head.val,p.next);
+                    p.next = new ListNode(head.val, p.next);
                     break;
                 }
                 q = p;
@@ -1999,40 +1999,101 @@ class Solution {
     /**
      * 148. 排序链表
      * 给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+     * O(nlog(n))
+     *
      * @param head
      * @return
      */
     public static ListNode sortList(ListNode head) {
+        return sortSubList(head, null);
+    }
+
+    public static ListNode sortSubList(ListNode head, ListNode tail) {
         if (head == null) {
             return null;
         }
+        if (head.next == tail) {
+            head.next = null;
+            return head;
+        }
+
+        ListNode slow = head, fast = head;
+        while (fast != tail) {
+            slow = slow.next;
+            fast = fast.next;
+            if (fast != tail) {
+                fast = fast.next;
+            }
+        }
+
+        ListNode mid = slow;
+        ListNode leftList = sortSubList(head, mid);
+        ListNode rightList = sortSubList(mid, tail);
+
         ListNode XNNode = new ListNode();
-        XNNode.next = new ListNode(head.val);
-        head = head.next;
-        while (head != null) {
-            ListNode p = XNNode.next;
-            ListNode q = p;
-            //判断当前元素是不是比第一个元素小
-            if (p.val > head.val) {
-                XNNode.next = new ListNode(head.val);
-                XNNode.next.next = p;
-                head = head.next;
-                continue;
+        ListNode p = XNNode, lp = leftList, rp = rightList;
+        while (lp != null && rp != null) {
+            if (lp.val < rp.val) {
+                p.next = lp;
+                lp = lp.next;
+            } else {
+                p.next = rp;
+                rp = rp.next;
             }
-            while (p != null) {
-                if (p.next != null && p.next.val > head.val) {
-                    p.next = new ListNode(head.val,p.next);
-                    break;
-                }
-                q = p;
-                p = p.next;
-            }
-            if (p == null) {
-                q.next = new ListNode(head.val);
-            }
-            head = head.next;
+            p = p.next;
+        }
+        if (lp != null) {
+            p.next = lp;
+        }
+        if (rp != null) {
+            p.next = rp;
         }
         return XNNode.next;
+    }
+
+    /**
+     * 149. 直线上最多的点数
+     * <p>
+     * 给定一个二维平面，平面上有 n 个点，求最多有多少个点在同一条直线上。
+     *
+     * @param points 坐标集
+     * @return 统一直线的个数
+     */
+    public static int maxPoints(int[][] points) {
+        int n = points.length;
+        if (n < 3) {
+            return n;
+        }
+        int res = 0;
+        for (int i = 0; i < n - 1; i++) {
+            //不能使用double作为key，会存在精度问题
+            Map<String, Integer> slope = new HashMap<>();
+            int repeat = 0;
+            int tmp_max = 0;
+            for (int j = i + 1; j < n; j++) {
+                int dy = points[i][1] - points[j][1];
+                int dx = points[i][0] - points[j][0];
+                if (dy == 0 && dx == 0) {
+                    repeat++;
+                    continue;
+                }
+                int g = gcd(dy, dx);
+                if (g != 0) {
+                    dy /= g;
+                    dx /= g;
+                }
+                String tmp = String.valueOf(dy) + "/" + String.valueOf(dx);
+                slope.put(tmp, slope.getOrDefault(tmp, 0) + 1);
+                tmp_max = Math.max(tmp_max, slope.get(tmp));
+            }
+            res = Math.max(res, repeat + tmp_max + 1);
+        }
+        return res;
+    }
+
+    public static int gcd(int dy, int dx) {
+        if (dx == 0) return dy;
+        else return gcd(dx, dy % dx);
     }
 
     public static void main(String[] args) {
