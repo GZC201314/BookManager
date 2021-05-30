@@ -2156,6 +2156,26 @@ class Solution {
     return max;
   }
 
+  /**
+   * 153. 寻找旋转排序数组中的最小值
+   *
+   * @param nums 旋转排序数组
+   * @return 最小值
+   */
+  public static int findMin(int[] nums) {
+    int left = 0;
+    int right = nums.length - 1;
+    while (left < right) {
+      int mid = (right + left) / 2;
+      if (nums[left] > nums[mid]) {
+        right = mid;
+      } else {
+        left = mid + 1;
+      }
+    }
+    return nums[left];
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
@@ -2217,10 +2237,10 @@ class Solution {
     //		nextPermutation(arr);
     List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
     long start = new Date().getTime();
-
+    int[] intArr = new int[] {11, 13, 15, 17};
     //		merge(arr,0, arr1,1);
     //        flatten(tree);
-    System.out.println(reverseWords("  Bob    Loves  Alice   "));
+    System.out.println(findMin(intArr));
     //		partition1(three, 0);
     long end = new Date().getTime();
     System.out.println("程序运行时间: " + (end - start));
