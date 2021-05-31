@@ -2159,10 +2159,12 @@ class Solution {
   /**
    * 153. 寻找旋转排序数组中的最小值
    *
+   * <p>提示数组中不存在相同的数字
+   *
    * @param nums 旋转排序数组
    * @return 最小值
    */
-  public static int findMin(int[] nums) {
+  public static int findMin1(int[] nums) {
     int left = 0;
     int right = nums.length - 1;
     while (left < right) {
@@ -2174,6 +2176,101 @@ class Solution {
       }
     }
     return nums[left];
+  }
+
+  /**
+   * 154. 寻找旋转排序数组中的最小值 II
+   *
+   * <p>给你一个可能存在 重复 元素值的数组 nums ，它原来是一个升序排列的数组，并按上述情形进行了多次旋转。请你找出并返回数组中的 最小元素 。
+   *
+   * <p>算法思路，对于中间元素和右端元素分三种情况分类讨论 1. nums[right] > nums[mid] 最小值在mid元素的左端 2. nums[right] < nums[mid]
+   * 最小值在mid 元素的右端 3. nums[right] = nums[mid] 此时不能判断最小值所在的空间，我们把右端的元素，向左移动一位 *
+   *
+   * @param nums
+   * @return
+   */
+  public static int findMin(int[] nums) {
+    int left = 0;
+    int right = nums.length - 1;
+    while (left < right) {
+      int mid = (right + left) / 2;
+      if (nums[right] > nums[mid]) {
+        right = mid;
+      } else if (nums[right] < nums[mid]) {
+        left = mid + 1;
+      } else {
+        right = right - 1;
+      }
+    }
+    return nums[left];
+  }
+
+  /**
+   * 160. 相交链表
+   *
+   * <p>编写一个程序，找到两个单链表相交的起始节点。
+   *
+   * @param headA
+   * @param headB
+   * @return
+   */
+  public static ListNode getIntersectionNode1(ListNode headA, ListNode headB) {
+    Set<ListNode> nodeSet = new HashSet<>();
+    while (headA != null || headB != null) {
+      if (headA != null && !nodeSet.add(headA)) {
+        return headA;
+      }
+      if (headB != null && !nodeSet.add(headB)) {
+        return headB;
+      }
+      if (headA != null) headA = headA.next;
+      if (headB != null) headB = headB.next;
+    }
+    return null;
+  }
+
+  /**
+   * 进行两次遍历，在两个遍历相等的时候就是两个链表的交点
+   *
+   * @param headA
+   * @param headB
+   * @return
+   */
+  public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    ListNode nodea = headA, nodeb = headB;
+    while (nodea != nodeb) {
+      if (nodea == null) nodea = headB;
+      else nodea = nodea.next;
+      if (nodeb == null) nodeb = headA;
+      else nodeb = nodeb.next;
+    }
+    return nodeb;
+  }
+
+  /**
+   * 162. 寻找峰值
+   *
+   * <p>峰值元素是指其值大于左右相邻值的元素。
+   *
+   * <p>给你一个输入数组nums，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 任何一个峰值 所在位置即可。
+   *
+   * @param nums
+   * @return
+   */
+  public static int findPeakElement(int[] nums) {
+    int length = nums.length - 1;
+    for (int i = 1; i < length; i++) {
+      if (nums[i - 1] < nums[i] && nums[i] > nums[i + 1]) {
+        return i;
+      }
+    }
+    if (length == 0) {
+      return 0;
+    }
+    if (nums[length] > nums[length - 1]) {
+      return length;
+    }
+    return 0;
   }
 
   public static void main(String[] args) {
@@ -2197,19 +2294,41 @@ class Solution {
         new TreeNode(4, new TreeNode(9, new TreeNode(5), new TreeNode(1)), new TreeNode(0));
     ListNode l3 = new ListNode(4, new ListNode(2, new ListNode(1, new ListNode(3))));
     //
-    Node node1 = new Node(7);
-    Node node2 = new Node(13);
-    Node node3 = new Node(11);
-    Node node4 = new Node(10);
-    Node node5 = new Node(1);
-    node1.next = node2;
-    node2.next = node3;
-    node2.random = node1;
-    node3.next = node4;
-    node3.random = node5;
-    node4.next = node5;
-    node4.random = node3;
-    node5.random = node1;
+    ListNode ListNode1 = new ListNode(1);
+    ListNode ListNode2 = new ListNode(3);
+    ListNode ListNode3 = new ListNode(5);
+    ListNode ListNode4 = new ListNode(7);
+    ListNode ListNode5 = new ListNode(9);
+    ListNode ListNode6 = new ListNode(11);
+    ListNode ListNode7 = new ListNode(13);
+    ListNode ListNode8 = new ListNode(15);
+    ListNode ListNode9 = new ListNode(17);
+    ListNode ListNode10 = new ListNode(19);
+    ListNode ListNode11 = new ListNode(21);
+    ListNode ListNode12 = new ListNode(23);
+    ListNode ListNode13 = new ListNode(25);
+    ListNode ListNode14 = new ListNode(27);
+    ListNode ListNode15 = new ListNode(29);
+    ListNode ListNode16 = new ListNode(30);
+    ListNode ListNode17 = new ListNode(31);
+    ListNode ListNode18 = new ListNode(32);
+    ListNode1.next = ListNode2;
+    ListNode2.next = ListNode3;
+    ListNode3.next = ListNode4;
+    ListNode4.next = ListNode5;
+    ListNode5.next = ListNode6;
+    ListNode6.next = ListNode7;
+    ListNode7.next = ListNode8;
+    ListNode8.next = ListNode9;
+    ListNode9.next = ListNode10;
+    ListNode10.next = ListNode11;
+    ListNode11.next = ListNode12;
+    ListNode12.next = ListNode13;
+    ListNode13.next = ListNode14;
+    ListNode14.next = ListNode15;
+    ListNode15.next = ListNode16;
+    ListNode16.next = ListNode17;
+    ListNode17.next = ListNode18;
 
     //		ListNode f = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new
     // ListNode(5)))));
@@ -2240,7 +2359,7 @@ class Solution {
     int[] intArr = new int[] {11, 13, 15, 17};
     //		merge(arr,0, arr1,1);
     //        flatten(tree);
-    System.out.println(findMin(intArr));
+    System.out.println(getIntersectionNode(ListNode1, ListNode16));
     //		partition1(three, 0);
     long end = new Date().getTime();
     System.out.println("程序运行时间: " + (end - start));
