@@ -198,8 +198,7 @@ class Solution {
       treeNode.add(null);
       return treeNode;
     }
-    List<TreeNode> treeResult = generateTrees(1, n);
-    return treeResult;
+    return generateTrees(1, n);
   }
 
   public static List<TreeNode> generateTrees(int start, int end) {
@@ -2273,6 +2272,186 @@ class Solution {
     return 0;
   }
 
+  /**
+   * 164. 最大间距
+   *
+   * <p>给定一个无序的数组，找出数组在排序之后，相邻元素之间最大的差值。
+   *
+   * <p>如果数组元素个数小于 2，则返回 0。
+   *
+   * @param nums
+   * @return
+   */
+  public static int maximumGap1(int[] nums) {
+    int length = nums.length;
+    if (length < 2) {
+      return 0;
+    }
+    int minVal = Arrays.stream(nums).min().getAsInt();
+    int maxVal = Arrays.stream(nums).max().getAsInt();
+    int d = Math.max(1, (maxVal - minVal) / (length - 1));
+    int bucketNum = (maxVal - minVal) / d + 1;
+    // 保存每个桶中的最大值和最小值
+    int[][] bucket = new int[bucketNum][2];
+    for (int i = 0; i < bucketNum; i++) {
+      Arrays.fill(bucket[i], -1);
+    }
+    for (int num : nums) {
+      // 计算对应的桶索引
+      int idx = (num - minVal) / d;
+      // 计算对应桶的最大值和最小值
+      if (bucket[idx][0] == -1) {
+        bucket[idx][0] = num;
+        bucket[idx][1] = num;
+      } else {
+        bucket[idx][0] = Math.min(bucket[idx][0], num);
+        bucket[idx][1] = Math.max(bucket[idx][1], num);
+      }
+    }
+    int result = 0;
+    int minIndex = -1;
+    for (int i = 0; i < bucketNum; i++) {
+      if (bucket[i][0] == -1) {
+        continue;
+      }
+      if (minIndex != -1) {
+        result = Math.max(result, bucket[i][0] - bucket[minIndex][1]);
+      }
+      minIndex = i;
+    }
+    return result;
+  }
+  /**
+   * 164. 最大间距
+   *
+   * <p>给定一个无序的数组，找出数组在排序之后，相邻元素之间最大的差值。
+   *
+   * <p>如果数组元素个数小于 2，则返回 0。
+   *
+   * <p>使用系统自带的排序算法的效果更好
+   *
+   * @param nums
+   * @return
+   */
+  public int maximumGap(int[] nums) {
+    int length = nums.length;
+    if (length < 2) {
+      return 0;
+    }
+    Arrays.sort(nums);
+    int max = Integer.MIN_VALUE;
+    for (int i = 1; i < length; i++) {
+      if (nums[i] - nums[i - 1] > max) {
+        max = nums[i] - nums[i - 1];
+      }
+    }
+    return max;
+  }
+
+  /**
+   * 165. 比较版本号
+   *
+   * <p>输入：version1 = "1.01", version2 = "1.001"
+   *
+   * <p>输出：0
+   *
+   * <p>解释：忽略前导零，"01" 和 "001" 都表示相同的整数 "1"
+   *
+   * @param version1
+   * @param version2
+   * @return
+   */
+  public static int compareVersion(String version1, String version2) {
+    String[] v1arr = version1.split("\\.");
+    String[] v2arr = version2.split("\\.");
+    int size = Math.max(v1arr.length, v2arr.length);
+    for (int i = 0; i < size; i++) {
+      String subVersion1 = "0";
+      String subVersion2 = "0";
+      if (i < v1arr.length) {
+        subVersion1 = v1arr[i];
+      }
+      if (i < v2arr.length) {
+        subVersion2 = v2arr[i];
+      }
+
+      if (Integer.parseInt(subVersion1) > Integer.parseInt(subVersion2)) {
+        return 1;
+      } else if (Integer.parseInt(subVersion1) < Integer.parseInt(subVersion2)) {
+        return -1;
+      }
+    }
+    return 0;
+  }
+
+  private static void deleteBeforeZero(String subVersion1) {
+    for (int j = 0; j < subVersion1.length(); j++) {
+      if (subVersion1.charAt(j) == '0') {
+        continue;
+      }
+      subVersion1 = subVersion1.substring(j);
+      break;
+    }
+    subVersion1 = "0";
+  }
+
+  /**
+   * 166. 分数到小数
+   *
+   * <p>给定两个整数，分别表示分数的分子numerator 和分母 denominator，以 字符串形式返回小数 。
+   *
+   * <p>如果小数部分为循环小数，则将循环的部分括在括号内。
+   *
+   * <p>如果存在多个答案，只需返回 任意一个 。
+   *
+   * <p>对于所有给定的输入，保证 答案字符串的长度小于 104 。
+   *
+   * @param numerator
+   * @param denominator
+   * @return
+   */
+  public static String fractionToDecimal(int numerator, int denominator) {
+    Set<Long> setNum = new HashSet<>();
+    Map<Long, Integer> map = new HashMap<>();
+    StringBuilder result = new StringBuilder();
+    List<Character> charArr = new ArrayList<>();
+    long denominatorD = denominator;
+    long numeratorD = numerator;
+    if (numeratorD * denominatorD < 0) {
+      result.append("-");
+    }
+
+    result.append((Math.abs(numeratorD) / Math.abs(denominatorD)));
+    if ((double) numerator % denominatorD != 0) {
+      result.append(".");
+    }
+    long num = numeratorD % denominatorD;
+    if (num < 0) {
+      num = -num;
+    }
+    if (denominatorD < 0) {
+      denominatorD = -denominatorD;
+    }
+    int index = 0;
+    while (num != 0) {
+      num = num * 10;
+      if (setNum.add(num)) {
+        map.put(num, index++);
+        charArr.add((char) (num / denominatorD + '0'));
+        num = num % denominatorD;
+      } else {
+        int startIndex = map.get(num);
+        charArr.add(startIndex, '(');
+        charArr.add(')');
+        break;
+      }
+    }
+    for (Character character : charArr) {
+      result.append(character);
+    }
+    return result.toString();
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
@@ -2356,10 +2535,10 @@ class Solution {
     //		nextPermutation(arr);
     List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
     long start = new Date().getTime();
-    int[] intArr = new int[] {11, 13, 15, 17};
+    int[] intArr = new int[] {3, 6, 9, 1};
     //		merge(arr,0, arr1,1);
     //        flatten(tree);
-    System.out.println(getIntersectionNode(ListNode1, ListNode16));
+    System.out.println(fractionToDecimal(-2147483648, 1));
     //		partition1(three, 0);
     long end = new Date().getTime();
     System.out.println("程序运行时间: " + (end - start));
