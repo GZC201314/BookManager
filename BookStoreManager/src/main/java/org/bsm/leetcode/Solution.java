@@ -2452,6 +2452,95 @@ class Solution {
     return result.toString();
   }
 
+  /**
+   * 167. 两数之和 II - 输入有序数组
+   *
+   * <p>输入：numbers = [2,7,11,15], target = 9
+   *
+   * <p>输出：[1,2]
+   *
+   * <p>解释：2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。
+   */
+  public static int[] twoSum1(int[] numbers, int target) {
+    int[] result = new int[2];
+    int length = numbers.length;
+    for (int i = 0; i < length; i++) {
+      if (i < length - 2 && numbers[i] + numbers[i + 1] > target) {
+        break;
+      }
+      for (int j = i + 1; j < length; j++) {
+        if (numbers[i] + numbers[j] == target) {
+          result[0] = i + 1;
+          result[1] = j + 1;
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  public static int[] twoSum2(int[] numbers, int target) {
+    int[] result = new int[2];
+    Map<Integer, Integer> mapNumber = new HashMap<>();
+    for (int i = 0; i < numbers.length; i++) {
+      mapNumber.put(numbers[i], i + 1);
+    }
+    for (int i = 0; i < numbers.length; i++) {
+      int num = target - numbers[i];
+      if (mapNumber.containsKey(num)) {
+        int j = mapNumber.get(num);
+        if (j != i + 1) {
+          result[0] = i + 1;
+          result[1] = j;
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  public static int[] twoSum(int[] numbers, int target) {
+    int start = 0, end = numbers.length - 1;
+    while (start < end) {
+      if (numbers[start] + numbers[end] > target) {
+        end--;
+      } else if (numbers[start] + numbers[end] < target) {
+        start++;
+      } else {
+        return new int[] {start + 1, end + 1};
+      }
+    }
+    return null;
+  }
+
+  /**
+   * 168. Excel表列名称
+   *
+   * <p>给定一个正整数，返回它在 Excel 表中相对应的列名称。
+   *
+   * <p>输入: 1
+   *
+   * <p>输出: "A"
+   */
+  public static String convertToTitle(int columnNumber) {
+    String result = "";
+    char[] charArr =
+        new char[] {
+          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+          'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        };
+    while (columnNumber != 0) {
+      int num = columnNumber % 26;
+      if (num == 0) {
+        num = 26;
+        columnNumber--;
+      }
+      result = charArr[num - 1] + result;
+      columnNumber = columnNumber / 26;
+    }
+    return result;
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
@@ -2535,10 +2624,10 @@ class Solution {
     //		nextPermutation(arr);
     List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
     long start = new Date().getTime();
-    int[] intArr = new int[] {3, 6, 9, 1};
+    int[] intArr = new int[] {5, 25, 75};
     //		merge(arr,0, arr1,1);
     //        flatten(tree);
-    System.out.println(fractionToDecimal(-2147483648, 1));
+    System.out.println(twoSum(intArr, 100));
     //		partition1(three, 0);
     long end = new Date().getTime();
     System.out.println("程序运行时间: " + (end - start));
