@@ -13,6 +13,7 @@ import java.util.*;
  */
 class Solution {
 
+  @org.jetbrains.annotations.Contract("null -> null")
   public static List<List<Integer>> subsetsWithDup(int[] nums) {
     if (nums == null) {
       return null;
@@ -2541,6 +2542,66 @@ class Solution {
     return result;
   }
 
+  /**
+   * 169. 多数元素
+   *
+   * <p>给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数 大于 ⌊ n/2 ⌋ 的元素。
+   *
+   * <p>你可以假设数组是非空的，并且给定的数组总是存在多数元素。
+   */
+  public static int majorityElement(int[] nums) {
+    Deque<Integer> stack = new ArrayDeque<Integer>();
+    stack.add(nums[0]);
+    int length = nums.length;
+    for (int i = 1; i < length; i++) {
+      if (!stack.isEmpty()) {
+        if (stack.peek() == nums[i]) {
+          stack.add(nums[i]);
+        } else {
+          stack.pop();
+        }
+      } else {
+        stack.push(nums[i]);
+      }
+    }
+    return stack.pop();
+  }
+
+  /**
+   * 171. Excel表列序号
+   *
+   * <p>给定一个Excel表格中的列名称，返回其相应的列序号。
+   *
+   * <p>输入: "A"
+   *
+   * <p>输出: 1
+   */
+  public static int titleToNumber(String columnTitle) {
+    int length = columnTitle.length() - 1;
+    int result = 0;
+    for (int i = length, index = 0; i >= 0; i--, index++) {
+      char ch = columnTitle.charAt(i);
+      int num = (ch + 0) - 64;
+      result += num * Math.pow(26, index);
+    }
+    return result;
+  }
+
+  /**
+   * 172. 阶乘后的零
+   *
+   * <p>给定一个整数 n，返回 n! 结果尾数中零的数量。
+   */
+  public static int trailingZeroes(int n) {
+    int zeroCount = 0;
+    long currentMultiple = 5;
+    while (n > 0) {
+      n /= 5;
+      zeroCount += n;
+    }
+    return zeroCount;
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
@@ -2598,52 +2659,24 @@ class Solution {
     ListNode16.next = ListNode17;
     ListNode17.next = ListNode18;
 
-    //		ListNode f = new ListNode(1, new ListNode(2, new ListNode(3, new ListNode(4, new
-    // ListNode(5)))));
     ListNode f = new ListNode(5);
     //		ListNode l2 = new ListNode(1, three);
     //		[[1,2],[3,5],[6,7],[8,10],[12,16]]
-    //		ListNode[] nodeArr = new ListNode[] { l1, l2, l3 };
-    //		int[][] arr = new int[][] { { 1, 3, 5, 7 } };
-    //		char[][] arr = new char[][]
-    // {{'1','0','1','0','0'},{'1','0','1','1','1'},{'1','1','1','1','1'},{'1','0','0','1','0'}};
-    //		int[][] arr = new int[][] { { 1, 5 } };
     int[] preorder = new int[] {4, 1, 2, 1, 2};
     int[] inorder = new int[] {4, 4, 1, 5, 1};
     int[] postorder = new int[] {9, 15, 7, 20, 3};
     List<List<Integer>> triangle = new ArrayList<>();
-    triangle.add(new ArrayList<>(Arrays.asList(2)));
+    triangle.add(new ArrayList<>(Collections.singletonList(2)));
     triangle.add(new ArrayList<>(Arrays.asList(3, 4)));
     triangle.add(new ArrayList<>(Arrays.asList(6, 5, 7)));
     triangle.add(new ArrayList<>(Arrays.asList(4, 1, 8, 3)));
     String[] strArr =
         new String[] {"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"};
 
-    //		char[][] board = { { 'A', 'B', 'C', 'E' }, { 'S', 'F', 'C', 'S' }, { 'A', 'D', 'E', 'E' } };
-    //		String word = "ABCCED";
-    //		nextPermutation(arr);
-    List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
+    //    List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
     long start = new Date().getTime();
     int[] intArr = new int[] {5, 25, 75};
-    //		merge(arr,0, arr1,1);
-    //        flatten(tree);
-    System.out.println(twoSum(intArr, 100));
-    //		partition1(three, 0);
     long end = new Date().getTime();
     System.out.println("程序运行时间: " + (end - start));
-    //		solveSudoku(suduku);
-    //		System.out.println();
-    //		rotate(arr);
-    //		System.out.println(rotateRight(l1,2));
-    //		System.out.println(159002%6);
-    //		Random random = new Random();
-    //		for (int i = 0; i < 20; i++) {
-    //			System.out.println(random.nextInt(2));
-    //		}
-    //		ListNode result = reverseKGroup(l1, 2);
-    //		while (result != null) {
-    //			System.out.println(result.val);
-    //			result = result.next;
-    //		}
   }
 }
