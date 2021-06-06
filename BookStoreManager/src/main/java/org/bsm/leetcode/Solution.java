@@ -2625,6 +2625,37 @@ class Solution {
     return dp[0][0];
   }
 
+  public static String largestNumber(int[] nums) {
+    int n = nums.length;
+    // 转换成包装类型，以便传入 Comparator 对象（此处为 lambda 表达式）
+    Integer[] numsArr = new Integer[n];
+    for (int i = 0; i < n; i++) {
+      numsArr[i] = nums[i];
+    }
+
+    Arrays.sort(
+        numsArr,
+        (x, y) -> {
+          long sx = 10, sy = 10;
+          while (sx <= x) {
+            sx *= 10;
+          }
+          while (sy <= y) {
+            sy *= 10;
+          }
+          return (int) ((sx * y + x) - (sy * x + y));
+        });
+
+    if (numsArr[0] == 0) {
+      return "0";
+    }
+    StringBuilder ret = new StringBuilder();
+    for (int num : numsArr) {
+      ret.append(num);
+    }
+    return ret.toString();
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
@@ -2685,7 +2716,7 @@ class Solution {
     ListNode f = new ListNode(5);
     //		ListNode l2 = new ListNode(1, three);
     //		[[1,2],[3,5],[6,7],[8,10],[12,16]]
-    int[] preorder = new int[] {4, 1, 2, 1, 2};
+    int[] preorder = new int[] {3, 30, 34, 5, 9};
     int[] inorder = new int[] {4, 4, 1, 5, 1};
     int[] postorder = new int[] {9, 15, 7, 20, 3};
     List<List<Integer>> triangle = new ArrayList<>();
@@ -2695,7 +2726,7 @@ class Solution {
     triangle.add(new ArrayList<>(Arrays.asList(4, 1, 8, 3)));
     String[] strArr =
         new String[] {"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"};
-
+    System.out.println(largestNumber(preorder));
     //    List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
     long start = new Date().getTime();
     int[] intArr = new int[] {5, 25, 75};
