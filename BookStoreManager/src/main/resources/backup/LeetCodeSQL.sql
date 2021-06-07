@@ -140,3 +140,51 @@ insert into Employee (Id, Name, Salary, ManagerId) values ('4', 'Max', '90000', 
 
 Select a.Name as Employee from Employee as a,Employee as b
 where a.ManagerId=b.Id and a.Salary>b.Salary;
+
+
+/**
+
+182. 查找重复的电子邮箱
+
+编写一个 SQL 查询，查找 Person 表中所有重复的电子邮箱。
+*/
+Create table If Not Exists Person (Id int, Email varchar(255));
+Truncate table Person;
+insert into Person (Id, Email) values ('1', 'a@b.com');
+insert into Person (Id, Email) values ('2', 'c@d.com');
+insert into Person (Id, Email) values ('3', 'a@b.com');
+
+SELECT Email FROM person GROUP BY Email HAVING COUNT(Email)>1;
+
+/**
+
+183. 从不订购的客户
+
+某网站包含两个表，Customers 表和 Orders 表。编写一个 SQL 查询，找出所有从不订购任何东西的客户。
+*/
+Create table If Not Exists Customers (Id int, Name varchar(255));
+Create table If Not Exists Orders (Id int, CustomerId int);
+Truncate table Customers;
+insert into Customers (Id, Name) values ('1', 'Joe');
+insert into Customers (Id, Name) values ('2', 'Henry');
+insert into Customers (Id, Name) values ('3', 'Sam');
+insert into Customers (Id, Name) values ('4', 'Max');
+Truncate table Orders;
+insert into Orders (Id, CustomerId) values ('1', '3');
+insert into Orders (Id, CustomerId) values ('2', '1');
+
+SELECT c.Name AS Customers FROM Customers c LEFT JOIN Orders o  ON c.Id =o.CustomerId where o.Id IS NULL;
+
+drop table Employee;
+drop table Department;
+Create table If Not Exists Employee (Id int, Name varchar(255), Salary int, DepartmentId int);
+Create table If Not Exists Department (Id int, Name varchar(255));
+Truncate table Employee;
+insert into Employee (Id, Name, Salary, DepartmentId) values ('1', 'Joe', '70000', '1');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('2', 'Jim', '90000', '1');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('3', 'Henry', '80000', '2');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('4', 'Sam', '60000', '2');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('5', 'Max', '90000', '1');
+Truncate table Department;
+insert into Department (Id, Name) values ('1', 'IT');
+insert into Department (Id, Name) values ('2', 'Sales');
