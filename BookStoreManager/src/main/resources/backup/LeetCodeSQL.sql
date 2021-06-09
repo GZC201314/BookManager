@@ -175,6 +175,11 @@ insert into Orders (Id, CustomerId) values ('2', '1');
 
 SELECT c.Name AS Customers FROM Customers c LEFT JOIN Orders o  ON c.Id =o.CustomerId where o.Id IS NULL;
 
+/**
+184. 部门工资最高的员工
+
+Employee 表包含所有员工信息，每个员工有其对应的 Id, salary 和 department Id。
+*/
 drop table Employee;
 drop table Department;
 Create table If Not Exists Employee (Id int, Name varchar(255), Salary int, DepartmentId int);
@@ -188,3 +193,60 @@ insert into Employee (Id, Name, Salary, DepartmentId) values ('5', 'Max', '90000
 Truncate table Department;
 insert into Department (Id, Name) values ('1', 'IT');
 insert into Department (Id, Name) values ('2', 'Sales');
+
+SELECT
+	Department. NAME AS 'Department',
+	Employee. NAME AS 'Employee',
+	Salary
+FROM
+	Employee
+JOIN Department ON Employee.DepartmentId = Department.Id
+WHERE
+	(
+		Employee.DepartmentId,
+		Salary
+	) IN (
+		SELECT
+			DepartmentId,
+			MAX(Salary)
+		FROM
+			Employee
+		GROUP BY
+			DepartmentId
+	);
+/**
+185. 部门工资前三高的所有员工
+
+Employee 表包含所有员工信息，每个员工有其对应的工号 Id，姓名 Name，工资 Salary 和部门编号 DepartmentId 。
+*/
+Create table If Not Exists Employee (Id int, Name varchar(255), Salary int, DepartmentId int);
+Create table If Not Exists Department (Id int, Name varchar(255));
+Truncate table Employee;
+insert into Employee (Id, Name, Salary, DepartmentId) values ('1', 'Joe', '85000', '1');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('2', 'Henry', '80000', '2');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('3', 'Sam', '60000', '2');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('4', 'Max', '90000', '1');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('5', 'Janet', '69000', '1');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('6', 'Randy', '85000', '1');
+insert into Employee (Id, Name, Salary, DepartmentId) values ('7', 'Will', '70000', '1');
+Truncate table Department;
+insert into Department (Id, Name) values ('1', 'IT');
+insert into Department (Id, Name) values ('2', 'Sales');
+
+SELECT
+	d.`Name` AS Department,
+	e1.`Name` AS Employee,
+	e1.Salary AS Salary
+FROM
+	employee e1
+JOIN department d ON (e1.DepartmentId = d.Id)
+WHERE
+	3 > (
+		SELECT
+			COUNT(DISTINCT(e2.Salary))
+		FROM
+			employee e2
+		WHERE
+			e1.Salary < e2.Salary
+		AND e1.DepartmentId = e2.DepartmentId
+	);
