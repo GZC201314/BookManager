@@ -2656,6 +2656,134 @@ class Solution {
     return ret.toString();
   }
 
+  /**
+   * 187. 重复的DNA序列
+   *
+   * <p>所有 DNA 都由一系列缩写为 'A'，'C'，'G' 和 'T' 的核苷酸组成，例如："ACGAATTCCG"。 在研究 DNA 时，识别 DNA
+   * 中的重复序列有时会对研究非常有帮助。
+   */
+  public static List<String> findRepeatedDnaSequences(String s) {
+    int length = s.length();
+    List<String> result = new ArrayList<>();
+    if (length < 10) {
+      return result;
+    }
+    Map<String, Integer> map = new HashMap<>();
+    Set<String> set = new HashSet<>();
+    int start = 0, end = 10;
+    while (end <= length) {
+      String subString = s.substring(start, end);
+      map.put(subString, map.getOrDefault(subString, 0) + 1);
+      start++;
+      end++;
+    }
+    Set<String> keySet = map.keySet();
+    for (String key : keySet) {
+      if (map.get(key) > 1) {
+        result.add(key);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * 188. 买卖股票的最佳时机 IV
+   *
+   * <p>给定一个整数数组 prices ，它的第 i 个元素 prices[i] 是一支给定的股票在第 i 天的价格。
+   *
+   * <p>设计一个算法来计算你所能获取的最大利润。你最多可以完成 k 笔交易。
+   *
+   * <p>注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+   *
+   * <p>动态规划 转移方程
+   *
+   * <p>buy[i][j] 表示对于数组 prices[0..i] 中的价格而言，进行恰好 j笔交易
+   *
+   * <p>buy[i][j]=max{buy[i−1][j],sell[i−1][j]−price[i]}
+   *
+   * <p>sell[i][j]=max{sell[i−1][j],buy[i−1][j−1]+price[i]}
+   */
+  public static int maxProfit(int k, int[] prices) {
+    if (prices.length == 0) {
+      return 0;
+    }
+
+    int n = prices.length;
+    k = Math.min(k, n / 2);
+    int[][] buy = new int[n][k + 1];
+    int[][] sell = new int[n][k + 1];
+
+    buy[0][0] = -prices[0];
+    sell[0][0] = 0;
+    for (int i = 1; i <= k; ++i) {
+      buy[0][i] = sell[0][i] = Integer.MIN_VALUE / 2;
+    }
+
+    for (int i = 1; i < n; ++i) {
+      buy[i][0] = Math.max(buy[i - 1][0], sell[i - 1][0] - prices[i]);
+      for (int j = 1; j <= k; ++j) {
+        buy[i][j] = Math.max(buy[i - 1][j], sell[i - 1][j] - prices[i]);
+        sell[i][j] = Math.max(sell[i - 1][j], buy[i - 1][j - 1] + prices[i]);
+      }
+    }
+
+    return Arrays.stream(sell[n - 1]).max().getAsInt();
+  }
+
+  /**
+   * 189. 旋转数组
+   *
+   * <p>给定一个数组，将数组中的元素向右移动 k 个位置，其中 k 是非负数。
+   */
+  public static void rotate(int[] nums, int k) {
+    int length = nums.length;
+    k = k % length;
+    if (k == 0) {
+      return;
+    }
+    int start = 0, end = length - k - 1;
+    jiaoHuan(nums, start, end);
+    start = length - k;
+    end = length - 1;
+    jiaoHuan(nums, start, end);
+    start = 0;
+    end = length - 1;
+    jiaoHuan(nums, start, end);
+  }
+
+  private static void jiaoHuan(int[] nums, int start, int end) {
+    while (start < end) {
+      int tem = nums[start];
+      nums[start] = nums[end];
+      nums[end] = tem;
+      start++;
+      end--;
+    }
+  }
+
+  /**
+   * 190. 颠倒二进制位
+   *
+   * <p>颠倒给定的 32 位无符号整数的二进制位。
+   */
+  public static int reverseBits(int n) {
+    int rev = 0;
+    for (int i = 0; i < 32 && n != 0; ++i) {
+      rev |= (n & 1) << (31 - i);
+      n >>>= 1;
+    }
+    return rev;
+  }
+
+  public static int hammingWeight(int n) {
+    int result = 0;
+    while (n > 0) {
+      result += (n & 1);
+      n = n >>> 1;
+    }
+    return result;
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
@@ -2716,7 +2844,7 @@ class Solution {
     ListNode f = new ListNode(5);
     //		ListNode l2 = new ListNode(1, three);
     //		[[1,2],[3,5],[6,7],[8,10],[12,16]]
-    int[] preorder = new int[] {3, 30, 34, 5, 9};
+    int[] preorder = new int[] {1, 2, 3, 4, 5, 6, 7};
     int[] inorder = new int[] {4, 4, 1, 5, 1};
     int[] postorder = new int[] {9, 15, 7, 20, 3};
     List<List<Integer>> triangle = new ArrayList<>();
@@ -2726,7 +2854,8 @@ class Solution {
     triangle.add(new ArrayList<>(Arrays.asList(4, 1, 8, 3)));
     String[] strArr =
         new String[] {"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"};
-    System.out.println(largestNumber(preorder));
+    rotate(preorder, 3);
+    //    System.out.println(rotate(preorder,3));
     //    List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
     long start = new Date().getTime();
     int[] intArr = new int[] {5, 25, 75};
