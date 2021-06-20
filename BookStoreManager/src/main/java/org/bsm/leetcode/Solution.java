@@ -2784,12 +2784,71 @@ class Solution {
     return result;
   }
 
+  /**
+   * 198. 打家劫舍
+   *
+   * <p>你是一个专业的小偷，计划偷窃沿街的房屋。每间房内都藏有一定的现金，
+   *
+   * <p>影响你偷窃的唯一制约因素就是相邻的房屋装有相互连通的防盗系统，
+   *
+   * <p>如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+   *
+   * <p>给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，
+   *
+   * <p>一夜之内能够偷窃到的最高金额。
+   */
+  public static int rob(int[] nums) {
+    int length = nums.length;
+    if (length == 0) {
+      return 0;
+    }
+    if (length == 1) {
+      return nums[0];
+    }
+    int[] dp = new int[length + 1];
+    dp[0] = nums[0];
+    dp[1] = Math.max(nums[0], nums[1]);
+
+    for (int i = 2; i < length; i++) {
+      dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+    }
+    return dp[length - 1];
+  }
+
+  /**
+   * 199. 二叉树的右视图
+   *
+   * <p>给定一棵二叉树，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+   *
+   * <p>层次遍历，获取每个队列的最后一个元素
+   */
+  public static List<Integer> rightSideView(TreeNode root) {
+    List<Integer> result = new ArrayList<>();
+    if (root == null) {
+      return result;
+    }
+    Deque<TreeNode> queue = new ArrayDeque<>();
+    queue.add(root);
+    while (!queue.isEmpty()) {
+      int size = queue.size();
+      result.add(queue.getLast().val);
+      for (int i = 0; i < size; i++) {
+        TreeNode node = queue.poll();
+        if (node.left != null) {
+          queue.add(node.left);
+        }
+        if (node.right != null) {
+          queue.add(node.right);
+        }
+      }
+    }
+    return result;
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
-            1,
-            new TreeNode(2, new TreeNode(4), new TreeNode(5)),
-            new TreeNode(3, new TreeNode(6), new TreeNode(7)));
+            1, new TreeNode(2, null, new TreeNode(5)), new TreeNode(3, null, new TreeNode(4)));
     Node node =
         new Node(
             1,
@@ -2855,7 +2914,7 @@ class Solution {
     String[] strArr =
         new String[] {"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"};
     rotate(preorder, 3);
-    //    System.out.println(rotate(preorder,3));
+    System.out.println(rightSideView(tree));
     //    List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
     long start = new Date().getTime();
     int[] intArr = new int[] {5, 25, 75};

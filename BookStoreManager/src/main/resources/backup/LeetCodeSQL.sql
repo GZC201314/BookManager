@@ -250,3 +250,33 @@ WHERE
 			e1.Salary < e2.Salary
 		AND e1.DepartmentId = e2.DepartmentId
 	);
+/**
+196. 删除重复的电子邮箱
+
+编写一个 SQL 查询，来删除 Person 表中所有重复的电子邮箱，重复的邮箱里只保留 Id 最小 的那个。
+*/	
+DELETE p1
+FROM
+	person p1,
+	person p2
+WHERE
+	p1.Id > p2.Id
+AND p1.Email = p2.Email;	
+	
+/**
+197. 上升的温度
+
+编写一个 SQL 查询，来查找与之前（昨天的）日期相比温度更高的所有日期的 id 。
+*/	
+SELECT
+	w2.id
+FROM
+	Weather w1,
+	Weather w2
+WHERE
+	TIMESTAMPDIFF(
+		DAY,
+		w1.RecordDate,
+		w2.RecordDate
+	) = 1
+AND w2.Temperature > w1.Temperature;	
