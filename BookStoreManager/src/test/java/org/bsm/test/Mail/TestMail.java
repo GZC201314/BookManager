@@ -39,7 +39,7 @@ public class TestMail {
     pro.put("mail.smtp.ssl.socketFactory", sf);
     // 根据邮件的会话属性构造一个发送邮件的Session，这里需要注意的是用户名那里不能加后缀，否则便不是用户名了
     // 还需要注意的是，这里的密码不是正常使用邮箱的登陆密码，而是客户端生成的另一个专门的授权码
-    MailAuthenticator0 authenticator = new MailAuthenticator0("17366192087@163.com", "abc123");
+    MailAuthenticator0 authenticator = new MailAuthenticator0("17366192087@163.com", "客户端授权码");
     Session session = Session.getInstance(pro, authenticator);
     // 根据Session 构建邮件信息
     Message message = new MimeMessage(session);
