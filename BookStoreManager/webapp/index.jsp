@@ -240,14 +240,13 @@
         <table>
             <tr>
                 <th>登录名</th>
-                <td><input name="name" class="easyui-validatebox"
+                <td><input name="name" class="easyui-textbox"
                            data-options="required:true,missingMessage:'登陆名称必填'"
                            validType="validateSameName"/></td>
             </tr>
             <tr>
                 <th>密码</th>
-                <td><input name="pwd" type="password"
-                           class="easyui-validatebox" data-options="required:true"/></td>
+                <td><input name="pwd" class="easyui-passwordbox" data-options="required:true"/></td>
             </tr>
             <tr>
                 <th>重复密码</th>

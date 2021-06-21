@@ -2845,6 +2845,120 @@ class Solution {
     return result;
   }
 
+  /**
+   * 200. 岛屿数量
+   *
+   * <p>给你一个由'1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+   *
+   * <p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+   *
+   * <p>此外，你可以假设该网格的四条边均被水包围。
+   */
+  public static int numIslands(char[][] grid) {
+    if (grid == null || grid.length == 0) {
+      return 0;
+    }
+    int row = grid.length;
+    int col = grid[0].length;
+    int num_Islands = 0;
+    for (int i = 0; i < row; i++) {
+      for (int j = 0; j < col; j++) {
+        if (grid[i][j] == '1') {
+          num_Islands++;
+          dfs_numIslands(grid, i, j);
+        }
+      }
+    }
+    return num_Islands;
+  }
+
+  public static void dfs_numIslands(char[][] grid, int r, int c) {
+    int row = grid.length;
+    int col = grid[0].length;
+    if (c < 0 || r < 0 || r > row - 1 || c > col - 1 || grid[r][c] == '0') {
+      return;
+    }
+    grid[r][c] = '0';
+    dfs_numIslands(grid, r - 1, c);
+    dfs_numIslands(grid, r, c + 1);
+    dfs_numIslands(grid, r, c - 1);
+    dfs_numIslands(grid, r + 1, c);
+  }
+
+  /**
+   * 201. 数字范围按位与
+   *
+   * <p>给你两个整数 left 和 right ，表示区间 [left, right] ，返回此区间内所有数字 按位与 的结果（包含 left 、right 端点）。
+   */
+  public static int rangeBitwiseAnd(int left, int right) {
+    int shift = 0;
+    // 找到公共前缀
+    while (left < right) {
+      right &= right - 1;
+    }
+    return right;
+  }
+
+  /**
+   * 202. 快乐数
+   *
+   * <p>编写一个算法来判断一个数 n 是不是快乐数。
+   *
+   * <p>「快乐数」定义为：
+   *
+   * <p>对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。 然后重复这个过程直到这个数变为 1，
+   *
+   * <p>也可能是 无限循环 但始终变不到 1。 如果 可以变为  1，那么这个数就是快乐数。
+   *
+   * <p>如果 n 是快乐数就返回 true ；不是，则返回 false 。
+   */
+  public static boolean isHappy(int n) {
+    Set<Integer> set = new HashSet<>();
+    set.add(n);
+    while (n != 1) {
+      int sum = 0;
+      while (n != 0) {
+        sum += Math.pow(n % 10, 2);
+        n = n / 10;
+      }
+      n = sum;
+      if (n == 1) {
+        return true;
+      }
+      if (!set.add(n)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * 203. 移除链表元素
+   *
+   * <p>给你一个链表的头节点 head 和一个整数 val ，请你删除链表中所有满足 Node.val == val 的节点，并返回 新的头节点 。
+   */
+  public static ListNode removeElements(ListNode head, int val) {
+    if (head == null) {
+      return null;
+    }
+    ListNode headNode = new ListNode();
+
+    if (head.val == val) {
+      head = head.next;
+    }
+    headNode.next = head;
+    ListNode p = headNode;
+
+    while (p != null) {
+      if (p.next != null && p.next.val == val) {
+        p.next = p.next.next;
+      } else {
+        p = p.next;
+      }
+    }
+    return headNode.next;
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
@@ -2866,12 +2980,12 @@ class Solution {
     //
     ListNode ListNode1 = new ListNode(1);
     ListNode ListNode2 = new ListNode(3);
-    ListNode ListNode3 = new ListNode(5);
+    ListNode ListNode3 = new ListNode(3);
     ListNode ListNode4 = new ListNode(7);
     ListNode ListNode5 = new ListNode(9);
     ListNode ListNode6 = new ListNode(11);
     ListNode ListNode7 = new ListNode(13);
-    ListNode ListNode8 = new ListNode(15);
+    ListNode ListNode8 = new ListNode(3);
     ListNode ListNode9 = new ListNode(17);
     ListNode ListNode10 = new ListNode(19);
     ListNode ListNode11 = new ListNode(21);
@@ -2881,7 +2995,7 @@ class Solution {
     ListNode ListNode15 = new ListNode(29);
     ListNode ListNode16 = new ListNode(30);
     ListNode ListNode17 = new ListNode(31);
-    ListNode ListNode18 = new ListNode(32);
+    ListNode ListNode18 = new ListNode(3);
     ListNode1.next = ListNode2;
     ListNode2.next = ListNode3;
     ListNode3.next = ListNode4;
@@ -2914,7 +3028,7 @@ class Solution {
     String[] strArr =
         new String[] {"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"};
     rotate(preorder, 3);
-    System.out.println(rightSideView(tree));
+    System.out.println(removeElements(ListNode1, 3));
     //    List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
     long start = new Date().getTime();
     int[] intArr = new int[] {5, 25, 75};
