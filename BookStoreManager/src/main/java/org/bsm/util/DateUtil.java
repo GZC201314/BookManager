@@ -10,17 +10,17 @@ import java.util.GregorianCalendar;
  * @author
  */
 public class DateUtil {
-    /**
-     * 获取未来 第 past 天的日期
-     *
-     * @param past
-     * @return
-     */
-    public static Date getPastDate(int past) {
-        Date now = new Date();
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(now);
-        calendar.add(Calendar.DAY_OF_MONTH, -7);
-        return calendar.getTime();
-    }
+  /**
+   * 获取未来 第 past 天的日期
+   *
+   * @param past
+   * @return
+   */
+  public static Date getPastDate(int past) {
+    Date now = new Date();
+    GregorianCalendar calendar = new GregorianCalendar();
+    calendar.setTime(now);
+    calendar.add(Calendar.DAY_OF_MONTH, -7);
+    return calendar.getTime();
+  }
 }

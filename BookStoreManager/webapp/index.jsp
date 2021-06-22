@@ -228,7 +228,7 @@
 
 
 <!-- 注册弹窗 -->
-<div id="user_reg_regDialog" style="width: 250px;" class="easyui-dialog"
+<div id="user_reg_regDialog" style="width: 350px;" class="easyui-dialog"
      data-options="title:'注册',closed:true,modal:true,buttons:[{
 				text:'注册',
 				iconCls:'icon-edit',
@@ -239,26 +239,54 @@
     <form id="user_reg_regForm" method="post">
         <table>
             <tr>
-                <th>登录名</th>
-                <td><input name="name" class="easyui-textbox"
-                           data-options="required:true,missingMessage:'登陆名称必填'"
+                <th>登录邮箱</th>
+                <td><input id="emailAddress" name="name" class="easyui-textbox" style="width: 250px"
+                           data-options="validType:'isEmail[\'#user_reg_regForm input[name=name]\']'"
                            validType="validateSameName"/></td>
             </tr>
             <tr>
                 <th>密码</th>
-                <td><input name="pwd" class="easyui-passwordbox" data-options="required:true"/></td>
+                <td><input name="pwd" class="easyui-passwordbox" style="width: 250px" data-options="required:true"/>
+                </td>
             </tr>
             <tr>
                 <th>重复密码</th>
-                <td><input name="rePwd" type="password"
+                <td><input name="rePwd" class="easyui-passwordbox" style="width: 250px"
                            class="easyui-validatebox"
                            data-options="required:true,validType:'eqPwd[\'#user_reg_regForm input[name=pwd]\']'"/></td>
+            </tr>
+            <tr>
+                <th>邮箱验证码</th>
+                <td><input name="EmailValidCode" class="easyui-textbox" style="width: 150px"
+                           class="easyui-validatebox"
+                           data-options="required:true,validType:'ValidEmailCode[\'#user_reg_regForm input[name=name]\']'"/>
+                    <a id="sendEmail" href="#" class="easyui-linkbutton" onclick="sendEmail()" style="float: right">发送验证码</a>
+                </td>
             </tr>
         </table>
     </form>
 </div>
 
 <script type="text/javascript">
+    function sendEmail() {
+        //发送邮件
+        var emailAddress = $("#emailAddress").val();
+        debugger;
+        $.ajax({
+            type: "post",
+            url: "${pageContext.request.contextPath}/userAction!sendEmailCode.action",
+            data: {"emailAddress": emailAddress},
+            success: function (data) {
+                var obj = jQuery.parseJSON(data);
+                if (obj.success) {
+
+                } else {
+                    alert("面容识别失败,请继续验证");
+                }
+            }
+        });
+        $("#sendEmail").linkbutton('disable');
+    }
 
     /* 设置页面长时间没有操作,退出用户登录 */
 
@@ -390,7 +418,6 @@
                     $.cookie('userlog', decodeURI(obj.obj.userlog));
                     $.cookie('isFaceValid', obj.obj.isFaceValid);
                     //取消人脸注册的选项
-                    debugger;
                     if (obj.obj.isFaceValid == "1") {
                         $('#faceReg').remove();
                     }
@@ -446,7 +473,6 @@
         $('#user_login_loginForm').form({
             url: '${pageContext.request.contextPath}/userAction!login.action',
             success: function (r) {
-                debugger;
                 var obj = jQuery.parseJSON(r);
                 if (obj.success) {
                     /* 登录成功把Token和refreshToken放到cookies中 */

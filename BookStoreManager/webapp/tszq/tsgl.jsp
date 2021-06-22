@@ -259,14 +259,14 @@
     }
 
     function searchBookFun() {
-        var bookname = $('#tszq_sjgl_bookname').val();
+        var bookname = $('#').val();
         $('#tszq_sjgl_datagrid').datagrid('load', {
             'bookname': bookname
         });
     }
 
     function clearBookFun() {
-        $('#tszq_sjgl_bookname').textbox('setValue', '');
+        $('#').textbox('setValue', '');
         $('#tszq_sjgl_datagrid').datagrid('load', {});
 
     }

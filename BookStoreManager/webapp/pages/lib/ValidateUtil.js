@@ -9,6 +9,20 @@ $.extend($.fn.validatebox.defaults.rules, {
         message: '密码不一致！'
     }
 });
+
+/*
+ * 校验邮箱地址
+ */
+$.extend($.fn.validatebox.defaults.rules, {
+    isEmail: {
+        validator: function (value, param) {
+            var regex = /^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g;
+            return regex.test(value);
+        },
+        message: '邮件地址错误,请检查！'
+    }
+});
+
 $.extend($.fn.validatebox.defaults.rules, {
     eqvalidateCode: {
         validator: function (value) {
@@ -40,6 +54,28 @@ $.extend($.fn.validatebox.defaults.rules, {
     }
 });
 
+$.extend($.fn.validatebox.defaults.rules, {
+    ValidEmailCode: {
+        validator: function (value, param) {
+            var result;
+            $.ajax({
+                url: 'userAction!validateEmailCode.action',
+                data: {
+                    emailAddress: $(param[0]).val(),
+                    emailCode: value
+                },
+                type: 'post',
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    result = data.success;
+                }
+            });
+            return result;
+        },
+        message: ' 邮箱验证码错误。'
+    }
+});
 
 // 扩展树加载失败的方法
 $.fn.tree.defaults.onLoadError = function (arguments) {
