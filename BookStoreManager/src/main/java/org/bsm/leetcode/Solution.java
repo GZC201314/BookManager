@@ -2959,6 +2959,30 @@ class Solution {
     return headNode.next;
   }
 
+  /**
+   * 204. 计数质数
+   *
+   * <p>统计所有小于非负整数 n 的质数的数量。
+   */
+  public static int countPrimes(int n) {
+    List<Integer> primes = new ArrayList<>();
+    int[] isPrimes = new int[n];
+    Arrays.fill(isPrimes, 1);
+    for (int i = 2; i < n; i++) {
+      // 判断一个数是质数
+      if (isPrimes[i] == 1) {
+        primes.add(i);
+      }
+      for (int j = 0; j < primes.size() && i * primes.get(j) < n; j++) {
+        isPrimes[i * primes.get(j)] = 0;
+        if (i % primes.get(j) == 0) {
+          break;
+        }
+      }
+    }
+    return primes.size();
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
