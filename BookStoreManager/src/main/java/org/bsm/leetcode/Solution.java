@@ -3017,6 +3017,74 @@ class Solution {
     return true;
   }
 
+  /**
+   * 206. 反转链表
+   *
+   * <p>给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。
+   */
+  public static ListNode reverseList(ListNode head) {
+    if (head == null) {
+      return null;
+    }
+    ListNode newHead = null;
+    while (head != null) {
+      ListNode listNode = new ListNode();
+      listNode.val = head.val;
+      listNode.next = newHead;
+      newHead = listNode;
+      head = head.next;
+    }
+    return newHead;
+  }
+
+  public static List<List<Integer>> edges;
+  public static int[] visitedCourses;
+  public static boolean valid = true;
+
+  /**
+   * 207. 课程表
+   *
+   * <p>拓扑图
+   *
+   * @param numCourses
+   * @param prerequisites
+   * @return
+   */
+  public static boolean canFinish(int numCourses, int[][] prerequisites) {
+    edges = new ArrayList<>();
+    visitedCourses = new int[numCourses];
+    for (int i = 0; i < numCourses; i++) {
+      edges.add(new ArrayList<>());
+    }
+    // 创建边
+    for (int[] prerequisite : prerequisites) {
+      edges.get(prerequisite[1]).add(prerequisite[0]);
+    }
+    for (int i = 0; i < numCourses && valid; ++i) {
+      if (visitedCourses[i] == 0) {
+        dfs_canFinish(i);
+      }
+    }
+    return valid;
+  }
+
+  private static void dfs_canFinish(int i) {
+    visitedCourses[i] = 1;
+    List<Integer> cources = edges.get(i);
+    for (Integer cource : cources) {
+      if (visitedCourses[cource] == 0) {
+        dfs_canFinish(cource);
+        if (!valid) {
+          return;
+        }
+      } else if (visitedCourses[cource] == 1) {
+        valid = false;
+        return;
+      }
+    }
+    visitedCourses[i] = 2;
+  }
+
   public static void main(String[] args) {
     TreeNode tree =
         new TreeNode(
