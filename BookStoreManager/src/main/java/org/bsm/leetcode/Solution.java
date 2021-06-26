@@ -3040,15 +3040,12 @@ class Solution {
   public static List<List<Integer>> edges;
   public static int[] visitedCourses;
   public static boolean valid = true;
-
+  public static int[] canFinish_result;
+  public static int index;
   /**
    * 207. 课程表
    *
    * <p>拓扑图
-   *
-   * @param numCourses
-   * @param prerequisites
-   * @return
    */
   public static boolean canFinish(int numCourses, int[][] prerequisites) {
     edges = new ArrayList<>();
@@ -3083,6 +3080,83 @@ class Solution {
       }
     }
     visitedCourses[i] = 2;
+  }
+
+  /** 209. 长度最小的子数组 */
+  public static int minSubArrayLen(int target, int[] nums) {
+    if (nums.length == 0) {
+      return 0;
+    }
+    int length = nums.length;
+    int minLength = Integer.MAX_VALUE;
+    int start = 0, end = 0, sum = 0;
+    while (end < length) {
+      sum += nums[end];
+      while (sum >= target) {
+        if (end - start + 1 < minLength) {
+          minLength = end - start + 1;
+        }
+        sum -= nums[start++];
+      }
+      end++;
+    }
+    if (minLength == Integer.MAX_VALUE) {
+      return 0;
+    }
+    return minLength;
+  }
+
+  /**
+   * 210. 课程表 II
+   *
+   * <p>给定课程总量以及它们的先决条件，返回你为了学完所有课程所安排的学习顺序。
+   */
+  public int[] findOrder(int numCourses, int[][] prerequisites) {
+    edges = new ArrayList<List<Integer>>();
+    for (int i = 0; i < numCourses; ++i) {
+      edges.add(new ArrayList<Integer>());
+    }
+    visitedCourses = new int[numCourses];
+    canFinish_result = new int[numCourses];
+    index = numCourses - 1;
+    for (int[] info : prerequisites) {
+      edges.get(info[1]).add(info[0]);
+    }
+    // 每次挑选一个「未搜索」的节点，开始进行深度优先搜索
+    for (int i = 0; i < numCourses && valid; ++i) {
+      if (visitedCourses[i] == 0) {
+        dfs_canFinish(i);
+      }
+    }
+    if (!valid) {
+      return new int[0];
+    }
+    return canFinish_result;
+  }
+
+  public void dfs_canFinish2(int u) {
+    // 将节点标记为「搜索中」
+    visitedCourses[u] = 1;
+    // 搜索其相邻节点
+    // 只要发现有环，立刻停止搜索
+    for (int v : edges.get(u)) {
+      // 如果「未搜索」那么搜索相邻节点
+      if (visitedCourses[v] == 0) {
+        dfs_canFinish2(v);
+        if (!valid) {
+          return;
+        }
+      }
+      // 如果「搜索中」说明找到了环
+      else if (visitedCourses[v] == 1) {
+        valid = false;
+        return;
+      }
+    }
+    // 将节点标记为「已完成」
+    visitedCourses[u] = 2;
+    // 将节点入栈
+    canFinish_result[index--] = u;
   }
 
   public static void main(String[] args) {
@@ -3154,8 +3228,9 @@ class Solution {
     String[] strArr =
         new String[] {"10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"};
     rotate(preorder, 3);
-    System.out.println(isIsomorphic("egg", "add"));
+    System.out.println(minSubArrayLen(7, new int[] {2, 3, 1, 2, 4, 3}));
     //    List<String> strlist = new ArrayList<>(Arrays.asList("apple", "pen"));
+
     long start = new Date().getTime();
     int[] intArr = new int[] {5, 25, 75};
     long end = new Date().getTime();

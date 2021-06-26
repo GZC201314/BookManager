@@ -5,9 +5,9 @@ package org.bsm.leetcode;
  * @create 2021-06-24 15:55
  */
 public class Trie {
-  private Trie[] children;
+  Trie[] children;
 
-  private boolean isEnd;
+  boolean isEnd;
 
   public Trie() {
     children = new Trie[26];
