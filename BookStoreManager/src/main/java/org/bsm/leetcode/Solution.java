@@ -340,13 +340,7 @@ class Solution {
     y.val = tem;
   }
 
-  /**
-   * 相同的图判断
-   *
-   * @param p
-   * @param q
-   * @return
-   */
+  /** 相同的图判断 */
   public static boolean isSameTree(TreeNode p, TreeNode q) {
     if (p == null && q == null) {
       return true;
@@ -985,17 +979,11 @@ class Solution {
   }
 
   /**
-   * 121. 买卖股票的最佳时机 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+   * 121. 买卖股票的最佳时机 给定一个数组 prices ，它的第i 个元素prices[i] 表示一支给定股票第 i 天的价格。
    *
    * <p>你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
    *
    * <p>返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
-   *
-   * <p>来源：力扣（LeetCode） 链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock
-   * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
-   *
-   * @param prices 价格数组
-   * @return
    */
   public static int maxProfit1(int[] prices) {
     int minprice = Integer.MAX_VALUE;
@@ -1078,10 +1066,11 @@ class Solution {
   }
 
   /**
-   * 125. 验证回文串 给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。 说明：本题中，我们将空字符串定义为有效的回文串。
+   * 125. 验证回文串
    *
-   * @param s
-   * @return
+   * <p>给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。
+   *
+   * <p>说明：本题中，我们将空字符串定义为有效的回文串。
    */
   public static boolean isPalindrome(String s) {
     int end = s.length() - 1;
@@ -1109,11 +1098,6 @@ class Solution {
    * <p>序列中第一个单词是 beginWord 。 序列中最后一个单词是 endWord 。 每次转换只能改变一个字母。 转换过程中的中间单词必须是字典wordList 中的单词。
    * 给你两个单词 beginWord和 endWord 和一个字典 wordList ，找到从beginWord 到endWord 的 最短转换序列 中的 单词数目
    * 。如果不存在这样的转换序列，返回 0。
-   *
-   * @param beginWord
-   * @param endWord
-   * @param wordList
-   * @return
    */
   public static int ladderLength(String beginWord, String endWord, List<String> wordList) {
     if (wordList.size() == 0 || !wordList.contains(endWord)) {
@@ -1169,9 +1153,6 @@ class Solution {
    * <p>例如，从根节点到叶节点的路径 1 -> 2 -> 3 表示数字 123 。 计算从根节点到叶节点生成的 所有数字之和 。
    *
    * <p>叶节点 是指没有子节点的节点。
-   *
-   * @param root
-   * @return
    */
   public static int sumNumbers(TreeNode root) {
     return dfs_sumNumbers(root, 0);
@@ -1196,11 +1177,6 @@ class Solution {
    * 转换过程中的每个单词si（1<=i<=k）必须是字典wordList中的单词。注意beginWord不必是字典wordList中的单词。 sk==endWord
    * 给你两个单词beginWord和endWord，以及一个字典wordList。 请你找出并返回所有从beginWord到endWord的最短转换序列，
    * 如果不存在这样的转换序列，返回一个空列表。 每个序列都应该以单词列表[beginWord,s1,s2,...,sk]的形式返回。
-   *
-   * @param beginWord
-   * @param endWord
-   * @param wordList
-   * @return
    */
   public static List<List<String>> findLadders(
       String beginWord, String endWord, List<String> wordList) {
@@ -1292,15 +1268,16 @@ class Solution {
   }
 
   /**
-   * 128. 最长连续序列 给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。 进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？
+   * 128. 最长连续序列
    *
-   * @param nums
-   * @return
+   * <p>给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+   *
+   * <p>进阶：你可以设计并实现时间复杂度为 O(n) 的解决方案吗？
    */
   public static int longestConsecutive(int[] nums) {
     Set<Integer> set_nums = new HashSet<>();
-    for (int i = 0; i < nums.length; i++) {
-      set_nums.add(nums[i]);
+    for (int num : nums) {
+      set_nums.add(num);
     }
     int longestConsecutive = 0;
 
