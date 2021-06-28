@@ -1,5 +1,7 @@
 package org.bsm.leetcode;
 
+import java.util.Arrays;
+
 /**
  * Definition for singly-linked list. public class ListNode { int val; ListNode next; ListNode() {}
  * ListNode(int val) { this.val = val; } ListNode(int val, ListNode next) { this.val = val;
@@ -38,5 +40,45 @@ class SolutionHead {
     return second;
   }
 
-  public static void main(String[] args) {}
+  /**
+   * 214. 最短回文串
+   *
+   * <p>给定一个字符串 s，你可以通过在字符串前面添加字符将其转换为回文串。找到并返回可以用这种方式转换的最短回文串。
+   */
+  public static String shortestPalindrome(String s) {
+    int length = s.length();
+    if (isPalindrome(s)) {
+      return s;
+    }
+    for (int i = length - 1; i >= 0; i--) {
+      if (isPalindrome(s.substring(0, i))) {
+        return new StringBuilder(s.substring(i)).reverse() + s;
+      }
+    }
+    return new StringBuilder(s).reverse() + s;
+  }
+
+  /** 校验回文数 */
+  public static boolean isPalindrome(String s) {
+    // 用StringBuilder的reverse方法将字符串反转
+    StringBuilder sb = new StringBuilder(s);
+    String afterReverse = sb.reverse().toString();
+    // 判断反转后的字符串与原字符串是否相等，可用compareTo，equals，
+    int isequal = afterReverse.compareTo(s); // 若相等则输出0
+    return isequal == 0;
+  }
+
+  /**
+   * 215. 数组中的第K个最大元素
+   *
+   * <p>在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+   */
+  public int findKthLargest(int[] nums, int k) {
+    Arrays.sort(nums);
+    return nums[nums.length - k];
+  }
+
+  public static void main(String[] args) {
+    System.out.println(shortestPalindrome(""));
+  }
 }
