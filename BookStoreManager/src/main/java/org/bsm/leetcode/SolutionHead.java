@@ -1,6 +1,6 @@
 package org.bsm.leetcode;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Definition for singly-linked list. public class ListNode { int val; ListNode next; ListNode() {}
@@ -76,6 +76,103 @@ class SolutionHead {
   public int findKthLargest(int[] nums, int k) {
     Arrays.sort(nums);
     return nums[nums.length - k];
+  }
+
+  /**
+   * 216. 组合总和 III
+   *
+   * <p>找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。
+   */
+  public static List<List<Integer>> result = new ArrayList<>();
+
+  public static List<List<Integer>> combinationSum3(int k, int n) {
+    List<Integer> ans = new ArrayList<>();
+    dfs_combinationSum3(k, n, 1, ans);
+    return result;
+  }
+
+  public static void dfs_combinationSum3(int k, int n, int start, List<Integer> ans) {
+    if (k == 1) {
+      if (n >= start && n <= 9) {
+        ans.add(n);
+        result.add(new ArrayList<>(ans));
+        ans.remove(ans.size() - 1);
+      }
+    } else {
+      for (int i = start; i <= 9; i++) {
+        ans.add(i);
+        dfs_combinationSum3(k - 1, n - i, i + 1, ans);
+        ans.remove(ans.size() - 1);
+      }
+    }
+  }
+
+  /**
+   * 217. 存在重复元素
+   *
+   * <p>给定一个整数数组，判断是否存在重复元素。
+   */
+  public static boolean containsDuplicate(int[] nums) {
+    Set<Integer> set = new HashSet<>();
+    for (int num : nums) {
+      if (!set.add(num)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  /**
+   * 217. 存在重复元素
+   *
+   * <p>给定一个整数数组，判断是否存在重复元素。
+   */
+  public static boolean containsDuplicate2(int[] nums) {
+    Arrays.sort(nums);
+    for (int i = 1; i < nums.length; i++) {
+      if (nums[i - 1] == nums[i]) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * 218. 天际线问题
+   *
+   * <p>城市的天际线是从远处观看该城市中所有建筑物形成的轮廓的外部轮廓。
+   *
+   * <p>给你所有建筑物的位置和高度，请返回由这些建筑物形成的 天际线 。
+   */
+  public static List<List<Integer>> getSkyline(int[][] buildings) {
+    PriorityQueue<int[]> pq =
+        new PriorityQueue<>((a, b) -> a[0] != b[0] ? a[0] - b[0] : a[1] - b[1]);
+    for (int[] building : buildings) {
+      pq.offer(new int[] {building[0], -building[2]});
+      pq.offer(new int[] {building[1], building[2]});
+    }
+
+    List<List<Integer>> res = new ArrayList<>();
+
+    TreeMap<Integer, Integer> heights = new TreeMap<>((a, b) -> b - a);
+    heights.put(0, 1);
+    int left = 0, height = 0;
+    while (!pq.isEmpty()) {
+      int[] arr = pq.poll();
+      if (arr[1] < 0) {
+        heights.put(-arr[1], heights.getOrDefault(-arr[1], 0) + 1);
+      } else {
+        heights.put(arr[1], heights.get(arr[1]) - 1);
+        if (heights.get(arr[1]) == 0) heights.remove(arr[1]);
+      }
+      int maxHeight = heights.keySet().iterator().next();
+      if (maxHeight != height) {
+        left = arr[0];
+        height = maxHeight;
+        res.add(Arrays.asList(left, height));
+      }
+    }
+
+    return res;
   }
 
   public static void main(String[] args) {
