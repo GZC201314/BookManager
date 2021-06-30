@@ -155,7 +155,7 @@ class SolutionHead {
 
     TreeMap<Integer, Integer> heights = new TreeMap<>((a, b) -> b - a);
     heights.put(0, 1);
-    int left = 0, height = 0;
+    int left, height = 0;
     while (!pq.isEmpty()) {
       int[] arr = pq.poll();
       if (arr[1] < 0) {
@@ -173,6 +173,29 @@ class SolutionHead {
     }
 
     return res;
+  }
+
+  /**
+   * 219. 存在重复元素 II
+   *
+   * <p>给定一个整数数组和一个整数k，判断数组中是否存在两个不同的索引i和j，使得nums [i] = nums [j]，
+   *
+   * <p>并且 i 和 j的差的 绝对值 至多为 k。
+   */
+  public static boolean containsNearbyDuplicate(int[] nums, int k) {
+    Map<Integer, Integer> map = new HashMap<>();
+    for (int i = 0; i < nums.length; i++) {
+      if (map.containsKey(nums[i])) {
+        if (i - map.get(nums[i]) <= k) {
+          return true;
+        } else {
+          map.put(nums[i], i);
+        }
+      } else {
+        map.put(nums[i], i);
+      }
+    }
+    return false;
   }
 
   public static void main(String[] args) {
