@@ -181,6 +181,10 @@ class SolutionHead {
    * <p>给定一个整数数组和一个整数k，判断数组中是否存在两个不同的索引i和j，使得nums [i] = nums [j]，
    *
    * <p>并且 i 和 j的差的 绝对值 至多为 k。
+   *
+   * <p>执行用时： 27 ms , 在所有 Java 提交中击败了 23.73% 的用户
+   *
+   * <p>内存消耗： 47.2 MB , 在所有 Java 提交中击败了 9.14% 的用户
    */
   public static boolean containsNearbyDuplicate(int[] nums, int k) {
     Map<Integer, Integer> map = new HashMap<>();
