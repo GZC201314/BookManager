@@ -213,7 +213,7 @@ class SolutionHead {
    */
   public static boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
     int n = nums.length;
-    Map<Long, Long> map = new HashMap<Long, Long>();
+    Map<Long, Long> map = new HashMap<>();
     long w = (long) t + 1;
     for (int i = 0; i < n; i++) {
       long id;
@@ -246,7 +246,60 @@ class SolutionHead {
     return false;
   }
 
+  /**
+   * 221. 最大正方形
+   *
+   * <p>在一个由 '0' 和 '1' 组成的二维矩阵内，找到只包含 '1' 的最大正方形，并返回其面积。
+   *
+   * <p>动态规划算法 转移方程：
+   *
+   * <p>if matrix(i,j) == 0 则 dp(i,j)=0
+   *
+   * <p>if matrix(i,j) == 1 则 dp(i,j)=min(dp(i−1,j),dp(i−1,j−1),dp(i,j−1))+1
+   */
+  public static int maximalSquare(char[][] matrix) {
+    if (matrix.length == 0) {
+      return 0;
+    }
+    int max = 0;
+    int hang = matrix.length, lie = matrix[0].length;
+    int[][] dp = new int[hang + 1][lie + 1];
+    for (int i = 0; i < lie; i++) {
+      dp[0][i] = (int) matrix[0][i] - 48;
+      if (dp[0][i] > max) {
+        max = dp[0][i];
+      }
+    }
+    for (int i = 1; i < hang; i++) {
+      dp[i][0] = (int) matrix[i][0] - 48;
+      if (dp[i][0] > max) {
+        max = dp[i][0];
+      }
+    }
+    for (int i = 1; i < hang; i++) {
+      for (int j = 1; j < lie; j++) {
+        if (matrix[i][j] == '0') {
+          dp[i][j] = 0;
+        } else {
+          dp[i][j] = Math.min(dp[i][j - 1], Math.min(dp[i - 1][j - 1], dp[i - 1][j])) + 1;
+          if (dp[i][j] > max) {
+            max = dp[i][j];
+          }
+        }
+      }
+    }
+    return max * max;
+  }
+
   public static void main(String[] args) {
-    System.out.println(shortestPalindrome(""));
+    char[][] matrix =
+        new char[][] {
+          {'1', '1', '1', '1', '0'},
+          {'1', '1', '1', '1', '0'},
+          {'1', '1', '1', '1', '1'},
+          {'1', '1', '1', '1', '1'},
+          {'0', '0', '1', '1', '1'}
+        };
+    System.out.println(maximalSquare(matrix));
   }
 }
