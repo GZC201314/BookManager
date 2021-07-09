@@ -341,6 +341,61 @@ class SolutionHead {
     return node != null;
   }
 
+  public static int computeArea(
+      int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2) {
+    // 计算重叠矩形的面积
+    int x1 = Math.max(ax1, bx1);
+    int x2 = Math.min(ax2, bx2);
+    int y1 = Math.max(by1, ay1);
+    int y2 = Math.min(ay2, by2);
+    // 如果存在重叠的矩形
+    int subArea = 0;
+    if (x1 < x2 && y1 < y2) {
+      subArea = (x2 - x1) * (y2 - y1);
+    }
+    int mainArea = (ax2 - ax1) * (ay2 - ay1) + (bx2 - bx1) * (by2 - by1);
+    return mainArea - subArea;
+  }
+
+  public static int calculate(String s) {
+    s = s.replaceAll(" ", "");
+    Deque<Integer> ops = new ArrayDeque<>();
+    ops.push(1);
+    int result = 0;
+    int n = s.length();
+    int i = 0;
+    int sign = 1;
+    while (i < n) {
+      switch (s.charAt(i)) {
+        case '+':
+          sign = ops.peek();
+          i++;
+          break;
+        case '-':
+          sign = -ops.peek();
+          i++;
+          break;
+        case '(':
+          ops.push(sign);
+          i++;
+          break;
+        case ')':
+          ops.pop();
+          i++;
+          break;
+        default:
+          long num = 0;
+          while (i < n && Character.isDigit(s.charAt(i))) {
+            num = num * 10 + s.charAt(i) - '0';
+            i++;
+          }
+          result += sign * num;
+      }
+    }
+
+    return result;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
@@ -350,6 +405,6 @@ class SolutionHead {
           {'1', '1', '1', '1', '1'},
           {'0', '0', '1', '1', '1'}
         };
-    System.out.println(maximalSquare(matrix));
+    System.out.println(calculate("1 + 1"));
   }
 }
