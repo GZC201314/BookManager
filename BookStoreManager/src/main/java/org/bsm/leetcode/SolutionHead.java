@@ -473,6 +473,97 @@ class SolutionHead {
     return ans;
   }
 
+  /**
+   * 228. 汇总区间
+   *
+   * <p>给定一个无重复元素的有序整数数组 nums 。
+   */
+  public static List<String> summaryRanges(int[] nums) {
+    List<String> result = new ArrayList<>();
+    if (nums == null || nums.length == 0) {
+      return result;
+    }
+    int nextNum = nums[0];
+    int first = nums[0];
+    int end = nums[0];
+    for (int i = 1; i < nums.length; i++) {
+      if (nums[i] - nextNum == 1) {
+        end++;
+        nextNum = nums[i];
+      } else {
+        if (first == end) {
+          result.add(first + "");
+        } else {
+          result.add(first + "->" + end);
+        }
+        first = end = nextNum = nums[i];
+      }
+    }
+    if (first == end) {
+      result.add(first + "");
+    } else {
+      result.add(first + "->" + end);
+    }
+    return result;
+  }
+
+  /**
+   * 229. 求众数 II
+   *
+   * <p>给定一个大小为 n 的整数数组，找出其中所有出现超过 ⌊ n/3 ⌋ 次的元素。
+   */
+  public static List<Integer> majorityElement(int[] nums) {
+    List<Integer> result = new ArrayList<>();
+    if (nums == null || nums.length == 0) {
+      return result;
+    }
+    int n = nums.length;
+    if (n == 1) {
+      result.add(nums[0]);
+      return result;
+    }
+    int cand1 = nums[0], cand2 = nums[0];
+    int count1 = 0, count2 = 0;
+    for (int num : nums) {
+      if (cand1 == num) {
+        count1++;
+        continue;
+      }
+      if (cand2 == num) {
+        count2++;
+        continue;
+      }
+      if (count1 == 0) {
+        cand1 = num;
+        count1 = 1;
+        continue;
+      }
+      if (count2 == 0) {
+        cand2 = num;
+        count2 = 1;
+        continue;
+      }
+      count1--;
+      count2--;
+    }
+    count1 = 0;
+    count2 = 0;
+    for (int num : nums) {
+      if (num == cand1) {
+        count1++;
+      } else if (num == cand2) {
+        count2++;
+      }
+    }
+    if (count1 > n / 3) {
+      result.add(cand1);
+    }
+    if (count2 > n / 3) {
+      result.add(cand2);
+    }
+    return result;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
@@ -482,6 +573,7 @@ class SolutionHead {
           {'1', '1', '1', '1', '1'},
           {'0', '0', '1', '1', '1'}
         };
-    System.out.println(calculate("3 + 2 * 2"));
+    int[] arr = {0};
+    System.out.println(summaryRanges(arr));
   }
 }
