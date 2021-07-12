@@ -564,6 +564,50 @@ class SolutionHead {
     return result;
   }
 
+  public static List<Integer> listResult = new ArrayList<>();
+
+  /**
+   * 230. 二叉搜索树中第K小的元素
+   *
+   * <p>给定一个二叉搜索树的根节点 root ，和一个整数 k ，请你设计一个算法查找其中第 k 个最小元素（从 1 开始计数）。
+   */
+  public static int kthSmallest(TreeNode root, int k) {
+    zxpl(root);
+    return listResult.get(k - 1);
+  }
+
+  public static void zxpl(TreeNode root) {
+    if (root == null) {
+      return;
+    }
+    zxpl(root.left);
+    listResult.add(root.val);
+    zxpl(root.right);
+  }
+
+  /**
+   * 231. 2 的幂
+   *
+   * <p>给你一个整数 n，请你判断该整数是否是 2 的幂次方。如果是，返回 true ；否则，返回 false 。
+   *
+   * <p>如果存在一个整数 x 使得 n == 2x ，则认为 n 是 2 的幂次方。
+   */
+  public static boolean isPowerOfTwo(int n) {
+    if (n == 0) {
+      return false;
+    }
+    while (n != 0) {
+      if (n == 1) {
+        return true;
+      }
+      if (n % 2 != 0) {
+        return false;
+      }
+      n = n / 2;
+    }
+    return true;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
