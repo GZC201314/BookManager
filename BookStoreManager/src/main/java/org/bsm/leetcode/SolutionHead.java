@@ -608,6 +608,20 @@ class SolutionHead {
     return true;
   }
 
+  /**
+   * 233. 数字 1 的个数
+   *
+   * <p>给定一个整数 n，计算所有小于等于 n 的非负整数中数字 1 出现的个数。
+   */
+  public static int countDigitOne(int n) {
+    int countr = 0;
+    for (int i = 1; i <= n; i *= 10) {
+      int divider = i * 10;
+      countr += (n / divider) * i + Math.min(Math.max(n % divider - i + 1, 0), i);
+    }
+    return countr;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
