@@ -1,5 +1,6 @@
 package org.bsm.leetcode;
 
+import org.bsm.leetcode.model.ListNode;
 import org.bsm.leetcode.model.TreeNode;
 
 import java.util.*;
@@ -620,6 +621,101 @@ class SolutionHead {
       countr += (n / divider) * i + Math.min(Math.max(n % divider - i + 1, 0), i);
     }
     return countr;
+  }
+
+  /**
+   * 234. 回文链表
+   *
+   * <p>请判断一个链表是否为回文链表。
+   *
+   * <p>进阶： 你能否用 O(n) 时间复杂度和 O(1) 空间复杂度解决此题？
+   */
+  public boolean isPalindrome(ListNode head) {
+    if (head == null) {
+      return true;
+    }
+
+    // 找到前半部分链表的尾节点并反转后半部分链表
+    ListNode firstHalfEnd = endOfFirstHalf(head);
+    ListNode secondHalfStart = reverseList(firstHalfEnd.next);
+
+    // 判断是否回文
+    ListNode p1 = head;
+    ListNode p2 = secondHalfStart;
+    boolean result = true;
+    while (result && p2 != null) {
+      if (p1.val != p2.val) {
+        result = false;
+      }
+      p1 = p1.next;
+      p2 = p2.next;
+    }
+
+    // 还原链表并返回结果
+    firstHalfEnd.next = reverseList(secondHalfStart);
+    return result;
+  }
+
+  /** 转换列表 */
+  private ListNode reverseList(ListNode head) {
+    ListNode prev = null;
+    ListNode curr = head;
+    while (curr != null) {
+      ListNode nextTemp = curr.next;
+      curr.next = prev;
+      prev = curr;
+      curr = nextTemp;
+    }
+    return prev;
+  }
+
+  /** 寻找中间节点 */
+  private ListNode endOfFirstHalf(ListNode head) {
+    ListNode fast = head;
+    ListNode slow = head;
+    while (fast.next != null && fast.next.next != null) {
+      fast = fast.next.next;
+      slow = slow.next;
+    }
+    return slow;
+  }
+
+  public static TreeNode lowestCommonAncestor1(TreeNode root, TreeNode p, TreeNode q) {
+    TreeNode ancestor = root;
+    while (true) {
+      if (p.val > ancestor.val && q.val > ancestor.val) {
+        ancestor = ancestor.right;
+      } else if (p.val < ancestor.val && q.val < ancestor.val) {
+        ancestor = ancestor.left;
+      } else {
+        break;
+      }
+    }
+    return ancestor;
+  }
+
+  /**
+   * 236. 二叉树的最近公共祖先
+   *
+   * <p>给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+   */
+  public static TreeNode lowestCommonAncestorResult;
+
+  public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    dfs_lowestCommonAncestor(root, p, q);
+    return lowestCommonAncestorResult;
+  }
+
+  public static boolean dfs_lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    if (root == null) {
+      return false;
+    }
+    boolean rson = dfs_lowestCommonAncestor(root.right, p, q);
+    boolean lson = dfs_lowestCommonAncestor(root.left, p, q);
+    if ((rson && lson) || ((root.val == p.val || root.val == q.val) && (rson || lson))) {
+      lowestCommonAncestorResult = root;
+    }
+    return rson || lson || (root.val == p.val || root.val == q.val);
   }
 
   public static void main(String[] args) {
