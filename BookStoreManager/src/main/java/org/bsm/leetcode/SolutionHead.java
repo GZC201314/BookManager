@@ -718,6 +718,38 @@ class SolutionHead {
     return rson || lson || (root.val == p.val || root.val == q.val);
   }
 
+  /**
+   * 237 删除链表中的节点
+   *
+   * <p>请编写一个函数，使其可以删除某个链表中给定的（非末尾）节点。传入函数的唯一参数为 要被删除的节点 。
+   */
+  public static void deleteNode(ListNode node) {
+    node.val = node.next.val;
+    node.next = node.next.next;
+  }
+
+  /**
+   * 238. 除自身以外数组的乘积
+   *
+   * <p>给你一个长度为n的整数数组nums，其中n > 1，返回输出数组output，其中 output[i]等于nums中除nums[i]之外其余各元素的乘积。
+   */
+  public static int[] productExceptSelf(int[] nums) {
+    int length = nums.length;
+    int[] result = new int[length];
+    result[0] = 1;
+    // 计算左边的元素的乘积
+    for (int i = 1; i < length; i++) {
+      result[i] = nums[i - 1] * result[i - 1];
+    }
+
+    int R = 1;
+    for (int i = length - 1; i >= 0; i--) {
+      result[i] = result[i] * R;
+      R *= nums[i];
+    }
+    return result;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
@@ -727,7 +759,7 @@ class SolutionHead {
           {'1', '1', '1', '1', '1'},
           {'0', '0', '1', '1', '1'}
         };
-    int[] arr = {0};
-    System.out.println(summaryRanges(arr));
+    int[] arr = {1, 2, 3, 4};
+    System.out.println(Arrays.toString(productExceptSelf(arr)));
   }
 }
