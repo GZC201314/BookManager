@@ -751,7 +751,7 @@ class SolutionHead {
   }
 
   /**
-   * 238. 滑动窗口最大值
+   * 239. 滑动窗口最大值
    *
    * <p>给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位
    *
@@ -825,6 +825,47 @@ class SolutionHead {
     return result;
   }
 
+  /**
+   * 240. 搜索二维矩阵2
+   *
+   * <p>编写一个高效的算法来搜索 m x n 矩阵 matrix 中的一个目标值 target 。该矩阵具有以下特性：
+   *
+   * <p>每行的元素从左到右升序排列。每列的元素从上到下升序排列。
+   */
+  public static boolean searchMatrix(int[][] matrix, int target) {
+    if (matrix == null || matrix.length == 0) {
+      return false;
+    }
+
+    return searchRec(matrix, target, 0, 0, matrix[0].length - 1, matrix.length - 1);
+  }
+
+  private static boolean searchRec(
+      int[][] matrix, int target, int left, int up, int right, int down) {
+    // this submatrix has no height or no width.
+    if (left > right || up > down) {
+      return false;
+      // `target` is already larger than the largest element or smaller
+      // than the smallest element in this submatrix.
+    } else if (target < matrix[up][left] || target > matrix[down][right]) {
+      return false;
+    }
+
+    int mid = left + (right - left) / 2;
+
+    // Locate `row` such that matrix[row-1][mid] < target < matrix[row][mid]
+    int row = up;
+    while (row <= down && matrix[row][mid] <= target) {
+      if (matrix[row][mid] == target) {
+        return true;
+      }
+      row++;
+    }
+
+    return searchRec(matrix, target, left, row, mid - 1, down)
+        || searchRec(matrix, target, mid + 1, up, right, row - 1);
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
@@ -835,6 +876,13 @@ class SolutionHead {
           {'0', '0', '1', '1', '1'}
         };
     int[] arr = {7, 2, 4};
-    System.out.println(Arrays.toString(maxSlidingWindow(arr, 2)));
+    int[][] intArr = {
+      {1, 4, 7, 11, 15},
+      {2, 5, 8, 12, 19},
+      {3, 6, 9, 16, 22},
+      {10, 13, 14, 17, 24},
+      {18, 21, 23, 26, 30}
+    };
+    System.out.println((searchMatrix(intArr, 5)));
   }
 }
