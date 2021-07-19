@@ -866,6 +866,40 @@ class SolutionHead {
         || searchRec(matrix, target, mid + 1, up, right, row - 1);
   }
 
+  public static List<Integer> diffWaysToCompute(String expression) {
+    if (expression.matches("[0-9]+")) {
+      List<Integer> arr = new ArrayList<>();
+      arr.add(Integer.parseInt(expression));
+      return arr;
+    }
+    List<Integer> result = new ArrayList<>();
+    List<Integer> lResult = new ArrayList<>();
+    List<Integer> rResult = new ArrayList<>();
+    int length = expression.length();
+    for (int i = 0; i < length; ++i) {
+      if ("+-*".contains(expression.charAt(i) + "")) {
+        lResult = diffWaysToCompute(expression.substring(0, i));
+        rResult = diffWaysToCompute(expression.substring(i + 1));
+        for (Integer value : lResult) {
+          for (Integer integer : rResult) {
+            switch (expression.charAt(i)) {
+              case '+':
+                result.add(value + integer);
+                break;
+              case '-':
+                result.add(value - integer);
+                break;
+              case '*':
+                result.add(value * integer);
+                break;
+            }
+          }
+        }
+      }
+    }
+    return result;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
@@ -883,6 +917,6 @@ class SolutionHead {
       {10, 13, 14, 17, 24},
       {18, 21, 23, 26, 30}
     };
-    System.out.println((searchMatrix(intArr, 5)));
+    System.out.println((diffWaysToCompute("2-1-1")));
   }
 }
