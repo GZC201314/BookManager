@@ -900,6 +900,46 @@ class SolutionHead {
     return result;
   }
 
+  /** 242. 有效的字母异或词 */
+  public static boolean isAnagram(String s, String t) {
+    Map<Character, Integer> map = new HashMap<>();
+    if (s.length() != t.length()) {
+      return false;
+    }
+    char[] saArr = s.toCharArray();
+    char[] taArr = t.toCharArray();
+    for (int i = 0; i < s.length(); i++) {
+      map.put(saArr[i], map.getOrDefault(saArr[i], 0) + 1);
+    }
+    for (int i = 0; i < s.length(); i++) {
+      if (map.getOrDefault(taArr[i], 0) - 1 < 0) {
+        return false;
+      }
+      map.put(taArr[i], map.getOrDefault(taArr[i], 0) - 1);
+    }
+    return true;
+  }
+
+  public static List<String> binaryTreePathsResult = new ArrayList<>();
+
+  /** 257. 二叉树的所有路径 */
+  public static List<String> binaryTreePaths(TreeNode root) {
+    dfs_binaryTreePaths(root, "");
+    return binaryTreePathsResult;
+  }
+
+  public static void dfs_binaryTreePaths(TreeNode root, String path) {
+    if (root != null) {
+      path += root.val;
+      if (root.left == null && root.right == null) {
+        binaryTreePathsResult.add(path);
+      } else {
+        dfs_binaryTreePaths(root.left, path + "->");
+        dfs_binaryTreePaths(root.right, path + "->");
+      }
+    }
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
