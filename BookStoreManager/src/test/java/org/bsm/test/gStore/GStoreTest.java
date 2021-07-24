@@ -58,13 +58,62 @@ public class GStoreTest {
     paramsMap.put("access_secret", AccessSecret);
     paramsMap.put("action", "queryDB");
     paramsMap.put("dbName", "jinrong");
+    // TODO
+    String companyName1 = "中国东方航空股份有限公司";
+    String companyName2 = "上海浦东发展银行股份有限公司";
+    task3(url, paramsMap, companyName1, companyName2);
+  }
 
-    //    task1(url, paramsMap);
-    tesk2(url, paramsMap);
+  private void task3(
+      String url, Map<String, String> paramsMap, String companyName1, String companyName2) {
+    boolean task3Result = false;
+    String sparql1 =
+        "ASK {"
+            + "?x <http://localhost:2020/vocab/resource/holder_copy_holder_name>+ ?y \n"
+            + "FILTER(?x = <file:///F:/d2r-server-0.7/holder8.nt#holder_copy/"
+            + companyName1
+            + ">)\n"
+            + "FILTER(?y = <file:///F:/d2r-server-0.7/holder8.nt#holder_copy/"
+            + companyName2
+            + ">)"
+            + "}";
+    paramsMap.put("sparql", sparql1);
+    boolean ask1 = false;
+    boolean ask2 = false;
+    getAskResult(url, paramsMap);
+    String temp = companyName1;
+    companyName1 = companyName2;
+    companyName2 = temp;
+    String sparql2 =
+        "ASK {"
+            + "?x <http://localhost:2020/vocab/resource/holder_copy_holder_name>+ ?y \n"
+            + "FILTER(?x = <file:///F:/d2r-server-0.7/holder8.nt#holder_copy/"
+            + companyName1
+            + ">)\n"
+            + "FILTER(?y = <file:///F:/d2r-server-0.7/holder8.nt#holder_copy/"
+            + companyName2
+            + ">)"
+            + "}";
+    paramsMap.put("sparql", sparql2);
+    getAskResult(url, paramsMap);
+    task3Result = ask1 && ask2;
+  }
 
-    //    String sparql3 = getTask3Sparql();
-    //    paramsMap.put("sparql", sparql3);
-    //    System.out.println(HttpUtils.sendPost(url, paramsMap));
+  private void getAskResult(String url, Map<String, String> paramsMap) {
+    boolean ask1;
+    JSONObject jsonObject = JSON.parseObject(HttpUtils.sendPost(url, paramsMap));
+    String data = jsonObject.getString("data");
+    JSONObject results = JSON.parseObject(data);
+    String resultsString = results.getString("results");
+    JSONObject bindingsString = JSON.parseObject(resultsString);
+    JSONArray bindings = bindingsString.getJSONArray("bindings");
+    for (Object binding : bindings) {
+      JSONObject json = (JSONObject) binding;
+      int j = 0;
+      String askResult = json.getString("askResult");
+      TypeValue ask = JSON.parseObject(askResult, TypeValue.class);
+      ask1 = Boolean.parseBoolean(ask.getValue());
+    }
   }
 
   private void task1(String url, Map<String, String> paramsMap) {
@@ -83,8 +132,8 @@ public class GStoreTest {
     String resultsString = results.getString("results");
     JSONObject bindingsString = JSON.parseObject(resultsString);
     JSONArray bindings = bindingsString.getJSONArray("bindings");
-    for (int i = 0; i < bindings.size(); i++) {
-      JSONObject json = (JSONObject) bindings.get(i);
+    for (Object binding : bindings) {
+      JSONObject json = (JSONObject) binding;
       int j = 0;
       while (json.getString("com" + j) != null) {
         String companyName = json.getString("com" + j++);
@@ -166,7 +215,6 @@ public class GStoreTest {
             + companyName
             + "> ) \n"
             + "}";
-
     System.out.println(sparql);
     return sparql;
   }
