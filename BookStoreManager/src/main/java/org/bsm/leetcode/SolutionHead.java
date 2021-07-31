@@ -944,6 +944,55 @@ class SolutionHead {
     return (num - 1) % 9 + 1;
   }
 
+  /**
+   * 260. 只出现一次的数字
+   *
+   * <p>给定一个整数数组 nums，其中恰好有两个元素只出现一次，
+   *
+   * <p>其余所有元素均出现两次。 找出只出现一次的那两个元素。
+   *
+   * <p>你可以按 任意顺序 返回答案。
+   */
+  public static int[] singleNumber1(int[] nums) {
+    int[] result = new int[2];
+    Set<Integer> set = new HashSet<>();
+    int length = nums.length;
+    for (int num : nums) {
+      if (set.contains(num)) {
+        set.remove(num);
+      } else {
+        set.add(num);
+      }
+    }
+    int index = 0;
+    for (int num : set) {
+      result[index++] = num;
+    }
+    return result;
+  }
+
+  public int[] singleNumber(int[] nums) {
+    int ret = 0;
+    for (int num : nums) {
+      ret ^= num;
+    }
+    int index = 1;
+    while ((ret & index) == 0) {
+      index <<= 1;
+    }
+    int a = 0;
+    int b = 0;
+    for (int num : nums) {
+      if ((num & index) == 0) {
+        a ^= num;
+      } else {
+        b ^= num;
+      }
+    }
+
+    return new int[] {a, b};
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
