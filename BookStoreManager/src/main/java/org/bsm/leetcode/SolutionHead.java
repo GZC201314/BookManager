@@ -971,6 +971,13 @@ class SolutionHead {
     return result;
   }
 
+  /**
+   * 260. 只出现一次的数字 III
+   *
+   * <p>给定一个整数数组 nums，其中恰好有两个元素只出现一次，其余所有元素均出现两次。
+   *
+   * <p>找出只出现一次的那两个元素。你可以按 任意顺序 返回答案。
+   */
   public int[] singleNumber(int[] nums) {
     int ret = 0;
     for (int num : nums) {
@@ -991,6 +998,31 @@ class SolutionHead {
     }
 
     return new int[] {a, b};
+  }
+
+  /**
+   * 263. 抽数
+   *
+   * <p>给你一个整数 n ，请你判断 n 是否为 丑数 。如果是，返回 true ；
+   *
+   * <p>否则，返回 false 。
+   *
+   * <p>丑数 就是只包含质因数 2、3 和/或 5 的正整数。
+   */
+  public static boolean isUgly(int n) {
+    if (n == 0) {
+      return false;
+    }
+    while (n % 2 == 0) {
+      n = n / 2;
+    }
+    while (n % 3 == 0) {
+      n = n / 3;
+    }
+    while (n % 5 == 0) {
+      n = n / 5;
+    }
+    return n == 1;
   }
 
   public static void main(String[] args) {

@@ -4,6 +4,9 @@ import com.alibaba.druid.filter.config.ConfigTools;
 import com.sun.mail.util.MailSSLSocketFactory;
 import org.bsm.Email.MailAuthenticator0;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -20,6 +23,15 @@ import java.util.regex.Pattern;
 public class TestMail {
   @Test
   public void testSendMail() throws Exception {
+    // 获取邮箱密码
+    ApplicationContext ac =
+        new ClassPathXmlApplicationContext(
+            new String[] {"classpath:spring.xml", "classpath:spring-hibernate.xml"});
+    RedisTemplate<String, String> redisTemplate =
+        (RedisTemplate<String, String>) ac.getBean("redisTemplate");
+    String emailEncodePassword = redisTemplate.opsForValue().get("emailEncodePassword");
+    String emailAddress = redisTemplate.opsForValue().get("emailAddress");
+
     // 配置信息
     Properties pro = new Properties();
     pro.put("mail.smtp.host", "smtp.163.com");
@@ -34,10 +46,7 @@ public class TestMail {
     // 根据邮件的会话属性构造一个发送邮件的Session，这里需要注意的是用户名那里不能加后缀，否则便不是用户名了
     // 还需要注意的是，这里的密码不是正常使用邮箱的登陆密码，而是客户端生成的另一个专门的授权码
     MailAuthenticator0 authenticator =
-        new MailAuthenticator0(
-            "17366192087@163.com",
-            ConfigTools.decrypt(
-                "WNRMsp637PiROfSUR7s0jP2iN5mJb4FFvTjwnF45qVrMMP8gZVYFcqnsAEVO7J0EkOSRsl/tWRRh/skUX7qMDw=="));
+        new MailAuthenticator0(emailAddress, ConfigTools.decrypt(emailEncodePassword));
     Session session = Session.getInstance(pro, authenticator);
     // 根据Session 构建邮件信息
     Message message = new MimeMessage(session);
