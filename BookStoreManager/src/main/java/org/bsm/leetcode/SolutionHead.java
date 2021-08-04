@@ -1204,6 +1204,34 @@ class SolutionHead {
     return result;
   }
 
+  /** 274. H指数 */
+  public static int hIndex(int[] citations) {
+    int n = citations.length;
+    int l = 0, r = n;
+    // 二分引用次数
+    while (l <= r) {
+      int mid = l + (r - l) / 2;
+      if (check(citations, mid)) {
+        l = mid + 1;
+      } else {
+        r = mid - 1;
+      }
+    }
+    return r;
+  }
+
+  public static boolean check(int[] citations, int mid) {
+    int count = 0;
+    for (int citation : citations) {
+      // 如果论文引用次数 >= 当前引用次数,符合要求的篇数+1
+      if (citation >= mid) {
+        count++;
+      }
+    }
+    // 如果符合要求篇数>=引用次数,则当前值可以为H指数
+    return count >= mid;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
