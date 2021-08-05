@@ -1205,7 +1205,7 @@ class SolutionHead {
   }
 
   /** 274. H指数 */
-  public static int hIndex(int[] citations) {
+  public static int hIndex1(int[] citations) {
     int n = citations.length;
     int l = 0, r = n;
     // 二分引用次数
@@ -1230,6 +1230,17 @@ class SolutionHead {
     }
     // 如果符合要求篇数>=引用次数,则当前值可以为H指数
     return count >= mid;
+  }
+  /** 275. H指数 2 */
+  public static int hIndex(int[] citations) {
+    int n = citations.length;
+    int l = 0, r = n - 1;
+    while (l < r) {
+      int mid = l + r >> 1;
+      if (citations[mid] >= n - mid) r = mid;
+      else l = mid + 1;
+    }
+    return citations[r] >= n - r ? n - r : 0;
   }
 
   public static void main(String[] args) {
