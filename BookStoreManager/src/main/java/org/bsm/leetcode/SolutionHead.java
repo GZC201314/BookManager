@@ -1243,6 +1243,102 @@ class SolutionHead {
     return citations[r] >= n - r ? n - r : 0;
   }
 
+  /**
+   * 279. 完全平均数
+   *
+   * <p>给定正整数 n，找到若干个完全平方数（比如 1, 4, 9, 16, ...）
+   *
+   * <p>使得它们的和等于 n。你需要让组成和的完全平方数的个数最少。
+   */
+  public int numSquares(int n) {
+    int[] f = new int[n + 1];
+    for (int i = 1; i <= n; i++) {
+      int minn = Integer.MAX_VALUE;
+      for (int j = 1; j * j <= i; j++) {
+        minn = Math.min(minn, f[i - j * j]);
+      }
+      f[i] = minn + 1;
+    }
+    return f[n];
+  }
+
+  public ArrayList<String> answer;
+  public String digits;
+  public long target;
+
+  public void recurse(
+      int index, long previousOperand, long currentOperand, long value, ArrayList<String> ops) {
+    String nums = this.digits;
+
+    // Done processing all the digits in num
+    if (index == nums.length()) {
+
+      // If the final value == target expected AND
+      // no operand is left unprocessed
+      if (value == this.target && currentOperand == 0) {
+        StringBuilder sb = new StringBuilder();
+        ops.subList(1, ops.size()).forEach(v -> sb.append(v));
+        this.answer.add(sb.toString());
+      }
+      return;
+    }
+
+    // 将当前操作数扩展一位
+    currentOperand = currentOperand * 10 + Character.getNumericValue(nums.charAt(index));
+    String current_val_rep = Long.toString(currentOperand);
+    int length = nums.length();
+
+    // 为了避免我们有 1 + 05 或 1 05 的情况，因为 05 将不是有效的操作数。因此这个检查
+    if (currentOperand > 0) {
+
+      // NO OP recursion
+      recurse(index + 1, previousOperand, currentOperand, value, ops);
+    }
+
+    // +
+    ops.add("+");
+    ops.add(current_val_rep);
+    recurse(index + 1, currentOperand, 0, value + currentOperand, ops);
+    ops.remove(ops.size() - 1);
+    ops.remove(ops.size() - 1);
+
+    if (ops.size() > 0) {
+
+      // -
+      ops.add("-");
+      ops.add(current_val_rep);
+      recurse(index + 1, -currentOperand, 0, value - currentOperand, ops);
+      ops.remove(ops.size() - 1);
+      ops.remove(ops.size() - 1);
+
+      // *，计算乘法之前需要先把之前计算的减去，再加乘法
+      ops.add("*");
+      ops.add(current_val_rep);
+      recurse(
+          index + 1,
+          currentOperand * previousOperand,
+          0,
+          value - previousOperand + (currentOperand * previousOperand),
+          ops);
+      ops.remove(ops.size() - 1);
+      ops.remove(ops.size() - 1);
+    }
+  }
+
+  /** 282. 给表达式添加运算符 */
+  public List<String> addOperators(String num, int target) {
+
+    if (num.length() == 0) {
+      return new ArrayList<String>();
+    }
+
+    this.target = target;
+    this.digits = num;
+    this.answer = new ArrayList<String>();
+    this.recurse(0, 0, 0, 0, new ArrayList<String>());
+    return this.answer;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
