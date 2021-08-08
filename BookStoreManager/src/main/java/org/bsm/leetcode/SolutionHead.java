@@ -1339,6 +1339,46 @@ class SolutionHead {
     return this.answer;
   }
 
+  /** 283. 移动零 */
+  public static void moveZeroes(int[] nums) {
+    if (nums.length == 1) {
+      return;
+    }
+    int start = 0, end = 1;
+    while (end < nums.length) {
+      if (nums[start] == 0 && nums[end] == 0) {
+        end++;
+        if (end >= nums.length) {
+          break;
+        }
+      }
+      if (nums[start] != 0 && nums[end] == 0) {
+        start++;
+        end++;
+        if (end >= nums.length) {
+          break;
+        }
+      }
+      if (nums[start] != 0 && nums[end] != 0) {
+        start++;
+        end++;
+        if (end >= nums.length) {
+          break;
+        }
+      }
+      if (nums[start] == 0 && nums[end] != 0) {
+        int tem = nums[start];
+        nums[start] = nums[end];
+        nums[end] = tem;
+        start++;
+        end++;
+        if (end >= nums.length) {
+          break;
+        }
+      }
+    }
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
@@ -1348,7 +1388,7 @@ class SolutionHead {
           {'1', '1', '1', '1', '1'},
           {'0', '0', '1', '1', '1'}
         };
-    int[] arr = {7, 2, 4};
+    int[] arr = {4, 2, 4, 0, 0, 3, 0, 5, 1, 0};
     int[][] intArr = {
       {1, 4, 7, 11, 15},
       {2, 5, 8, 12, 19},
@@ -1356,6 +1396,7 @@ class SolutionHead {
       {10, 13, 14, 17, 24},
       {18, 21, 23, 26, 30}
     };
-    System.out.println((nthUglyNumber(10)));
+    moveZeroes(arr);
+    //    System.out.println(());
   }
 }
