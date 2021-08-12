@@ -1397,6 +1397,10 @@ class SolutionHead {
       {18, 21, 23, 26, 30}
     };
     moveZeroes(arr);
+    MedianFinder m = new MedianFinder();
+    m.addNum(1);
+    m.addNum(2);
+    System.out.println(m.findMedian());
     //    System.out.println(());
   }
 }
