@@ -307,9 +307,7 @@ class SolutionHead {
   }
 
   public int countNodes1(TreeNode root) {
-    if (root == null) {
-      return 0;
-    }
+    if (root == null) return 0;
     int level = 0;
     TreeNode node = root;
     while (node.left != null) {
@@ -440,7 +438,7 @@ class SolutionHead {
     //      char[] flags = {'+', '-', '*', '/'};
     //      if ("+-*/".contains(charArr[i] + "")) {}
     //    }
-    Deque<Integer> stack = new LinkedList<Integer>();
+    Deque<Integer> stack = new LinkedList<>();
     s = s.replaceAll(" ", "");
     char preSign = '+';
     int num = 0;
@@ -753,11 +751,9 @@ class SolutionHead {
   /**
    * 239. 滑动窗口最大值
    *
-   * <p>给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位
+   * <p>给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。
    *
-   * @param nums
-   * @param k
-   * @return
+   * <p>你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位
    */
   public static int[] maxSlidingWindow(int[] nums, int k) {
     //    int start = 0, end = k;
@@ -1379,6 +1375,139 @@ class SolutionHead {
     }
   }
 
+  /** 299. 猜数字游戏 */
+  public static String getHint(String secret, String guess) {
+    int[] array = new int[10];
+    int A = 0, B = 0;
+    for (int i = 0; i < secret.length(); i++) {
+      if (secret.charAt(i) == guess.charAt(i)) {
+        A++;
+      } else {
+        // 判断 guess 在 i 之前是否该数字
+        if (array[secret.charAt(i) - '0']++ < 0) {
+          B++;
+        }
+        // 判断 secret 在 i 之前是否该数字
+        if (array[guess.charAt(i) - '0']-- > 0) {
+          B++;
+        }
+      }
+    }
+    return String.valueOf(A) + 'A' + B + 'B';
+  }
+
+  /**
+   * 301. 删除无效的括号
+   *
+   * <p>给你一个由若干括号和字母组成的字符串 s ，删除最小数量的无效括号，使得输入的字符串有效。
+   *
+   * <p>返回所有可能的结果。答案可以按 任意顺序 返回。
+   */
+  private int len;
+
+  private char[] charArray;
+  private final Set<String> validExpressions = new HashSet<>();
+
+  public List<String> removeInvalidParentheses(String s) {
+    this.len = s.length();
+    this.charArray = s.toCharArray();
+
+    // 第 1 步：遍历一次，计算多余的左右括号
+    int leftRemove = 0;
+    int rightRemove = 0;
+    for (int i = 0; i < len; i++) {
+      if (charArray[i] == '(') {
+        leftRemove++;
+      } else if (charArray[i] == ')') {
+        // 遇到右括号的时候，须要根据已经存在的左括号数量决定
+        if (leftRemove == 0) {
+          rightRemove++;
+        }
+        if (leftRemove > 0) {
+          // 关键：一个右括号出现可以抵销之前遇到的左括号
+          leftRemove--;
+        }
+      }
+    }
+
+    // 第 2 步：回溯算法，尝试每一种可能的删除操作
+    StringBuilder path = new StringBuilder();
+    dfs(0, 0, 0, leftRemove, rightRemove, path);
+    return new ArrayList<>(this.validExpressions);
+  }
+
+  /**
+   * @param index 当前遍历到的下标
+   * @param leftCount 已经遍历到的左括号的个数
+   * @param rightCount 已经遍历到的右括号的个数
+   * @param leftRemove 最少应该删除的左括号的个数
+   * @param rightRemove 最少应该删除的右括号的个数
+   * @param path 一个可能的结果
+   */
+  private void dfs(
+      int index,
+      int leftCount,
+      int rightCount,
+      int leftRemove,
+      int rightRemove,
+      StringBuilder path) {
+    if (index == len) {
+      if (leftRemove == 0 && rightRemove == 0) {
+        validExpressions.add(path.toString());
+      }
+      return;
+    }
+
+    char character = charArray[index];
+    // 可能的操作 1：删除当前遍历到的字符
+    if (character == '(' && leftRemove > 0) {
+      // 由于 leftRemove > 0，并且当前遇到的是左括号，因此可以尝试删除当前遇到的左括号
+      dfs(index + 1, leftCount, rightCount, leftRemove - 1, rightRemove, path);
+    }
+    if (character == ')' && rightRemove > 0) {
+      // 由于 rightRemove > 0，并且当前遇到的是右括号，因此可以尝试删除当前遇到的右括号
+      dfs(index + 1, leftCount, rightCount, leftRemove, rightRemove - 1, path);
+    }
+
+    // 可能的操作 2：保留当前遍历到的字符
+    path.append(character);
+    if (character != '(' && character != ')') {
+      // 如果不是括号，继续深度优先遍历
+      dfs(index + 1, leftCount, rightCount, leftRemove, rightRemove, path);
+    } else if (character == '(') {
+      // 考虑左括号
+      dfs(index + 1, leftCount + 1, rightCount, leftRemove, rightRemove, path);
+    } else if (rightCount < leftCount) {
+      // 考虑右括号
+      dfs(index + 1, leftCount, rightCount + 1, leftRemove, rightRemove, path);
+    }
+    path.deleteCharAt(path.length() - 1);
+  }
+
+  /**
+   * 300. 最大递增子序列
+   *
+   * <p>动态规划算法
+   */
+  public static int lengthOfLIS(int[] nums) {
+    int length = nums.length;
+    int max = 1;
+    int[] dp = new int[length];
+    Arrays.fill(dp, 1);
+    for (int i = 1; i < length; i++) {
+      int numCount = 1;
+      for (int j = 0; j < i; j++) {
+        if (nums[j] < nums[i]) {
+          dp[i] = Math.max(dp[j] + 1, dp[i]);
+          if (max < dp[i]) {
+            max = dp[i];
+          }
+        }
+      }
+    }
+    return max;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
@@ -1388,7 +1517,7 @@ class SolutionHead {
           {'1', '1', '1', '1', '1'},
           {'0', '0', '1', '1', '1'}
         };
-    int[] arr = {4, 2, 4, 0, 0, 3, 0, 5, 1, 0};
+    int[] arr = {7, 7, 7, 7, 7, 7, 7};
     int[][] intArr = {
       {1, 4, 7, 11, 15},
       {2, 5, 8, 12, 19},
@@ -1396,11 +1525,11 @@ class SolutionHead {
       {10, 13, 14, 17, 24},
       {18, 21, 23, 26, 30}
     };
-    moveZeroes(arr);
-    MedianFinder m = new MedianFinder();
-    m.addNum(1);
-    m.addNum(2);
-    System.out.println(m.findMedian());
+    //    moveZeroes(arr);
+    //    MedianFinder m = new MedianFinder();
+    //    m.addNum(1);
+    //    m.addNum(2);
+    System.out.println(lengthOfLIS(arr));
     //    System.out.println(());
   }
 }
