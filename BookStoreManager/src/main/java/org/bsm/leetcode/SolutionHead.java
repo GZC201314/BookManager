@@ -1,6 +1,7 @@
 package org.bsm.leetcode;
 
 import org.bsm.leetcode.model.ListNode;
+import org.bsm.leetcode.model.NumMatrix;
 import org.bsm.leetcode.model.TreeNode;
 
 import java.util.*;
@@ -1519,17 +1520,14 @@ class SolutionHead {
         };
     int[] arr = {7, 7, 7, 7, 7, 7, 7};
     int[][] intArr = {
-      {1, 4, 7, 11, 15},
-      {2, 5, 8, 12, 19},
-      {3, 6, 9, 16, 22},
-      {10, 13, 14, 17, 24},
-      {18, 21, 23, 26, 30}
+      {3, 0, 1, 4, 2}, {5, 6, 3, 2, 1}, {1, 2, 0, 1, 5}, {4, 1, 0, 1, 7}, {1, 0, 3, 0, 5}
     };
     //    moveZeroes(arr);
     //    MedianFinder m = new MedianFinder();
     //    m.addNum(1);
     //    m.addNum(2);
-    System.out.println(lengthOfLIS(arr));
+    NumMatrix nm = new NumMatrix(intArr);
+    System.out.println(nm.sumRegion(2, 1, 4, 3));
     //    System.out.println(());
   }
 }
