@@ -1,7 +1,6 @@
 package org.bsm.leetcode;
 
 import org.bsm.leetcode.model.ListNode;
-import org.bsm.leetcode.model.NumMatrix;
 import org.bsm.leetcode.model.TreeNode;
 
 import java.util.*;
@@ -1509,6 +1508,62 @@ class SolutionHead {
     return max;
   }
 
+  public static String reverseVowels1(String s) {
+    int length = s.length();
+    if (length <= 1) {
+      return s;
+    }
+    char[] sArr = s.toCharArray();
+    int start = 0;
+    int end = length - 1;
+    while (start < end) {
+      while (start < length - 1 && !"AEIOUaeiou".contains(sArr[start] + "")) {
+        start++;
+      }
+      if (start >= end) {
+        break;
+      }
+      while (!"AEIOUaeiou".contains(sArr[end] + "")) {
+        end--;
+      }
+      if (start < end) {
+        char tem = sArr[start];
+        sArr[start] = sArr[end];
+        sArr[end] = tem;
+      }
+      start++;
+      end--;
+    }
+    return new String(sArr);
+  }
+
+  private boolean isNotVowel(char ch) {
+    return ch != 'a' && ch != 'e' && ch != 'i' && ch != 'o' && ch != 'u' && ch != 'A' && ch != 'E'
+        && ch != 'I' && ch != 'O' && ch != 'U';
+  }
+
+  public String reverseVowels(String s) {
+    if (s == null) {
+      return null;
+    }
+    int j = s.length() - 1;
+    char[] sArr = new char[s.length()];
+    int i = 0;
+    while (i <= j) {
+      char iChar = s.charAt(i);
+      char jChar = s.charAt(j);
+      if (isNotVowel(iChar)) {
+        sArr[i++] = iChar;
+      } else if (isNotVowel(jChar)) {
+        sArr[j--] = jChar;
+      } else {
+        sArr[i++] = jChar;
+        sArr[j--] = iChar;
+      }
+    }
+    return new String(sArr);
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
@@ -1526,8 +1581,8 @@ class SolutionHead {
     //    MedianFinder m = new MedianFinder();
     //    m.addNum(1);
     //    m.addNum(2);
-    NumMatrix nm = new NumMatrix(intArr);
-    System.out.println(nm.sumRegion(2, 1, 4, 3));
+    //    NumMatrix nm = new NumMatrix(intArr);
+    System.out.println(reverseVowels1(".,"));
     //    System.out.println(());
   }
 }
