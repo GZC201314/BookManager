@@ -1564,6 +1564,135 @@ class SolutionHead {
     return new String(sArr);
   }
 
+  private static final int[][] DIRECTIONS = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+
+  public List<Integer> numIslands2(int m, int n, int[][] positions) {
+    UnionFind unionFind = new UnionFind(m * n);
+    boolean[] visited = new boolean[m * n];
+
+    List<Integer> res = new ArrayList<>();
+    for (int[] position : positions) {
+      int currX = position[0];
+      int currY = position[1];
+
+      int index = currX * n + currY;
+      if (!visited[index]) {
+        // 把水变成陆地，连通分量个数加 1
+        unionFind.addCount();
+        visited[index] = true;
+        for (int[] direction : DIRECTIONS) {
+          int newX = currX + direction[0];
+          int newY = currY + direction[1];
+          int newIndex = newX * n + newY;
+          // 下面这三个条件很重要
+          if (inArea(newX, newY, m, n)
+              && visited[newIndex]
+              && !unionFind.isConnected(index, newIndex)) {
+            unionFind.union(index, newIndex);
+          }
+        }
+      }
+      res.add(unionFind.getCount());
+    }
+    return res;
+  }
+
+  public boolean inArea(int x, int y, int m, int n) {
+    return 0 <= x && x < m && 0 <= y && y < n;
+  }
+
+  private class UnionFind {
+
+    private int[] parent;
+    private int count;
+
+    public int getCount() {
+      return count;
+    }
+
+    public void addCount() {
+      count++;
+    }
+
+    public UnionFind(int n) {
+      this.parent = new int[n];
+      for (int i = 0; i < n; i++) {
+        parent[i] = i;
+      }
+      this.count = 0;
+    }
+
+    public boolean isConnected(int x, int y) {
+      return find(x) == find(y);
+    }
+
+    public int find(int x) {
+      if (parent[x] != x) {
+        parent[x] = find(parent[x]);
+      }
+      return parent[x];
+    }
+
+    public void union(int x, int y) {
+      int rootX = find(x);
+      int rootY = find(y);
+      if (rootX == rootY) {
+        return;
+      }
+
+      parent[rootX] = rootY;
+      count--;
+    }
+  }
+
+  /**
+   * 306. 累加数
+   *
+   * @param num
+   * @return
+   */
+  String s;
+
+  int n;
+
+  public boolean isAdditiveNumber(String num) {
+    this.s = num;
+    this.n = num.length();
+    return toFlashBack(0, 0, 0, 0);
+  }
+
+  /**
+   * @param index 当前的下标
+   * @param sum 前两个数的和
+   * @param previous 前一个数的值
+   * @param count 已生成几个数
+   * @return
+   */
+  public boolean toFlashBack(int index, long sum, long previous, int count) {
+    if (index == n) {
+      return count >= 3;
+    }
+    long value = 0;
+
+    for (int i = index; i < n; i++) {
+      if (i > index && s.charAt(index) == '0') {
+        break;
+      }
+      value = value * 10 + s.charAt(i) - '0';
+      if (count >= 2) {
+        if (value < sum) {
+          continue;
+        } else if (value > sum) {
+          break;
+        }
+      }
+      if (toFlashBack(i + 1, previous + value, value, count + 1)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
