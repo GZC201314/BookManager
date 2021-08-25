@@ -1739,13 +1739,13 @@ class SolutionHead {
       result = new ArrayList<>();
       int size = queue.size();
       for (int i = 0; i < size; i++) {
-        Integer leafNode = queue.poll();
+        int leafNode = queue.poll();
         result.add(leafNode);
         List<Integer> neighbors = edgeList.get(leafNode);
         for (Integer neighbor : neighbors) {
           du[neighbor]--;
           if (du[neighbor] == 1) {
-            queue.offer(du[neighbor]);
+            queue.offer(neighbor);
           }
         }
       }
