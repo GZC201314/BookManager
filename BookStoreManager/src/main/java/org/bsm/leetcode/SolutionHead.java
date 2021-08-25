@@ -1711,6 +1711,48 @@ class SolutionHead {
     return Math.max(dp[length - 1][1], dp[length - 1][2]);
   }
 
+  public static List<Integer> findMinHeightTrees(int n, int[][] edges) {
+    List<Integer> result = new ArrayList<>();
+    if (n == 1) {
+      result.add(0);
+      return result;
+    }
+    int[] du = new int[n];
+    List<List<Integer>> edgeList = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+      edgeList.add(new ArrayList<Integer>());
+    }
+    for (int[] edge : edges) {
+      du[edge[0]]++;
+      du[edge[1]]++;
+      edgeList.get(edge[0]).add(edge[1]);
+      edgeList.get(edge[1]).add(edge[0]);
+    }
+    Queue<Integer> queue = new LinkedList<>();
+    // 把叶子节点全部入队
+    for (int i = 0; i < n; i++) {
+      if (du[i] == 1) {
+        queue.offer(i);
+      }
+    }
+    while (!queue.isEmpty()) {
+      result = new ArrayList<>();
+      int size = queue.size();
+      for (int i = 0; i < size; i++) {
+        Integer leafNode = queue.poll();
+        result.add(leafNode);
+        List<Integer> neighbors = edgeList.get(leafNode);
+        for (Integer neighbor : neighbors) {
+          du[neighbor]--;
+          if (du[neighbor] == 1) {
+            queue.offer(du[neighbor]);
+          }
+        }
+      }
+    }
+    return result;
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
