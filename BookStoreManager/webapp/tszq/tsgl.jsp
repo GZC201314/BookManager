@@ -42,7 +42,7 @@
     <form id="tszq_sjgl_addForm" method="post"
           enctype="multipart/form-data">
         <h3>图书信息</h3>
-        <div id="tszq_sjgl_toobar" style="margin-bottom: 15px;">
+        <div id="tszq_sjgl_toobar2" style="margin-bottom: 15px;">
             图书ISBN: <input id="tszq_sjgl_searchbookisbn" class="easyui-textbox"></input>
             <a href="#" class="easyui-linkbutton"
                data-options="iconCls:'icon-search',plain:true"
@@ -259,7 +259,7 @@
     }
 
     function searchBookFun() {
-        var bookname = $('#').val();
+        var bookname = $('#tszq_sjgl_bookname').val();
         $('#tszq_sjgl_datagrid').datagrid('load', {
             'bookname': bookname
         });
