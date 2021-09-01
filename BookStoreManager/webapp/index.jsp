@@ -81,7 +81,7 @@
             margin: 10px auto 0;
             border-radius: 30px;
             overflow: hidden;
-            opacity: 0.7px;
+            opacity: 0.7;
         }
 
         #video {
@@ -322,7 +322,7 @@
         }
     }
 
-    /* 定时器  间隔1秒检测是否长时间未操作页面  */
+    /* 定时器  间隔10秒检测是否长时间未操作页面  */
     window.setInterval(testTime, 10000);
 
     (function ($) {

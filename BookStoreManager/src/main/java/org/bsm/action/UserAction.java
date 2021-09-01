@@ -74,7 +74,6 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
     try {
       ValidateCode validateCode = new ValidateCode();
       HttpServletResponse response = ServletActionContext.getResponse();
-      HttpServletRequest request = ServletActionContext.getRequest();
       response.setContentType("application/octet-stream");
       response.addHeader("Content-Disposition", "attachment;filename=vcode.jpeg");
       String number = validateCode.getNumber(4);
@@ -82,7 +81,7 @@ public class UserAction extends BaseAction implements ModelDriven<PageUser> {
       response.addCookie(cookie);
       validateCode.getImage(response.getOutputStream(), number);
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(e.getMessage());
     }
   }
 

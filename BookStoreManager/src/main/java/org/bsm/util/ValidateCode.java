@@ -51,7 +51,7 @@ public class ValidateCode {
 
     //自定义方法，获取长度为size的字母数字组合的字符串
     public String getNumber(int size) {
-        String str = "0123456789";
+        String str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         String number = "";
         Random r = new Random();
         for (int i = 0; i < size; i++) {
