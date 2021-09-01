@@ -1776,6 +1776,15 @@ class SolutionHead {
     return dp[n];
   }
 
+  public void reverseString(char[] s) {
+    int start = 0, end = s.length - 1;
+    while (start < end) {
+      char tem = s[start];
+      s[start++] = s[end];
+      s[end--] = tem;
+    }
+  }
+
   public static void main(String[] args) {
     char[][] matrix =
         new char[][] {
