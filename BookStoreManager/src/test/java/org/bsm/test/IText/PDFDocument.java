@@ -14,7 +14,7 @@ import com.itextpdf.layout.element.Image;
 
 public class PDFDocument {
     private static final String ORIG = "src/main/resources/image/myplot.png";
-    private static final String OUTPUT_FOLDER = "/";
+    private static final String OUTPUT_FOLDER = "./";
 
     @Test
     public void pdfTest() throws MalformedURLException, FileNotFoundException {

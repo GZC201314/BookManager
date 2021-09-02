@@ -92,7 +92,8 @@ public class TestMail {
       mimeMultiPart.addBodyPart(bodyPart);
       // 添加附件
       List<String> fileAddressList = new ArrayList<String>();
-      fileAddressList.add("C:\\Users\\GZC\\Pictures\\1.png");
+      fileAddressList.add("src/main/resources/image/myplot.png");
+
       if (fileAddressList != null) {
         BodyPart attchPart = null;
         for (int i = 0; i < fileAddressList.size(); i++) {

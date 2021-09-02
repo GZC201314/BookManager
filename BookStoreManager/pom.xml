@@ -179,16 +179,16 @@
         </dependency>
 
         <!--MongoBD-Spring整合 -->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>2.14.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
-            <version>1.10.7.RELEASE</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.mongodb</groupId>-->
+<!--            <artifactId>mongo-java-driver</artifactId>-->
+<!--            <version>2.14.3</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.data</groupId>-->
+<!--            <artifactId>spring-data-mongodb</artifactId>-->
+<!--            <version>1.10.7.RELEASE</version>-->
+<!--        </dependency>-->
 
 
         <!-- jwt -->
@@ -283,7 +283,7 @@
         </dependency>
 
         <!-- hadoop 依赖 -->
-        <dependency>
+<!--        <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
             <version>${hadoop.version}</version>
@@ -315,19 +315,19 @@
             <artifactId>hbase-protocol</artifactId>
             <version>${hbase.version}</version>
         </dependency>
+
+        -->
+<!--        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <version>2.1.2.RELEASE</version>
+        </dependency>-->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.amqp</groupId>
-            <artifactId>spring-rabbit</artifactId>
-            <version>2.1.2.RELEASE</version>
-        </dependency>
-
         <!-- javax mail -->
         <dependency>
             <groupId>javax.mail</groupId>
@@ -344,19 +344,19 @@
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+<!--                <version>3.8.0</version>-->
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
+<!--            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.1</version>
                 <configuration>
                     <warSourceDirectory>webapp</warSourceDirectory>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>
