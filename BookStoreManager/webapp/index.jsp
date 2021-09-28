@@ -109,9 +109,27 @@
           type="text/css"></link>
     <link rel="stylesheet"
           href="pages/lib/jquery-easyui-1.7.0/themes/icon.css" type="text/css"></link>
+
+    <%--加载看板娘--%>
+    <link rel="stylesheet" type="text/css" href="pages/lib/kanbanniang/assets/waifu.css"/>
+
     <title>BSM</title>
 </head>
 <body class="easyui-layout">
+<%--看板娘--%>
+<div class="waifu" id="waifu" style="z-index: 999;">
+    <div class="waifu-tips" style="opacity: 1;"></div>
+    <canvas id="live2d" width="280" height="250" class="live2d"></canvas>
+    <div class="waifu-tool">
+        <span class="fui-home"></span>
+        <span class="fui-chat"></span>
+        <span class="fui-eye"></span>
+        <span class="fui-user"></span>
+        <span class="fui-photo"></span>
+        <span class="fui-info-circle"></span>
+        <span class="fui-cross"></span>
+    </div>
+</div>
 <div data-options="region:'north'"
      style="height: 60px; background-color: #f9f9f9;">
     <jsp:include page="layout/north.jsp"></jsp:include>
@@ -130,6 +148,12 @@
         <div title="首页"></div>
     </div>
 </div>
+
+
+<script src="pages/lib/kanbanniang/assets/live2d.min.js"></script>
+<script src="pages/lib/kanbanniang/assets/waifu-tips.js"></script>
+<script type="text/javascript">initModel()</script>
+
 </body>
 <!-- 登录弹窗 -->
 <div id="user_login_loginDialog" class="easyui-dialog"
@@ -565,3 +589,5 @@
     });
 </script>
 </html>
+
+<link rel="stylesheet" type="text/css" href="pages/lib/kanbanniang/assets/flat-ui.min.css"/>
