@@ -1,25 +1,12 @@
 package org.bsm.action;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.log4j.LogManager;
+import com.opensymphony.xwork2.ModelDriven;
 import org.apache.log4j.Logger;
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.bsm.pageModel.BaiduAI;
 import org.bsm.pageModel.Json;
-import org.bsm.pageModel.Menu;
 import org.bsm.service.BaiduAIServiceI;
-import org.bsm.service.MenuServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.util.StringUtils;
-
-import com.opensymphony.xwork2.ModelDriven;
 
 @Action(value = "baiduAIAction")
 public class BaiduAIAction extends BaseAction implements ModelDriven<BaiduAI> {

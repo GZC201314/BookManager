@@ -11,6 +11,8 @@ import java.lang.reflect.Type;
 
 /**
  * Json工具类.
+ *
+ * @author GZC
  */
 public class GsonUtils {
     private static Gson gson = new GsonBuilder().create();

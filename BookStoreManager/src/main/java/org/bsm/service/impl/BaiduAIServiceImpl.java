@@ -1,31 +1,19 @@
 package org.bsm.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import org.bsm.model.Tuser;
-import org.bsm.pageModel.AipFaceResult;
-import org.bsm.pageModel.BaiduAI;
-import org.bsm.pageModel.PageUser;
-import org.bsm.pageModel.Tpsbresult;
-import org.bsm.pageModel.Words_result;
+import com.alibaba.fastjson.JSONObject;
+import com.baidu.aip.face.AipFace;
+import com.baidu.aip.ocr.AipOcr;
+import org.bsm.pageModel.*;
 import org.bsm.service.BaiduAIServiceI;
 import org.bsm.service.UserServiceI;
-import org.bsm.util.BaiduAIAuthUtil;
 import org.bsm.util.BaiduAipInstance;
-import org.bsm.util.FileUtil;
-import org.bsm.util.GeneralBasic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.alibaba.fastjson.JSONObject;
-import com.baidu.aip.face.AipFace;
-import com.baidu.aip.face.MatchRequest;
-import com.baidu.aip.ocr.AipOcr;
+import java.util.HashMap;
+import java.util.List;
 
 @Service("baiduAIService")
 public class BaiduAIServiceImpl implements BaiduAIServiceI {
