@@ -12,7 +12,7 @@
         <itext.version>7.1.11</itext.version>
         <hadoop.version>2.9.2</hadoop.version>
         <hbase.version>0.98.1-hadoop2</hbase.version>
-        <spring.version>4.3.19.RELEASE</spring.version>
+        <spring.version>5.3.19</spring.version>
     </properties>
     <dependencies>
         <dependency>
